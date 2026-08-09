@@ -24,6 +24,7 @@ export default function BranchOverlay({ node, children, restBackground }: Props)
   const videoRefs = useRef<Array<HTMLVideoElement | null>>([]);
   const contentRef = useRef<HTMLDivElement>(null);
   const rafRef = useRef<number | null>(null);
+  const cancelForwardRef = useRef<(() => void) | null>(null);
   const activeRef = useRef(false);
   // Branch clips use preload="none" so the ~13MB of studio-exit video isn't
   // fetched on first paint; kick the real load off only when this branch is
@@ -54,6 +55,46 @@ export default function BranchOverlay({ node, children, restBackground }: Props)
       }
       acc += d;
     }
+  };
+
+  // Scrubbing (repeated currentTime seeks) reads as a slideshow rather than
+  // a video. Forward entrance always plays in one direction, so drive it
+  // with real play()/playbackRate — the browser's normal decode pipeline —
+  // and chain clips on their native "ended" event instead.
+  const playForwardNative = (onDone: () => void) => {
+    let i = 0;
+    let cancelled = false;
+    cancelForwardRef.current = () => {
+      cancelled = true;
+    };
+
+    const playNext = () => {
+      if (cancelled) return;
+      if (i >= clips.length) {
+        onDone();
+        return;
+      }
+      const v = videoRefs.current[i];
+      if (!v) {
+        i++;
+        playNext();
+        return;
+      }
+      videoRefs.current.forEach((vv, idx) => {
+        if (vv) vv.style.opacity = idx === i ? "1" : "0";
+      });
+      v.currentTime = 0;
+      v.playbackRate = speed;
+      const onEnded = () => {
+        v.removeEventListener("ended", onEnded);
+        if (cancelled) return;
+        i++;
+        playNext();
+      };
+      v.addEventListener("ended", onEnded);
+      v.play().catch(() => {});
+    };
+    playNext();
   };
 
   const runTween = (from: number, to: number, onDone: () => void) => {
@@ -93,7 +134,7 @@ export default function BranchOverlay({ node, children, restBackground }: Props)
           if (contentRef.current) contentRef.current.style.opacity = "0";
           if (root) root.scrollTop = 0;
           setVideoTime(0);
-          runTween(0, totalNative, () => {
+          playForwardNative(() => {
             if (contentRef.current) {
               contentRef.current.style.opacity = "1";
               contentRef.current.style.pointerEvents = "auto";
@@ -103,6 +144,9 @@ export default function BranchOverlay({ node, children, restBackground }: Props)
         }),
       playReverse: () =>
         new Promise<void>((resolve) => {
+          cancelForwardRef.current?.();
+          cancelForwardRef.current = null;
+          videoRefs.current.forEach((v) => v?.pause());
           if (contentRef.current) {
             contentRef.current.style.opacity = "0";
             contentRef.current.style.pointerEvents = "none";
@@ -124,6 +168,7 @@ export default function BranchOverlay({ node, children, restBackground }: Props)
   useEffect(() => {
     return () => {
       if (rafRef.current) cancelAnimationFrame(rafRef.current);
+      cancelForwardRef.current?.();
     };
   }, []);
 

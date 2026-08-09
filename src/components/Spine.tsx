@@ -101,6 +101,32 @@ export default function Spine() {
     if (Math.abs(v.currentTime - t) > 0.004) v.currentTime = t;
   };
 
+  // Repeatedly seeking video.currentTime (the old approach) is fundamentally
+  // not smooth: every seek is a random-access decode, and doing 60 of them a
+  // second reads as a slideshow rather than a video. Whenever we're moving
+  // forward through an active clip, drive it with real play()/playbackRate
+  // instead and let the browser's normal decode pipeline render it — the
+  // same mechanism that makes any <video> look smooth. Progress is then
+  // read back from currentTime rather than dictating it. Returns the new
+  // progress if it drove playback, or null if the caller should fall back to
+  // manual seeking (paused/idle/reverse — playbackRate can't go negative).
+  const drivePlayback = (
+    v: HTMLVideoElement,
+    velocity: number,
+    zoneStart: number,
+    zoneEnd: number,
+    dur: number
+  ): number | null => {
+    if (velocity <= 0.002) return null;
+    if (v.paused) v.play().catch(() => {});
+    v.playbackRate = Math.min(6, Math.max(0.25, (velocity * dur) / (zoneEnd - zoneStart)));
+    if (v.currentTime >= dur - 0.03) {
+      v.pause();
+      return zoneEnd;
+    }
+    return zoneStart + (v.currentTime / dur) * (zoneEnd - zoneStart);
+  };
+
   const applyProgress = (p: number) => {
     const v1 = video1Ref.current;
     const v2 = video2Ref.current;
@@ -294,14 +320,34 @@ export default function Spine() {
           : 0;
         velocityRef.current += (target - velocityRef.current) * VELOCITY_EASE;
 
-        let next = progressRef.current + velocityRef.current * dt;
-        if (next <= 0) {
-          next = 0;
-          velocityRef.current = Math.max(velocityRef.current, 0);
-        } else if (next >= 1) {
-          next = 1;
-          velocityRef.current = Math.min(velocityRef.current, 0);
+        const { b1, b2, b3, b4 } = BOUNDS;
+        const p = progressRef.current;
+        const v1 = video1Ref.current;
+        const v2 = video2Ref.current;
+        let next: number | null = null;
+
+        if (v1 && p >= b1 && p < b2) {
+          next = drivePlayback(v1, velocityRef.current, b1, b2, DUR1);
+          if (next != null && v2 && !v2.paused) v2.pause();
+        } else if (v2 && p >= b3 && p < b4) {
+          next = drivePlayback(v2, velocityRef.current, b3, b4, DUR2);
+          if (next != null && v1 && !v1.paused) v1.pause();
+        } else {
+          if (v1 && !v1.paused) v1.pause();
+          if (v2 && !v2.paused) v2.pause();
         }
+
+        if (next == null) {
+          next = p + velocityRef.current * dt;
+          if (next <= 0) {
+            next = 0;
+            velocityRef.current = Math.max(velocityRef.current, 0);
+          } else if (next >= 1) {
+            next = 1;
+            velocityRef.current = Math.min(velocityRef.current, 0);
+          }
+        }
+
         progressRef.current = next;
         applyProgress(next);
         syncScrollFromProgress(next);
@@ -334,6 +380,8 @@ export default function Spine() {
         const p = REST_PROGRESS[target];
         velocityRef.current = 0;
         inputVelocityRef.current = 0;
+        if (video1Ref.current && !video1Ref.current.paused) video1Ref.current.pause();
+        if (video2Ref.current && !video2Ref.current.paused) video2Ref.current.pause();
         const obj = { p: progressRef.current };
 
         await new Promise<void>((resolve) => {
