@@ -123,7 +123,7 @@ export default function Spine() {
     if (v.paused) v.play().catch(() => {});
     const baseRate = (velocity * dur) / (zoneEnd - zoneStart);
     const curve = motionCurveMultiplier(dur > 0 ? v.currentTime / dur : 0);
-    v.playbackRate = Math.min(10, Math.max(0.25, baseRate * curve));
+    v.playbackRate = Math.min(8, Math.max(0.25, baseRate * curve));
     if (v.currentTime >= dur - 0.03) {
       v.pause();
       return zoneEnd;

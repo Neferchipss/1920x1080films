@@ -112,18 +112,33 @@ export default function BranchOverlay({ node, children, restBackground }: Props)
 
       const updateRate = () => {
         if (cancelled || v.ended) return;
-        v.playbackRate = Math.min(10, Math.max(0.1, baseRate * motionCurveMultiplier(v.currentTime / dur)));
+        v.playbackRate = Math.min(8, Math.max(0.1, baseRate * motionCurveMultiplier(v.currentTime / dur)));
         requestAnimationFrame(updateRate);
       };
       requestAnimationFrame(updateRate);
 
-      const onEnded = () => {
+      // Unlike the spine (which polls currentTime itself every frame),
+      // this chain waits on the clip's own "ended" event — and at a high
+      // sustained playbackRate a 2K/60fps clip can fail to decode fast
+      // enough for the browser to ever fire it, silently stalling forever.
+      // Since JourneyContext awaits this whole promise before releasing
+      // its navigation lock, a stall here didn't just break this branch's
+      // entrance — it permanently blocked *every* future navigation,
+      // including reverse on any branch. A generous timeout guarantees
+      // this always resolves one way or another.
+      let settled = false;
+      const finish = () => {
+        if (settled) return;
+        settled = true;
+        clearTimeout(safety);
         v.removeEventListener("ended", onEnded);
         if (cancelled) return;
         i++;
         playNext();
       };
+      const onEnded = () => finish();
       v.addEventListener("ended", onEnded);
+      const safety = setTimeout(finish, Math.max(400, (dur / baseRate) * 1000 * 2));
       v.play().catch(() => {});
     };
     playNext();
