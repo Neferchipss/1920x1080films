@@ -1,5 +1,5 @@
 import Experience from "@/components/Experience";
 
-export default function Home() {
+export default function ServicesPage() {
   return <Experience />;
 }
