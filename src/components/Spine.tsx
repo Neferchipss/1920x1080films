@@ -15,9 +15,15 @@ const DUR2 = 15.0;
 // impulse on top of that baseline, so scrolling controls speed and direction
 // without ever position-locking progress to raw scroll deltas (the source of
 // the old scrub jank).
-const BASE_SPEED = 0.03; // progress/sec drift once engaged
-const MAX_SPEED = 0.5; // progress/sec clamp
-const INPUT_K = 0.0022; // px of scroll/touch delta -> progress/sec impulse
+const BASE_SPEED = 0.025; // progress/sec drift once engaged
+// Capped low on purpose: at the old 0.5 cap, a single sustained scroll
+// gesture blew through the entire 740vh sequence in ~2s — too fast for the
+// browser to actually decode/seek video frames (or for studio's video to
+// finish buffering), which read as "snaps straight from landing to facade,
+// studio never appears". This keeps even a vigorous continuous scroll to a
+// ~8s-plus traversal.
+const MAX_SPEED = 0.12; // progress/sec clamp
+const INPUT_K = 0.0006; // px of scroll/touch delta -> progress/sec impulse
 const IMPULSE_DECAY_PER_SEC = 0.02; // multiplicative decay applied per second
 const VELOCITY_EASE = 0.12; // per-frame ease toward target velocity
 
@@ -89,6 +95,12 @@ export default function Spine() {
     if (Math.abs(window.scrollY - y) > 0.5) window.scrollTo(0, y);
   };
 
+  // Skips redundant seeks (video.currentTime writes are real decode work,
+  // not free) when the target barely moved since the last frame.
+  const seekVideo = (v: HTMLVideoElement, t: number) => {
+    if (Math.abs(v.currentTime - t) > 0.004) v.currentTime = t;
+  };
+
   const applyProgress = (p: number) => {
     const v1 = video1Ref.current;
     const v2 = video2Ref.current;
@@ -113,12 +125,12 @@ export default function Spine() {
     // video1 scrub
     let v1Visible = true;
     if (p <= b1) {
-      v1.currentTime = 0;
+      seekVideo(v1, 0);
     } else if (p < b2) {
       const t = (p - b1) / (b2 - b1);
-      v1.currentTime = clamp01(t) * DUR1;
+      seekVideo(v1, clamp01(t) * DUR1);
     } else {
-      v1.currentTime = DUR1;
+      seekVideo(v1, DUR1);
     }
     v1Visible = p < b3 + 0.001;
     v1.style.opacity = v1Visible ? "1" : "0";
@@ -148,14 +160,14 @@ export default function Spine() {
     // video2 scrub
     let v2Visible = true;
     if (p <= b3) {
-      v2.currentTime = 0;
+      seekVideo(v2, 0);
       v2Visible = false;
     } else if (p < b4) {
       const t = (p - b3) / (b4 - b3);
-      v2.currentTime = clamp01(t) * DUR2;
+      seekVideo(v2, clamp01(t) * DUR2);
       v2Visible = true;
     } else {
-      v2.currentTime = DUR2;
+      seekVideo(v2, DUR2);
       v2Visible = true;
     }
     v2.style.opacity = v2Visible ? "1" : "0";
