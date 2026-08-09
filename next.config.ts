@@ -1,7 +1,11 @@
 import type { NextConfig } from "next";
 
+const repoName = "1920x1080films";
+
 const nextConfig: NextConfig = {
-  /* config options here */
+  output: "export",
+  basePath: `/${repoName}`,
+  images: { unoptimized: true },
 };
 
 export default nextConfig;

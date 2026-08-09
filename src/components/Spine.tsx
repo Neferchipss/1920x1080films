@@ -5,6 +5,7 @@ import gsap from "gsap";
 import { ScrollToPlugin } from "gsap/ScrollToPlugin";
 import { useJourney } from "@/context/JourneyContext";
 import { BOUNDS, REST_PROGRESS, SPINE_VH_TOTAL, clamp01 } from "@/lib/spineLayout";
+import { withBasePath } from "@/lib/basePath";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollToPlugin);
@@ -284,14 +285,14 @@ export default function Spine() {
     <div ref={scrollerRef} style={{ height: `${SPINE_VH_TOTAL}vh`, position: "relative" }}>
       <div className="brand-mark" ref={brandMarkRef} data-visible="false">
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src="/img/brand/logo.png" alt="1920 x 1080 films" />
+        <img src={withBasePath("/img/brand/logo.png")} alt="1920 x 1080 films" />
       </div>
 
       <div className="spine-pin" data-node={node}>
         <video
           ref={video1Ref}
           className="spine-video"
-          src="/video/landing-facade.mp4"
+          src={withBasePath("/video/landing-facade.mp4")}
           muted
           playsInline
           preload="auto"
@@ -299,7 +300,7 @@ export default function Spine() {
         <video
           ref={video2Ref}
           className="spine-video"
-          src="/video/facade-studio.mp4"
+          src={withBasePath("/video/facade-studio.mp4")}
           muted
           playsInline
           preload="auto"
@@ -308,7 +309,7 @@ export default function Spine() {
         <div className="landing-layer" ref={landingRef}>
           <div className="landing-logo" ref={landingLogoRef}>
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/img/brand/logo.png" alt="1920 x 1080 films" />
+            <img src={withBasePath("/img/brand/logo.png")} alt="1920 x 1080 films" />
           </div>
         </div>
         <div className="scroll-cue" ref={cueRef}>

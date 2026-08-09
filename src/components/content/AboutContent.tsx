@@ -1,10 +1,15 @@
+import { withBasePath } from "@/lib/basePath";
+
 export default function AboutContent() {
   return (
     <div className="about-wrap">
       <div className="about-frame">
         <div className="about-frame-inner">
           <div className="about-photo">
-            <img src="/img/portfolio/frame-04.jpg" alt="Umesh Pednekar, studio portrait" />
+            <img
+              src={withBasePath("/img/portfolio/frame-04.jpg")}
+              alt="Umesh Pednekar, studio portrait"
+            />
           </div>
           <div className="about-copy">
             <div className="about-copy-head">

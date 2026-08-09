@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { withBasePath } from "@/lib/basePath";
 
 // Mumbai (19.076N 72.877E) as a fraction of the equirectangular source map.
 const MUMBAI_X_FRAC = 0.7024;
@@ -96,7 +97,7 @@ export default function ContactContent() {
         </div>
 
         <div className="contact-right">
-          <img src="/img/brand/studio-still.jpg" alt="" />
+          <img src={withBasePath("/img/brand/studio-still.jpg")} alt="" />
         </div>
       </div>
 
@@ -143,7 +144,7 @@ export default function ContactContent() {
 
       <div className="contact-map-section">
         <div className="contact-map-image" aria-hidden>
-          <img ref={mapImgRef} src="/img/world-map.svg" alt="" />
+          <img ref={mapImgRef} src={withBasePath("/img/world-map.svg")} alt="" />
         </div>
         <div className="contact-map-pin" ref={pinRef} aria-hidden>
           <span className="contact-map-pulse" />

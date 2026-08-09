@@ -1,3 +1,5 @@
+import { withBasePath } from "@/lib/basePath";
+
 const HERO = [
   { id: "frame-01", slot: "tall-left" },
   { id: "frame-02", slot: "wide-top" },
@@ -31,7 +33,7 @@ export default function PortfolioContent() {
       <div className="portfolio-hero-grid">
         {HERO.map((f) => (
           <div className={`portfolio-tile portfolio-tile--${f.slot}`} key={f.id}>
-            <img src={`/img/portfolio/${f.id}.jpg`} alt="" loading="lazy" />
+            <img src={withBasePath(`/img/portfolio/${f.id}.jpg`)} alt="" loading="lazy" />
           </div>
         ))}
       </div>
@@ -39,7 +41,7 @@ export default function PortfolioContent() {
       <div className="portfolio-strip-grid">
         {STRIP.map((id) => (
           <div className="portfolio-tile portfolio-tile--strip" key={id}>
-            <img src={`/img/portfolio/${id}.jpg`} alt="" loading="lazy" />
+            <img src={withBasePath(`/img/portfolio/${id}.jpg`)} alt="" loading="lazy" />
           </div>
         ))}
       </div>

@@ -8,6 +8,7 @@ import {
   EDGE_VIDEO,
   NodeId,
 } from "@/lib/journey";
+import { withBasePath } from "@/lib/basePath";
 
 type Props = {
   node: "about" | "portfolio" | "contact" | "services";
@@ -143,7 +144,7 @@ export default function BranchOverlay({ node, children, restBackground }: Props)
               videoRefs.current[i] = el;
             }}
             className="branch-video"
-            src={src}
+            src={withBasePath(src)}
             muted
             playsInline
             preload="none"
