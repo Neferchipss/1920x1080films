@@ -11,8 +11,8 @@ if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollToPlugin);
 }
 
-const DUR1 = 12.04;
-const DUR2 = 15.04;
+const DUR1 = 12.0;
+const DUR2 = 15.0;
 
 // Source-pixel bounding boxes measured directly off the 1600x900 studio
 // still (assets/studio.jpeg), one per interactive object. Positioned at

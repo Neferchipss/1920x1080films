@@ -30,14 +30,14 @@ export const EDGE_VIDEO: Partial<Record<NodeId, string[]>> = {
   portfolio: ["/video/studio-portfolio-a.mp4", "/video/studio-portfolio-b.mp4"],
 };
 
-/** Native duration of each clip in seconds (24fps sources), for scrub math. */
+/** Native duration of each clip in seconds (2K/60fps sources), for scrub math. */
 export const EDGE_DURATION: Partial<Record<NodeId, number[]>> = {
-  facade: [12.04],
-  studio: [15.04],
-  about: [8.04],
-  contact: [8.04],
-  services: [8.04],
-  portfolio: [5.04, 12.04],
+  facade: [12.0],
+  studio: [15.0],
+  about: [7.97],
+  contact: [7.97],
+  services: [7.97],
+  portfolio: [4.97, 12.0],
 };
 
 /**
