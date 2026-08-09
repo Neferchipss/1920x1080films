@@ -11,22 +11,14 @@ import { motionCurveMultiplier } from "@/lib/motionCurve";
 const DUR1 = 12.0;
 const DUR2 = 15.0;
 
-// Auto-scroll tuning: once engaged, the spine drifts forward on its own like
-// an autoplaying video. Manual wheel/touch/keyboard input adds a decaying
-// impulse on top of that baseline, so scrolling controls speed and direction
-// without ever position-locking progress to raw scroll deltas (the source of
-// the old scrub jank).
-const BASE_SPEED = 0.025; // progress/sec drift once engaged
-// Capped low on purpose: at the old 0.5 cap, a single sustained scroll
-// gesture blew through the entire 740vh sequence in ~2s — too fast for the
-// browser to actually decode/seek video frames (or for studio's video to
-// finish buffering), which read as "snaps straight from landing to facade,
-// studio never appears". This keeps even a vigorous continuous scroll to a
-// ~8s-plus traversal.
-const MAX_SPEED = 0.12; // progress/sec clamp
-const INPUT_K = 0.0006; // px of scroll/touch delta -> progress/sec impulse
-const IMPULSE_DECAY_PER_SEC = 0.02; // multiplicative decay applied per second
-const VELOCITY_EASE = 0.12; // per-frame ease toward target velocity
+// Paginated checkpoint model: the spine holds at landing/facade/studio and
+// only moves when the user picks a direction. That single gesture commits
+// to an automatic play through to the adjacent checkpoint (a fixed cruise
+// speed, not proportional to how hard they scrolled) which then halts
+// again — further input mid-transition is ignored until it settles.
+const SPINE_CHECKPOINTS: Array<"landing" | "facade" | "studio"> = ["landing", "facade", "studio"];
+const CRUISE_SPEED = 0.09; // progress/sec while committed to a transition
+const VELOCITY_EASE = 0.12; // per-frame ease into CRUISE_SPEED at the start of a transition
 
 // Source-pixel bounding boxes measured directly off the 1600x900 studio
 // still (assets/studio.jpeg), one per interactive object. Positioned at
@@ -70,18 +62,19 @@ export default function Spine() {
   const brandMarkRef = useRef<HTMLDivElement>(null);
   const sceneFooterRef = useRef<HTMLDivElement>(null);
   const counterRefs = useRef<Array<HTMLSpanElement | null>>([]);
-  const countersHitRef = useRef(false);
   const hotspotRefs = useRef<Partial<Record<keyof typeof HOTSPOT_BOXES, HTMLButtonElement | null>>>({});
 
-  const progressRef = useRef(0);
+  const progressRef = useRef(REST_PROGRESS.landing);
   const velocityRef = useRef(0);
-  const inputVelocityRef = useRef(0);
-  const engagedRef = useRef(false);
+  const haltedRef = useRef(true);
+  const travelDirRef = useRef<0 | 1 | -1>(0);
+  const checkpointIndexRef = useRef(0);
+  const countersRafRef = useRef<number | null>(null);
+  const countersActiveRef = useRef(false);
   const lastTsRef = useRef<number | null>(null);
   const rafRef = useRef<number | null>(null);
   const nodeRef = useRef(node);
   const isAnimatingRef = useRef(isAnimating);
-  const lastReportedNodeRef = useRef<"landing" | "facade" | "studio" | null>(null);
 
   useEffect(() => {
     nodeRef.current = node;
@@ -165,28 +158,6 @@ export default function Spine() {
     v1Visible = p < b3 + 0.001;
     v1.style.opacity = v1Visible ? "1" : "0";
 
-    // facade hold content
-    const facadeT = clamp01((p - b2) / (b3 - b2));
-    const facadeVisible = p >= b2 - 0.01 && p < b4;
-    if (facadeRef.current) {
-      const inT = clamp01((p - b2) / 0.03);
-      const outT = clamp01((p - (b3 - 0.02)) / (b4 - (b3 - 0.02)));
-      const op = facadeVisible ? Math.min(inT, 1 - outT) : 0;
-      facadeRef.current.style.opacity = String(op);
-      facadeRef.current.style.pointerEvents = op > 0.5 ? "auto" : "none";
-    }
-    if (facadeT > 0.05 && !countersHitRef.current) {
-      countersHitRef.current = true;
-    }
-    if (countersHitRef.current) {
-      const countT = clamp01((facadeT - 0.05) / 0.55);
-      const eased = 1 - Math.pow(1 - countT, 3);
-      COUNTERS.forEach((c, i) => {
-        const el = counterRefs.current[i];
-        if (el) el.textContent = fmt(c.value * eased) + c.suffix;
-      });
-    }
-
     // video2 scrub
     let v2Visible = true;
     if (p <= b3) {
@@ -214,6 +185,60 @@ export default function Spine() {
       const footerOut = clamp01((p - (b4 - 0.05)) / 0.05);
       sceneFooterRef.current.style.opacity = String(1 - footerOut);
     }
+  };
+
+  // Counters aren't tied to scroll progress: they appear (and count up) only
+  // once the spine actually halts on facade, and disappear the instant the
+  // user starts moving away in either direction — not a function of how far
+  // through the facade hold the scroll position happens to sit.
+  const stopCounters = () => {
+    countersActiveRef.current = false;
+    if (countersRafRef.current) {
+      cancelAnimationFrame(countersRafRef.current);
+      countersRafRef.current = null;
+    }
+    if (facadeRef.current) {
+      facadeRef.current.style.opacity = "0";
+      facadeRef.current.style.pointerEvents = "none";
+    }
+    COUNTERS.forEach((c, i) => {
+      const el = counterRefs.current[i];
+      if (el) el.textContent = "0" + c.suffix;
+    });
+  };
+
+  const startCounters = () => {
+    countersActiveRef.current = true;
+    if (facadeRef.current) {
+      facadeRef.current.style.opacity = "1";
+      facadeRef.current.style.pointerEvents = "auto";
+    }
+    const start = performance.now();
+    const DURATION = 1400;
+    const step = (now: number) => {
+      const t = Math.min(1, (now - start) / DURATION);
+      const eased = 1 - Math.pow(1 - t, 3);
+      COUNTERS.forEach((c, i) => {
+        const el = counterRefs.current[i];
+        if (el) el.textContent = fmt(c.value * eased) + c.suffix;
+      });
+      if (t < 1 && countersActiveRef.current) {
+        countersRafRef.current = requestAnimationFrame(step);
+      } else {
+        countersRafRef.current = null;
+      }
+    };
+    countersRafRef.current = requestAnimationFrame(step);
+  };
+
+  const settleAt = (cp: "landing" | "facade" | "studio") => {
+    haltedRef.current = true;
+    travelDirRef.current = 0;
+    velocityRef.current = 0;
+    checkpointIndexRef.current = SPINE_CHECKPOINTS.indexOf(cp);
+    if (cp === "facade") startCounters();
+    else stopCounters();
+    reportSpinePosition(cp);
   };
 
   useEffect(() => {
@@ -255,33 +280,24 @@ export default function Spine() {
   }, []);
 
   useEffect(() => {
-    // Progress is no longer a direct function of scroll position (that 1:1
-    // mapping is what caused the old per-scroll-event video.currentTime
-    // jank). Instead a rAF loop integrates a velocity: once "engaged" by a
-    // first scroll-like gesture, progress drifts forward on its own at
-    // BASE_SPEED, and wheel/touch/keyboard input adds a decaying impulse on
-    // top that can speed it up, slow it down, or reverse it. The real page
-    // scroll position is then driven *from* progress (not the other way
-    // round) purely so the browser scrollbar stays in sync.
-    const addImpulse = (deltaY: number) => {
+    // Paginated: while halted, a directional gesture commits to a transition
+    // toward the adjacent checkpoint (ignored if there isn't one that way, or
+    // if a transition is already in flight — no queuing, no re-steering).
+    const requestTravel = (direction: 1 | -1) => {
       if (!isSpineNode(nodeRef.current) || isAnimatingRef.current) return;
-      engagedRef.current = true;
-      inputVelocityRef.current = Math.max(
-        -MAX_SPEED,
-        Math.min(MAX_SPEED, inputVelocityRef.current + deltaY * INPUT_K)
-      );
-    };
-
-    const normalizeWheelDelta = (e: WheelEvent) => {
-      if (e.deltaMode === 1) return e.deltaY * 16; // line -> px
-      if (e.deltaMode === 2) return e.deltaY * window.innerHeight; // page -> px
-      return e.deltaY;
+      if (!haltedRef.current) return;
+      const targetIndex = checkpointIndexRef.current + direction;
+      if (targetIndex < 0 || targetIndex >= SPINE_CHECKPOINTS.length) return;
+      if (SPINE_CHECKPOINTS[checkpointIndexRef.current] === "facade") stopCounters();
+      haltedRef.current = false;
+      travelDirRef.current = direction;
     };
 
     const onWheel = (e: WheelEvent) => {
       if (!isSpineNode(nodeRef.current) || isAnimatingRef.current) return;
       e.preventDefault();
-      addImpulse(normalizeWheelDelta(e));
+      if (Math.abs(e.deltaY) < 1) return;
+      requestTravel(e.deltaY > 0 ? 1 : -1);
     };
 
     let touchLastY = 0;
@@ -294,21 +310,22 @@ export default function Spine() {
       const deltaY = touchLastY - y; // finger moves up => content scrolls down
       touchLastY = y;
       e.preventDefault();
-      addImpulse(deltaY);
+      if (Math.abs(deltaY) < 1) return;
+      requestTravel(deltaY > 0 ? 1 : -1);
     };
 
-    const KEY_STEP: Record<string, number> = {
-      ArrowDown: 60,
-      PageDown: 400,
-      ArrowUp: -60,
-      PageUp: -400,
+    const KEY_DIR: Record<string, 1 | -1> = {
+      ArrowDown: 1,
+      PageDown: 1,
+      ArrowUp: -1,
+      PageUp: -1,
     };
     const onKeyDown = (e: KeyboardEvent) => {
-      const step = KEY_STEP[e.key];
-      if (step === undefined) return;
+      const dir = KEY_DIR[e.key];
+      if (dir === undefined) return;
       if (!isSpineNode(nodeRef.current) || isAnimatingRef.current) return;
       e.preventDefault();
-      addImpulse(step);
+      requestTravel(dir);
     };
 
     const tick = (ts: number) => {
@@ -316,19 +333,13 @@ export default function Spine() {
       lastTsRef.current = ts;
       const dt = last == null ? 0 : Math.min(0.05, (ts - last) / 1000);
 
-      // Gated on isSpineNode too, not just isAnimating: without this, the
-      // baseline auto-drift kept nudging progress (and reporting it) while
-      // a branch overlay was fully open and idle, silently dragging the
-      // tracked node back to "studio" behind the overlay — so by the time
-      // you clicked back, the app thought you were already at studio and
-      // skipped the branch's playReverse() entirely.
-      if (!isAnimatingRef.current && isSpineNode(nodeRef.current) && dt > 0) {
-        inputVelocityRef.current *= Math.pow(IMPULSE_DECAY_PER_SEC, dt);
+      if (!isAnimatingRef.current && isSpineNode(nodeRef.current) && !haltedRef.current && dt > 0) {
+        const dir = travelDirRef.current;
+        const targetIndex = checkpointIndexRef.current + dir;
+        const targetCp = SPINE_CHECKPOINTS[targetIndex];
+        const targetP = REST_PROGRESS[targetCp];
 
-        const target = engagedRef.current
-          ? Math.max(-MAX_SPEED, Math.min(MAX_SPEED, BASE_SPEED + inputVelocityRef.current))
-          : 0;
-        velocityRef.current += (target - velocityRef.current) * VELOCITY_EASE;
+        velocityRef.current += (dir * CRUISE_SPEED - velocityRef.current) * VELOCITY_EASE;
 
         const { b1, b2, b3, b4 } = BOUNDS;
         const p = progressRef.current;
@@ -336,10 +347,10 @@ export default function Spine() {
         const v2 = video2Ref.current;
         let next: number | null = null;
 
-        if (v1 && p >= b1 && p < b2) {
+        if (v1 && p >= b1 && p < b2 && velocityRef.current > 0) {
           next = drivePlayback(v1, velocityRef.current, b1, b2, DUR1);
           if (next != null && v2 && !v2.paused) v2.pause();
-        } else if (v2 && p >= b3 && p < b4) {
+        } else if (v2 && p >= b3 && p < b4 && velocityRef.current > 0) {
           next = drivePlayback(v2, velocityRef.current, b3, b4, DUR2);
           if (next != null && v1 && !v1.paused) v1.pause();
         } else {
@@ -349,24 +360,19 @@ export default function Spine() {
 
         if (next == null) {
           next = p + velocityRef.current * dt;
-          if (next <= 0) {
-            next = 0;
-            velocityRef.current = Math.max(velocityRef.current, 0);
-          } else if (next >= 1) {
-            next = 1;
-            velocityRef.current = Math.min(velocityRef.current, 0);
-          }
+        }
+
+        const arrived = dir > 0 ? next >= targetP : next <= targetP;
+        if (arrived) {
+          next = targetP;
+          if (v1 && !v1.paused) v1.pause();
+          if (v2 && !v2.paused) v2.pause();
+          settleAt(targetCp);
         }
 
         progressRef.current = next;
         applyProgress(next);
         syncScrollFromProgress(next);
-
-        const classified = next >= b4 ? "studio" : next >= b2 ? "facade" : "landing";
-        if (classified !== lastReportedNodeRef.current) {
-          lastReportedNodeRef.current = classified;
-          reportSpinePosition(classified);
-        }
       }
 
       rafRef.current = requestAnimationFrame(tick);
@@ -394,8 +400,11 @@ export default function Spine() {
     registerSpine({
       goTo: async (target) => {
         const p = REST_PROGRESS[target];
+        // isAnimating (set by JourneyContext before this runs) already keeps
+        // the checkpoint tick's own active block from touching progress
+        // while this tween drives it directly.
         velocityRef.current = 0;
-        inputVelocityRef.current = 0;
+        stopCounters();
         if (video1Ref.current && !video1Ref.current.paused) video1Ref.current.pause();
         if (video2Ref.current && !video2Ref.current.paused) video2Ref.current.pause();
         const obj = { p: progressRef.current };
@@ -411,10 +420,7 @@ export default function Spine() {
               syncScrollFromProgress(obj.p);
             },
             onComplete: () => {
-              progressRef.current = p;
-              applyProgress(p);
-              syncScrollFromProgress(p);
-              engagedRef.current = true;
+              settleAt(target);
               resolve();
             },
           });

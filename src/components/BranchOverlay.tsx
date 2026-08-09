@@ -20,7 +20,7 @@ type Props = {
 };
 
 export default function BranchOverlay({ node, children, restBackground }: Props) {
-  const { node: currentNode, registerBranch } = useJourney();
+  const { node: currentNode, isAnimating, registerBranch, goBack } = useJourney();
 
   const rootRef = useRef<HTMLDivElement>(null);
   const videoRefs = useRef<Array<HTMLVideoElement | null>>([]);
@@ -198,6 +198,22 @@ export default function BranchOverlay({ node, children, restBackground }: Props)
   }, []);
 
   const isTarget = currentNode === node;
+
+  // Scrolling up while already at the top of a branch's content is the same
+  // "scroll back at a checkpoint" gesture as on the spine — reverse to studio.
+  useEffect(() => {
+    const root = rootRef.current;
+    if (!root) return;
+    const onWheel = (e: WheelEvent) => {
+      if (!isTarget || isAnimating) return;
+      if (e.deltaY < 0 && root.scrollTop <= 2) {
+        e.preventDefault();
+        goBack();
+      }
+    };
+    root.addEventListener("wheel", onWheel, { passive: false });
+    return () => root.removeEventListener("wheel", onWheel);
+  }, [isTarget, isAnimating, goBack]);
 
   return (
     <div
