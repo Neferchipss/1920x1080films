@@ -169,15 +169,28 @@ export default function BranchOverlay({ node, children, restBackground }: Props)
     rafRef.current = requestAnimationFrame(step);
   };
 
+  const preload = () => {
+    if (loadTriggeredRef.current) return;
+    loadTriggeredRef.current = true;
+    // preload="none" in the markup keeps these from fetching on first
+    // paint; upgrading to "auto" here, right as we actually want buffering
+    // to start, is a stronger signal than an explicit load() alone — some
+    // browsers still only fetch metadata after load() while preload stays
+    // "none".
+    videoRefs.current.forEach((v) => {
+      if (!v) return;
+      v.preload = "auto";
+      v.load();
+    });
+  };
+
   useEffect(() => {
     registerBranch(node, {
+      preload,
       playForward: () =>
         new Promise<void>((resolve) => {
           activeRef.current = true;
-          if (!loadTriggeredRef.current) {
-            loadTriggeredRef.current = true;
-            videoRefs.current.forEach((v) => v?.load());
-          }
+          preload();
           const root = rootRef.current;
           if (root) {
             root.style.pointerEvents = "auto";

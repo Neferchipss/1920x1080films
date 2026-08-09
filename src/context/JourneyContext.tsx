@@ -19,6 +19,8 @@ export type SpineController = {
 export type BranchController = {
   playForward: () => Promise<void>;
   playReverse: () => Promise<void>;
+  /** Start buffering this branch's clips ahead of an actual click. */
+  preload: () => void;
 };
 
 type JourneyState = {
@@ -126,6 +128,18 @@ export function JourneyProvider({
     return () => clearTimeout(t);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  // Branch clips now play fast enough (4.5x-7.5x) to need real sustained
+  // bandwidth (see the request they were tuned against — tens of Mbps).
+  // Starting the fetch only at the exact moment of a click leaves zero
+  // buffer margin for that. Studio is where the user is deliberately
+  // deciding which branch to enter, so use that dwell time as a head
+  // start: kick off buffering for all four branches as soon as it's
+  // reached, well before any of them are actually clicked.
+  useEffect(() => {
+    if (node !== "studio") return;
+    Object.values(branchRefs.current).forEach((c) => c?.preload());
+  }, [node]);
 
   return (
     <JourneyCtx.Provider
