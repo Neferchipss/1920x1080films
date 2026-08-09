@@ -7,6 +7,7 @@ import {
   EDGE_DURATION,
   EDGE_VIDEO,
   NodeId,
+  REVERSE_SPEED_MULTIPLIER,
 } from "@/lib/journey";
 import { withBasePath } from "@/lib/basePath";
 
@@ -33,9 +34,17 @@ export default function BranchOverlay({ node, children, restBackground }: Props)
 
   const clips = EDGE_VIDEO[node as NodeId] ?? [];
   const durations = EDGE_DURATION[node as NodeId] ?? [];
-  const speed = BRANCH_SPEED[node as NodeId] ?? 1.5;
+  const speeds = BRANCH_SPEED[node as NodeId] ?? [1.5];
   const totalNative = durations.reduce((a, b) => a + b, 0);
-  const totalWall = totalNative / speed;
+
+  const clipIndexAt = (nativeT: number) => {
+    let acc = 0;
+    for (let i = 0; i < durations.length; i++) {
+      if (nativeT > acc && nativeT <= acc + durations[i]) return i;
+      acc += durations[i];
+    }
+    return durations.length - 1;
+  };
 
   const setVideoTime = (nativeT: number) => {
     let acc = 0;
@@ -84,7 +93,7 @@ export default function BranchOverlay({ node, children, restBackground }: Props)
         if (vv) vv.style.opacity = idx === i ? "1" : "0";
       });
       v.currentTime = 0;
-      v.playbackRate = speed;
+      v.playbackRate = speeds[i] ?? speeds[speeds.length - 1] ?? 1.5;
       const onEnded = () => {
         v.removeEventListener("ended", onEnded);
         if (cancelled) return;
@@ -97,18 +106,23 @@ export default function BranchOverlay({ node, children, restBackground }: Props)
     playNext();
   };
 
-  const runTween = (from: number, to: number, onDone: () => void) => {
+  // Exit can't use native play() — HTML5 video has no reliable reverse
+  // playback — so it still scrubs, but at each clip's own reverse rate
+  // (forward speed x REVERSE_SPEED_MULTIPLIER) rather than one blended rate
+  // across the whole sequence.
+  const runReverse = (from: number, onDone: () => void) => {
     if (rafRef.current) cancelAnimationFrame(rafRef.current);
-    const start = performance.now();
-    const wallDuration = (Math.abs(to - from) / totalNative) * totalWall * 1000;
-    const dur = Math.max(80, wallDuration);
+    let nativeT = from;
+    let lastTs: number | null = null;
 
     const step = (now: number) => {
-      const t = Math.min(1, (now - start) / dur);
-      const eased = 1 - Math.pow(1 - t, 2);
-      const nativeT = from + (to - from) * eased;
+      const dt = lastTs == null ? 0 : Math.min(0.05, (now - lastTs) / 1000);
+      lastTs = now;
+      const idx = clipIndexAt(nativeT);
+      const rate = (speeds[idx] ?? speeds[speeds.length - 1] ?? 1.5) * REVERSE_SPEED_MULTIPLIER;
+      nativeT = Math.max(0, nativeT - rate * dt);
       setVideoTime(nativeT);
-      if (t < 1) {
+      if (nativeT > 0) {
         rafRef.current = requestAnimationFrame(step);
       } else {
         onDone();
@@ -151,7 +165,7 @@ export default function BranchOverlay({ node, children, restBackground }: Props)
             contentRef.current.style.opacity = "0";
             contentRef.current.style.pointerEvents = "none";
           }
-          runTween(totalNative, 0, () => {
+          runReverse(totalNative, () => {
             const root = rootRef.current;
             if (root) {
               root.style.opacity = "0";

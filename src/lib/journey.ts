@@ -41,15 +41,19 @@ export const EDGE_DURATION: Partial<Record<NodeId, number[]>> = {
 };
 
 /**
- * Independent speed multiplier per branch autoplay (studio -> leaf).
- * >1 plays faster than real time.
+ * Per-clip forward playback speed for each branch's entrance (studio ->
+ * leaf), indexed the same as EDGE_VIDEO. >1 plays faster than real time.
+ * Reverse (exit back to studio) plays at REVERSE_SPEED_MULTIPLIER times
+ * each clip's own forward speed.
  */
-export const BRANCH_SPEED: Partial<Record<NodeId, number>> = {
-  about: 1.25,
-  contact: 1.25,
-  services: 1.25,
-  portfolio: 1.5,
+export const BRANCH_SPEED: Partial<Record<NodeId, number[]>> = {
+  about: [1.25],
+  contact: [1.25],
+  services: [1.25],
+  portfolio: [1.5, 2],
 };
+
+export const REVERSE_SPEED_MULTIPLIER = 1.5;
 
 export function pathBetween(from: NodeId, to: NodeId): { up: NodeId[]; down: NodeId[] } {
   if (from === to) return { up: [], down: [] };

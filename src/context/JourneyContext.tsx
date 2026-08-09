@@ -33,6 +33,11 @@ type JourneyApi = JourneyState & {
   setNavOpen: (open: boolean) => void;
   registerSpine: (controller: SpineController) => void;
   registerBranch: (node: NodeId, controller: BranchController) => void;
+  /** Passive sync from free scrolling — updates which spine waypoint we're
+   * logically "at" without going through the goTo animation machinery, so a
+   * later goTo (e.g. a hotspot click) computes its path from where the user
+   * actually scrolled to, not the last node they explicitly navigated to. */
+  reportSpinePosition: (node: "landing" | "facade" | "studio") => void;
 };
 
 const JourneyCtx = createContext<JourneyApi | null>(null);
@@ -59,6 +64,13 @@ export function JourneyProvider({
 
   const registerBranch = useCallback((n: NodeId, controller: BranchController) => {
     branchRefs.current[n] = controller;
+  }, []);
+
+  const reportSpinePosition = useCallback((n: "landing" | "facade" | "studio") => {
+    if (busyRef.current) return;
+    if (nodeRef.current === n) return;
+    nodeRef.current = n;
+    setNode(n);
   }, []);
 
   const goTo = useCallback(async (target: NodeId) => {
@@ -124,6 +136,7 @@ export function JourneyProvider({
         setNavOpen,
         goTo,
         goBack,
+        reportSpinePosition,
         registerSpine,
         registerBranch,
       }}

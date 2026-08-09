@@ -56,7 +56,7 @@ function fmt(n: number) {
 }
 
 export default function Spine() {
-  const { node, registerSpine, goTo, isAnimating } = useJourney();
+  const { node, registerSpine, goTo, isAnimating, reportSpinePosition } = useJourney();
 
   const scrollerRef = useRef<HTMLDivElement>(null);
   const video1Ref = useRef<HTMLVideoElement>(null);
@@ -80,6 +80,7 @@ export default function Spine() {
   const rafRef = useRef<number | null>(null);
   const nodeRef = useRef(node);
   const isAnimatingRef = useRef(isAnimating);
+  const lastReportedNodeRef = useRef<"landing" | "facade" | "studio" | null>(null);
 
   useEffect(() => {
     nodeRef.current = node;
@@ -351,6 +352,12 @@ export default function Spine() {
         progressRef.current = next;
         applyProgress(next);
         syncScrollFromProgress(next);
+
+        const classified = next >= b4 ? "studio" : next >= b2 ? "facade" : "landing";
+        if (classified !== lastReportedNodeRef.current) {
+          lastReportedNodeRef.current = classified;
+          reportSpinePosition(classified);
+        }
       }
 
       rafRef.current = requestAnimationFrame(tick);
