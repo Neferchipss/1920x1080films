@@ -1033,3 +1033,34 @@ button {
     transition-duration: 0.001ms !important;
   }
 }
+
+/* "See Studio" — landing-only shortcut that plays straight through to the
+   studio without halting on the facade checkpoint. */
+.ribbon-cta {
+  margin-left: auto;
+  margin-right: clamp(18px, 2.4vw, 36px);
+  font-size: 12px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #fff;
+  padding: 9px 18px;
+  white-space: nowrap;
+  border: 1px solid rgba(255, 255, 255, 0.45);
+  border-radius: 999px;
+  transition: background 0.3s var(--ease-cam), border-color 0.3s var(--ease-cam),
+    opacity 0.3s var(--ease-cam);
+}
+
+.ribbon-cta:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.85);
+}
+
+.ribbon-cta:disabled {
+  opacity: 0.45;
+}
+
+/* With the CTA present the nav no longer needs to claim the free space. */
+.ribbon-cta + .ribbon-persistent-nav {
+  margin-left: 0;
+}

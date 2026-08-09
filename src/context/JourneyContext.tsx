@@ -84,29 +84,39 @@ export function JourneyProvider({
 
     const { up, down } = pathBetween(nodeRef.current, target);
 
+    const arriveAt = (n: NodeId) => {
+      nodeRef.current = n;
+      setNode(n);
+    };
+
     try {
-      for (const n of up) {
-        if (isBranchNode(n)) {
-          await branchRefs.current[n]?.playReverse();
-        } else if (n === "studio" || n === "facade") {
-          const parent = PARENT[n] as "landing" | "facade";
-          await spineRef.current?.goTo(parent);
-        }
-        const parent = PARENT[n];
-        if (parent) {
-          nodeRef.current = parent;
-          setNode(parent);
-        }
+      // Branches unwind one at a time, but a run of spine nodes is handed to
+      // the spine as a single destination: it travels through the checkpoints
+      // in between without halting, so studio -> landing reads as one
+      // continuous move rather than two transitions with a stop at facade.
+      let i = 0;
+      while (i < up.length && isBranchNode(up[i])) {
+        await branchRefs.current[up[i]]?.playReverse();
+        arriveAt(PARENT[up[i]]!);
+        i++;
+      }
+      if (i < up.length) {
+        const dest = PARENT[up[up.length - 1]] as "landing" | "facade";
+        await spineRef.current?.goTo(dest);
+        arriveAt(dest);
       }
 
-      for (const n of down) {
-        if (isBranchNode(n)) {
-          await branchRefs.current[n]?.playForward();
-        } else {
-          await spineRef.current?.goTo(n as "landing" | "facade" | "studio");
-        }
-        nodeRef.current = n;
-        setNode(n);
+      // Descending, the spine nodes always come first (branches are leaves).
+      let j = 0;
+      while (j < down.length && !isBranchNode(down[j])) j++;
+      if (j > 0) {
+        const dest = down[j - 1] as "landing" | "facade" | "studio";
+        await spineRef.current?.goTo(dest);
+        arriveAt(dest);
+      }
+      for (; j < down.length; j++) {
+        await branchRefs.current[down[j]]?.playForward();
+        arriveAt(down[j]);
       }
     } finally {
       setIsAnimating(false);

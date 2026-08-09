@@ -6,6 +6,7 @@ import {
   BRANCH_SPEED,
   EDGE_DURATION,
   EDGE_VIDEO,
+  EDGE_VIDEO_REVERSE,
   NodeId,
   REVERSE_SPEED_MULTIPLIER,
 } from "@/lib/journey";
@@ -19,38 +20,51 @@ type Props = {
   restBackground: string;
 };
 
+/**
+ * The entrance's motion curve peaks at 3.2x, so its 4.5x base already asks
+ * for 14.4x on the first frame; the exit's 9x base would ask for 28.8x.
+ * 16 is the highest rate HTMLMediaElement actually honours, so both the
+ * initial and per-frame rate writes are clamped to it.
+ */
+const MAX_PLAYBACK_RATE = 16;
+
+/** Pad a per-clip config array out to `n`, repeating its last entry. */
+const perClip = (arr: number[], n: number, fallback: number) =>
+  Array.from({ length: n }, (_, i) => arr[i] ?? arr[arr.length - 1] ?? fallback);
+
 export default function BranchOverlay({ node, children, restBackground }: Props) {
   const { node: currentNode, isAnimating, registerBranch, goBack } = useJourney();
 
   const rootRef = useRef<HTMLDivElement>(null);
   const videoRefs = useRef<Array<HTMLVideoElement | null>>([]);
+  const revVideoRefs = useRef<Array<HTMLVideoElement | null>>([]);
   const contentRef = useRef<HTMLDivElement>(null);
-  const rafRef = useRef<number | null>(null);
-  const cancelForwardRef = useRef<(() => void) | null>(null);
+  const cancelSequenceRef = useRef<(() => void) | null>(null);
   const activeRef = useRef(false);
   // Branch clips use preload="none" so the ~13MB of studio-exit video isn't
   // fetched on first paint; kick the real load off only when this branch is
   // first entered.
   const loadTriggeredRef = useRef(false);
+  const revLoadTriggeredRef = useRef(false);
 
   const clips = EDGE_VIDEO[node as NodeId] ?? [];
   const durations = EDGE_DURATION[node as NodeId] ?? [];
   const speeds = BRANCH_SPEED[node as NodeId] ?? [1.5];
-  const totalNative = durations.reduce((a, b) => a + b, 0);
 
-  const clipIndexAt = (nativeT: number) => {
-    let acc = 0;
-    for (let i = 0; i < durations.length; i++) {
-      if (nativeT > acc && nativeT <= acc + durations[i]) return i;
-      acc += durations[i];
-    }
-    return durations.length - 1;
-  };
+  // The exit assets are the entrance shots encoded back-to-front, so the
+  // sequence runs through them in the opposite order, and each one's timing
+  // comes from its entrance counterpart (at REVERSE_SPEED_MULTIPLIER times
+  // that clip's own forward speed).
+  const revClips = EDGE_VIDEO_REVERSE[node as NodeId] ?? [];
+  const fwdSpeeds = perClip(speeds, clips.length, 1.5);
+  const fwdDurations = perClip(durations, clips.length, 1);
+  const revDurations = [...fwdDurations].reverse();
+  const revSpeeds = [...fwdSpeeds].reverse().map((s) => s * REVERSE_SPEED_MULTIPLIER);
 
   const setVideoTime = (nativeT: number) => {
     let acc = 0;
     for (let i = 0; i < clips.length; i++) {
-      const d = durations[i];
+      const d = fwdDurations[i];
       const v = videoRefs.current[i];
       if (!v) continue;
       if (nativeT >= acc && nativeT <= acc + d) {
@@ -68,42 +82,63 @@ export default function BranchOverlay({ node, children, restBackground }: Props)
   };
 
   // Scrubbing (repeated currentTime seeks) reads as a slideshow rather than
-  // a video. Forward entrance always plays in one direction, so drive it
-  // with real play()/playbackRate — the browser's normal decode pipeline —
-  // and chain clips on their native "ended" event instead.
-  const playForwardNative = (onDone: () => void) => {
+  // a video — and on these 2K/60fps sources a backward seek takes ~840ms, so
+  // a scrubbed transition renders essentially one frame. Both directions
+  // therefore play real, forward video with play()/playbackRate — the
+  // browser's normal decode pipeline — chaining clips on the native "ended"
+  // event. The exit gets there by playing pre-reversed encodes of the same
+  // shots (see EDGE_VIDEO_REVERSE).
+  const playSequence = (
+    refs: Array<HTMLVideoElement | null>,
+    count: number,
+    seqDurations: number[],
+    seqSpeeds: number[],
+    reversed: boolean,
+    onDone: () => void
+  ) => {
     let i = 0;
     let cancelled = false;
-    cancelForwardRef.current = () => {
+    cancelSequenceRef.current = () => {
       cancelled = true;
     };
 
+    // The motion curve exists to blast through the near-static frame the
+    // clips hold on. In a reversed encode that frame is at the *end*, not
+    // the start, so the curve has to be read backwards — otherwise an exit
+    // sprints through its most interesting motion and then lingers on the
+    // dead frame, at several times the decode cost.
+    const rate = (base: number, t: number) =>
+      Math.min(
+        MAX_PLAYBACK_RATE,
+        Math.max(0.1, base * motionCurveMultiplier(reversed ? 1 - t : t))
+      );
+
     const playNext = () => {
       if (cancelled) return;
-      if (i >= clips.length) {
+      if (i >= count) {
         onDone();
         return;
       }
-      const v = videoRefs.current[i];
+      const v = refs[i];
       if (!v) {
         i++;
         playNext();
         return;
       }
-      videoRefs.current.forEach((vv, idx) => {
+      refs.forEach((vv, idx) => {
         if (vv) vv.style.opacity = idx === i ? "1" : "0";
       });
       v.currentTime = 0;
-      const baseRate = speeds[i] ?? speeds[speeds.length - 1] ?? 1.5;
-      const dur = durations[i] || 1;
-      v.playbackRate = baseRate * motionCurveMultiplier(0);
+      const baseRate = seqSpeeds[i];
+      const dur = seqDurations[i] || 1;
+      v.playbackRate = rate(baseRate, 0);
 
       // Prime the next clip's first frame now, at the start of this clip's
       // multi-second run, rather than at the exact instant of handoff — that
       // was the jitter: the next clip only got seeked to 0 as it became
       // visible, so it could still be painting a stale/blank frame for a
       // beat before it caught up.
-      const nextV = videoRefs.current[i + 1];
+      const nextV = refs[i + 1];
       if (nextV) {
         try {
           nextV.currentTime = 0;
@@ -112,20 +147,20 @@ export default function BranchOverlay({ node, children, restBackground }: Props)
 
       const updateRate = () => {
         if (cancelled || v.ended) return;
-        v.playbackRate = Math.min(8, Math.max(0.1, baseRate * motionCurveMultiplier(v.currentTime / dur)));
+        v.playbackRate = rate(baseRate, v.currentTime / dur);
         requestAnimationFrame(updateRate);
       };
       requestAnimationFrame(updateRate);
 
       // Unlike the spine (which polls currentTime itself every frame),
       // this chain waits on the clip's own "ended" event — and at a high
-      // sustained playbackRate a 2K/60fps clip can fail to decode fast
-      // enough for the browser to ever fire it, silently stalling forever.
-      // Since JourneyContext awaits this whole promise before releasing
-      // its navigation lock, a stall here didn't just break this branch's
-      // entrance — it permanently blocked *every* future navigation,
-      // including reverse on any branch. A generous timeout guarantees
-      // this always resolves one way or another.
+      // sustained playbackRate a 2K clip can fail to decode fast enough for
+      // the browser to ever fire it, silently stalling forever. Since
+      // JourneyContext awaits this whole promise before releasing its
+      // navigation lock, a stall here wouldn't just break this transition —
+      // it would permanently block *every* future navigation in either
+      // direction. A generous timeout guarantees this always resolves one
+      // way or another.
       let settled = false;
       const finish = () => {
         if (settled) return;
@@ -144,44 +179,33 @@ export default function BranchOverlay({ node, children, restBackground }: Props)
     playNext();
   };
 
-  // Exit can't use native play() — HTML5 video has no reliable reverse
-  // playback — so it still scrubs, but at each clip's own reverse rate
-  // (forward speed x REVERSE_SPEED_MULTIPLIER) rather than one blended rate
-  // across the whole sequence.
-  const runReverse = (from: number, onDone: () => void) => {
-    if (rafRef.current) cancelAnimationFrame(rafRef.current);
-    let nativeT = from;
-    let lastTs: number | null = null;
-
-    const step = (now: number) => {
-      const dt = lastTs == null ? 0 : Math.min(0.05, (now - lastTs) / 1000);
-      lastTs = now;
-      const idx = clipIndexAt(nativeT);
-      const rate = (speeds[idx] ?? speeds[speeds.length - 1] ?? 1.5) * REVERSE_SPEED_MULTIPLIER;
-      nativeT = Math.max(0, nativeT - rate * dt);
-      setVideoTime(nativeT);
-      if (nativeT > 0) {
-        rafRef.current = requestAnimationFrame(step);
-      } else {
-        onDone();
-      }
-    };
-    rafRef.current = requestAnimationFrame(step);
-  };
-
-  const preload = () => {
-    if (loadTriggeredRef.current) return;
-    loadTriggeredRef.current = true;
+  const loadAll = (refs: Array<HTMLVideoElement | null>) => {
     // preload="none" in the markup keeps these from fetching on first
     // paint; upgrading to "auto" here, right as we actually want buffering
     // to start, is a stronger signal than an explicit load() alone — some
     // browsers still only fetch metadata after load() while preload stays
     // "none".
-    videoRefs.current.forEach((v) => {
+    refs.forEach((v) => {
       if (!v) return;
       v.preload = "auto";
       v.load();
     });
+  };
+
+  const preload = () => {
+    if (loadTriggeredRef.current) return;
+    loadTriggeredRef.current = true;
+    loadAll(videoRefs.current);
+  };
+
+  // Exit clips are only worth fetching once this branch is actually entered
+  // — buffering all four branches' exits alongside their entrances would
+  // roughly double what studio prefetches, and the entrance itself plus the
+  // user's dwell on the content is ample head start.
+  const preloadReverse = () => {
+    if (revLoadTriggeredRef.current) return;
+    revLoadTriggeredRef.current = true;
+    loadAll(revVideoRefs.current);
   };
 
   useEffect(() => {
@@ -191,6 +215,7 @@ export default function BranchOverlay({ node, children, restBackground }: Props)
         new Promise<void>((resolve) => {
           activeRef.current = true;
           preload();
+          preloadReverse();
           const root = rootRef.current;
           if (root) {
             root.style.pointerEvents = "auto";
@@ -198,8 +223,11 @@ export default function BranchOverlay({ node, children, restBackground }: Props)
           }
           if (contentRef.current) contentRef.current.style.opacity = "0";
           if (root) root.scrollTop = 0;
+          revVideoRefs.current.forEach((v) => {
+            if (v) v.style.opacity = "0";
+          });
           setVideoTime(0);
-          playForwardNative(() => {
+          playSequence(videoRefs.current, clips.length, fwdDurations, fwdSpeeds, false, () => {
             if (contentRef.current) {
               contentRef.current.style.opacity = "1";
               contentRef.current.style.pointerEvents = "auto";
@@ -209,19 +237,27 @@ export default function BranchOverlay({ node, children, restBackground }: Props)
         }),
       playReverse: () =>
         new Promise<void>((resolve) => {
-          cancelForwardRef.current?.();
-          cancelForwardRef.current = null;
-          videoRefs.current.forEach((v) => v?.pause());
+          cancelSequenceRef.current?.();
+          cancelSequenceRef.current = null;
+          preloadReverse();
+          videoRefs.current.forEach((v) => {
+            v?.pause();
+            if (v) v.style.opacity = "0";
+          });
           if (contentRef.current) {
             contentRef.current.style.opacity = "0";
             contentRef.current.style.pointerEvents = "none";
           }
-          runReverse(totalNative, () => {
+          playSequence(revVideoRefs.current, revClips.length, revDurations, revSpeeds, true, () => {
             const root = rootRef.current;
             if (root) {
               root.style.opacity = "0";
               root.style.pointerEvents = "none";
             }
+            revVideoRefs.current.forEach((v) => {
+              v?.pause();
+              if (v) v.style.opacity = "0";
+            });
             activeRef.current = false;
             resolve();
           });
@@ -232,8 +268,7 @@ export default function BranchOverlay({ node, children, restBackground }: Props)
 
   useEffect(() => {
     return () => {
-      if (rafRef.current) cancelAnimationFrame(rafRef.current);
-      cancelForwardRef.current?.();
+      cancelSequenceRef.current?.();
     };
   }, []);
 
@@ -275,6 +310,20 @@ export default function BranchOverlay({ node, children, restBackground }: Props)
             playsInline
             preload="none"
             style={{ opacity: i === 0 ? 1 : 0 }}
+          />
+        ))}
+        {revClips.map((src, i) => (
+          <video
+            key={src}
+            ref={(el) => {
+              revVideoRefs.current[i] = el;
+            }}
+            className="branch-video"
+            src={withBasePath(src)}
+            muted
+            playsInline
+            preload="none"
+            style={{ opacity: 0 }}
           />
         ))}
       </div>

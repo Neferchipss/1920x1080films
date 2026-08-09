@@ -30,6 +30,42 @@ export const EDGE_VIDEO: Partial<Record<NodeId, string[]>> = {
   portfolio: ["/video/studio-portfolio-a.mp4", "/video/studio-portfolio-b.mp4"],
 };
 
+/**
+ * Pre-rendered back-to-front encodes of the branch entrance clips, played
+ * (forwards) to animate a branch exit.
+ *
+ * The exit used to be scrubbed — a rAF loop walking `video.currentTime`
+ * down to 0. That can never render on these sources: they are 2560x1440
+ * H.264 at 60fps, where a single *backward* seek measures ~840ms, and
+ * assigning `currentTime` again while a seek is in flight replaces the
+ * pending one. Instrumenting a real exit showed 57 `seeking` events and
+ * exactly **one** `seeked` — the whole transition presented a single frame,
+ * which is why the exit read as "nothing happens, then a hard cut".
+ *
+ * HTML5 video has no negative playbackRate, so the only way to get the
+ * browser's normal decode pipeline (the same thing that makes the entrance
+ * smooth) to run an exit is to hand it a clip that is already reversed.
+ * These are encoded at 30fps rather than 60: the exit plays at ~9x, so
+ * source frames beyond 30fps could never be presented anyway, and halving
+ * them keeps the decode load at the entrance's proven level while halving
+ * the download.
+ *
+ * Indexed opposite to EDGE_VIDEO — a multi-clip branch exits through its
+ * clips back-to-front.
+ *
+ * Regenerate with (per clip, segmented because ffmpeg's `reverse` filter
+ * buffers every frame in RAM):
+ *   ffmpeg -ss S -t 2 -i in.mp4 -vf "fps=30,reverse" -an \
+ *     -c:v libx264 -crf 22 -preset medium -pix_fmt yuv420p -g 15 seg.mp4
+ * then concat the segments back-to-front with `-c copy -movflags +faststart`.
+ */
+export const EDGE_VIDEO_REVERSE: Partial<Record<NodeId, string[]>> = {
+  about: ["/video/studio-about-rev.mp4"],
+  contact: ["/video/studio-contact-rev.mp4"],
+  services: ["/video/studio-services-rev.mp4"],
+  portfolio: ["/video/studio-portfolio-b-rev.mp4", "/video/studio-portfolio-a-rev.mp4"],
+};
+
 /** Native duration of each clip in seconds (2K/60fps sources), for scrub math. */
 export const EDGE_DURATION: Partial<Record<NodeId, number[]>> = {
   facade: [12.0],

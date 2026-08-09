@@ -1,31 +1,52 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import gsap from "gsap";
 import { useJourney } from "@/context/JourneyContext";
 import { BOUNDS, REST_PROGRESS, SPINE_VH_TOTAL, clamp01 } from "@/lib/spineLayout";
 import { isSpineNode } from "@/lib/journey";
 import { withBasePath } from "@/lib/basePath";
 import { motionCurveMultiplier } from "@/lib/motionCurve";
 
-const DUR1 = 12.0;
-const DUR2 = 15.0;
+// Fallbacks only — the real durations are read off the elements once their
+// metadata lands (see durRefs). They are NOT round numbers: facade-studio.mp4
+// actually runs 15.072s, and holding the clip at a hardcoded 15.0 meant every
+// arrival at studio ended with a 0.07s *backward* seek, which on a 2560x1440
+// source costs ~540ms of decode — the stutter that used to hit right as the
+// transition came to rest.
+const DUR1_FALLBACK = 12.0;
+const DUR2_FALLBACK = 15.0;
 
 // Paginated checkpoint model: the spine holds at landing/facade/studio and
 // only moves when the user picks a direction. That single gesture commits
 // to an automatic play through to the adjacent checkpoint (a fixed cruise
 // speed, not proportional to how hard they scrolled) which then halts
 // again — further input mid-transition is ignored until it settles.
-const SPINE_CHECKPOINTS: Array<"landing" | "facade" | "studio"> = ["landing", "facade", "studio"];
+type Checkpoint = "landing" | "facade" | "studio";
+const SPINE_CHECKPOINTS: Checkpoint[] = ["landing", "facade", "studio"];
 const CRUISE_SPEED = 0.09; // progress/sec through the landing->facade clip and hold zones
-// "Studio animations" (the facade->studio clip, EDGE_VIDEO.studio, DUR2=15s)
-// get an explicit native-speed multiplier instead of the abstract cruise
-// speed, same pattern as branch clips. Both directions target ~2s
-// (15 / 7.5 = 2s), so forward and reverse use the same rate here rather
-// than a reverse multiplier.
+// "Studio animations" (the facade->studio clip, EDGE_VIDEO.studio) get an
+// explicit native-speed multiplier instead of the abstract cruise speed,
+// same pattern as branch clips. Both directions target ~2s (15 / 7.5 = 2s),
+// so forward and reverse use the same rate here rather than a reverse
+// multiplier.
 const STUDIO_ANIM_FORWARD_RATE = 7.5;
 const STUDIO_ANIM_REVERSE_RATE = 7.5;
 const VELOCITY_EASE = 0.12; // per-frame ease into CRUISE_SPEED at the start of a transition
+const MAX_RATE = 8;
+
+// Backward travel can't be done by winding `currentTime` down: a single
+// backward seek on these 2560x1440/60fps sources measures ~840ms, and
+// consecutive currentTime writes replace each other's pending seek, so a
+// scrubbed reverse presented roughly one frame for the whole transition.
+// These are the same shots pre-encoded back-to-front (at 30fps, since the
+// reverse plays at several times real time) so a backward leg can run
+// through the browser's normal decode pipeline exactly like a forward one.
+const REV_VIDEO_1 = "/video/landing-facade-rev.mp4";
+const REV_VIDEO_2 = "/video/facade-studio-rev.mp4";
+
+/** Which clip, if any, is currently owned by native playback — applyProgress
+ *  must not seek a video the playback driver is running. */
+type Driven = { which: 1 | 2; dir: 1 | -1 } | null;
 
 // Source-pixel bounding boxes measured directly off the 1600x900 studio
 // still (assets/studio.jpeg), one per interactive object. Positioned at
@@ -61,6 +82,8 @@ export default function Spine() {
   const scrollerRef = useRef<HTMLDivElement>(null);
   const video1Ref = useRef<HTMLVideoElement>(null);
   const video2Ref = useRef<HTMLVideoElement>(null);
+  const rev1Ref = useRef<HTMLVideoElement>(null);
+  const rev2Ref = useRef<HTMLVideoElement>(null);
   const landingRef = useRef<HTMLDivElement>(null);
   const landingLogoRef = useRef<HTMLDivElement>(null);
   const cueRef = useRef<HTMLDivElement>(null);
@@ -83,6 +106,21 @@ export default function Spine() {
   const nodeRef = useRef(node);
   const isAnimatingRef = useRef(isAnimating);
 
+  const dur1Ref = useRef(DUR1_FALLBACK);
+  const dur2Ref = useRef(DUR2_FALLBACK);
+  const revDur1Ref = useRef(DUR1_FALLBACK);
+  const revDur2Ref = useRef(DUR2_FALLBACK);
+  const revLoadedRef = useRef(false);
+  /** Which clip the playback driver currently owns. Held across frames so a
+   *  clip that has been handed the leg keeps it until it plays out — deciding
+   *  per frame from `p` alone let a boundary frame fall between the zones,
+   *  which handed the hidden forward clip a multi-second seek mid-reverse. */
+  const activeClipRef = useRef<1 | 2 | null>(null);
+
+  /** A programmatic (journey-driven) travel in flight — runs leg after leg
+   *  without halting on the checkpoints it passes through. */
+  const programmaticRef = useRef<{ target: Checkpoint; resolve: () => void } | null>(null);
+
   useEffect(() => {
     nodeRef.current = node;
     isAnimatingRef.current = isAnimating;
@@ -98,37 +136,56 @@ export default function Spine() {
   };
 
   // Skips redundant seeks (video.currentTime writes are real decode work,
-  // not free) when the target barely moved since the last frame.
-  const seekVideo = (v: HTMLVideoElement, t: number) => {
-    if (Math.abs(v.currentTime - t) > 0.004) v.currentTime = t;
+  // not free) when the target barely moved since the last frame. The hold
+  // positions at either end of a clip pass a much larger tolerance: a clip
+  // that just played out sits a few hundredths off its nominal end, and
+  // "correcting" that is a backward seek costing hundreds of milliseconds.
+  const seekVideo = (v: HTMLVideoElement, t: number, eps = 0.004) => {
+    if (Math.abs(v.currentTime - t) > eps) v.currentTime = t;
+  };
+  const HOLD_EPS = 0.25;
+
+  const allVideos = () => [video1Ref.current, video2Ref.current, rev1Ref.current, rev2Ref.current];
+
+  const pauseAllExcept = (keep: HTMLVideoElement | null) => {
+    allVideos().forEach((v) => {
+      if (v && v !== keep && !v.paused) v.pause();
+    });
   };
 
-  // Repeatedly seeking video.currentTime (the old approach) is fundamentally
-  // not smooth: every seek is a random-access decode, and doing 60 of them a
-  // second reads as a slideshow rather than a video. Whenever we're moving
-  // forward through an active clip, drive it with real play()/playbackRate
-  // instead and let the browser's normal decode pipeline render it — the
-  // same mechanism that makes any <video> look smooth. Progress is then
-  // read back from currentTime rather than dictating it. Returns the new
-  // progress if it drove playback, or null if the caller should fall back to
-  // manual seeking (paused/idle/reverse — playbackRate can't go negative).
-  const drivePlayback = (
+  // Repeatedly seeking video.currentTime is fundamentally not smooth: every
+  // seek is a random-access decode, and doing 60 of them a second reads as a
+  // slideshow — or, on these 2K sources, as a single frame, because pending
+  // seeks get replaced faster than they complete. So whenever we're moving
+  // through an active clip we drive a real element with play()/playbackRate
+  // and let the browser's normal decode pipeline render it; progress is then
+  // read back from currentTime rather than dictating it. Backward legs do
+  // exactly the same thing against the pre-reversed encode. Returns the new
+  // progress, or null if the caller should fall back to plain cruising.
+  const driveClip = (
     v: HTMLVideoElement,
-    velocity: number,
+    speed: number,
     zoneStart: number,
     zoneEnd: number,
-    dur: number
+    dur: number,
+    dir: 1 | -1
   ): number | null => {
-    if (velocity <= 0.002) return null;
+    if (speed <= 0.002) return null;
     if (v.paused) v.play().catch(() => {});
-    const baseRate = (velocity * dur) / (zoneEnd - zoneStart);
-    const curve = motionCurveMultiplier(dur > 0 ? v.currentTime / dur : 0);
-    v.playbackRate = Math.min(8, Math.max(0.25, baseRate * curve));
+    const span = zoneEnd - zoneStart;
+    const baseRate = (speed * dur) / span;
+    // The curve blasts through the near-static frame each clip holds on. A
+    // reversed encode carries that frame at its end, so the curve is read
+    // backwards for backward legs.
+    const frac = dur > 0 ? v.currentTime / dur : 0;
+    const curve = motionCurveMultiplier(dir > 0 ? frac : 1 - frac);
+    v.playbackRate = Math.min(MAX_RATE, Math.max(0.25, baseRate * curve));
     if (v.currentTime >= dur - 0.03) {
       v.pause();
-      return zoneEnd;
+      return dir > 0 ? zoneEnd : zoneStart;
     }
-    return zoneStart + (v.currentTime / dur) * (zoneEnd - zoneStart);
+    const done = dur > 0 ? v.currentTime / dur : 0;
+    return dir > 0 ? zoneStart + done * span : zoneEnd - done * span;
   };
 
   // Converts the explicit native-speed rate for the studio clip into an
@@ -140,17 +197,21 @@ export default function Spine() {
     const { b3, b4 } = BOUNDS;
     if (p >= b3 && p < b4) {
       const rate = dir > 0 ? STUDIO_ANIM_FORWARD_RATE : STUDIO_ANIM_REVERSE_RATE;
-      return dir * rate * ((b4 - b3) / DUR2);
+      return dir * rate * ((b4 - b3) / dur2Ref.current);
     }
     return dir * CRUISE_SPEED;
   };
 
-  const applyProgress = (p: number) => {
+  const applyProgress = (p: number, driven: Driven = null) => {
     const v1 = video1Ref.current;
     const v2 = video2Ref.current;
+    const r1 = rev1Ref.current;
+    const r2 = rev2Ref.current;
     if (!v1 || !v2) return;
 
     const { b1, b2, b3, b4 } = BOUNDS;
+    const d1 = dur1Ref.current;
+    const d2 = dur2Ref.current;
 
     // landing content
     const landingFade = 1 - clamp01(p / (b1 * 0.9 + 0.001));
@@ -169,33 +230,34 @@ export default function Spine() {
       brandMarkRef.current.setAttribute("data-visible", String(t > 0.5));
     }
 
-    // video1 scrub
-    let v1Visible = true;
-    if (p <= b1) {
-      seekVideo(v1, 0);
-    } else if (p < b2) {
-      const t = (p - b1) / (b2 - b1);
-      seekVideo(v1, clamp01(t) * DUR1);
-    } else {
-      seekVideo(v1, DUR1);
+    // clip 1 (landing -> facade)
+    const driven1 = driven?.which === 1;
+    if (!driven1) {
+      if (p <= b1) seekVideo(v1, 0, HOLD_EPS);
+      else if (p < b2) seekVideo(v1, clamp01((p - b1) / (b2 - b1)) * d1);
+      else seekVideo(v1, d1, HOLD_EPS);
     }
-    v1Visible = p < b3 + 0.001;
-    v1.style.opacity = v1Visible ? "1" : "0";
+    const show1 = p < b3 + 0.001;
+    const rev1Showing = driven1 && driven!.dir < 0;
+    v1.style.opacity = show1 && !rev1Showing ? "1" : "0";
+    if (r1) r1.style.opacity = show1 && rev1Showing ? "1" : "0";
 
-    // video2 scrub
-    let v2Visible = true;
-    if (p <= b3) {
-      seekVideo(v2, 0);
-      v2Visible = false;
-    } else if (p < b4) {
-      const t = (p - b3) / (b4 - b3);
-      seekVideo(v2, clamp01(t) * DUR2);
-      v2Visible = true;
-    } else {
-      seekVideo(v2, DUR2);
-      v2Visible = true;
+    // clip 2 (facade -> studio)
+    const driven2 = driven?.which === 2;
+    let show2 = true;
+    if (!driven2) {
+      if (p <= b3) {
+        seekVideo(v2, 0, HOLD_EPS);
+        show2 = false;
+      } else if (p < b4) {
+        seekVideo(v2, clamp01((p - b3) / (b4 - b3)) * d2);
+      } else {
+        seekVideo(v2, d2, HOLD_EPS);
+      }
     }
-    v2.style.opacity = v2Visible ? "1" : "0";
+    const rev2Showing = driven2 && driven!.dir < 0;
+    v2.style.opacity = show2 && !rev2Showing ? "1" : "0";
+    if (r2) r2.style.opacity = show2 && rev2Showing ? "1" : "0";
 
     // studio hold content
     if (studioRef.current) {
@@ -255,15 +317,93 @@ export default function Spine() {
     countersRafRef.current = requestAnimationFrame(step);
   };
 
-  const settleAt = (cp: "landing" | "facade" | "studio") => {
+  // The reversed encodes are only needed once the journey is actually moving,
+  // so they stay preload="none" and start buffering on the first leg rather
+  // than competing with the forward clips for bandwidth on first paint.
+  const ensureRevLoaded = () => {
+    if (revLoadedRef.current) return;
+    revLoadedRef.current = true;
+    [rev1Ref.current, rev2Ref.current].forEach((v) => {
+      if (!v) return;
+      v.preload = "auto";
+      v.load();
+    });
+  };
+
+  /** Commit to travelling one checkpoint in `dir`. Returns false if there
+   *  isn't one that way. */
+  const beginLeg = (dir: 1 | -1) => {
+    const targetIndex = checkpointIndexRef.current + dir;
+    if (targetIndex < 0 || targetIndex >= SPINE_CHECKPOINTS.length) return false;
+    if (SPINE_CHECKPOINTS[checkpointIndexRef.current] === "facade") stopCounters();
+    ensureRevLoaded();
+    if (dir < 0) {
+      // A backward leg always starts at a checkpoint, i.e. outside both clip
+      // zones, so the reversed encode always plays from its own first frame.
+      [rev1Ref.current, rev2Ref.current].forEach((v) => {
+        if (!v) return;
+        v.pause();
+        try {
+          v.currentTime = 0;
+        } catch {}
+      });
+    }
+    activeClipRef.current = null;
+    haltedRef.current = false;
+    travelDirRef.current = dir;
+    return true;
+  };
+
+  const settleAt = (cp: Checkpoint) => {
     haltedRef.current = true;
     travelDirRef.current = 0;
     velocityRef.current = 0;
     checkpointIndexRef.current = SPINE_CHECKPOINTS.indexOf(cp);
+    activeClipRef.current = null;
+    pauseAllExcept(null);
+
+    const prog = programmaticRef.current;
+    if (prog && cp !== prog.target) {
+      // Journey-driven travel runs straight through intermediate checkpoints
+      // — no halt, no counters — so landing -> studio reads as one move.
+      const dir = SPINE_CHECKPOINTS.indexOf(prog.target) > checkpointIndexRef.current ? 1 : -1;
+      stopCounters();
+      if (beginLeg(dir)) return;
+    }
+    if (prog) {
+      programmaticRef.current = null;
+      prog.resolve();
+    }
     if (cp === "facade") startCounters();
     else stopCounters();
     reportSpinePosition(cp);
   };
+
+  // These elements are server-rendered with their src, so `loadedmetadata`
+  // can fire before React ever attaches a handler — read whatever is already
+  // known on mount and only subscribe for the ones still pending.
+  useEffect(() => {
+    const pairs: Array<[HTMLVideoElement | null, React.RefObject<number>]> = [
+      [video1Ref.current, dur1Ref],
+      [video2Ref.current, dur2Ref],
+      [rev1Ref.current, revDur1Ref],
+      [rev2Ref.current, revDur2Ref],
+    ];
+    const cleanups: Array<() => void> = [];
+    pairs.forEach(([el, ref]) => {
+      if (!el) return;
+      const read = () => {
+        const d = el.duration;
+        if (Number.isFinite(d) && d > 0) ref.current = d;
+      };
+      read();
+      if (!Number.isFinite(el.duration) || el.duration <= 0) {
+        el.addEventListener("loadedmetadata", read);
+        cleanups.push(() => el.removeEventListener("loadedmetadata", read));
+      }
+    });
+    return () => cleanups.forEach((c) => c());
+  }, []);
 
   useEffect(() => {
     const layoutHotspots = () => {
@@ -310,11 +450,7 @@ export default function Spine() {
     const requestTravel = (direction: 1 | -1) => {
       if (!isSpineNode(nodeRef.current) || isAnimatingRef.current) return;
       if (!haltedRef.current) return;
-      const targetIndex = checkpointIndexRef.current + direction;
-      if (targetIndex < 0 || targetIndex >= SPINE_CHECKPOINTS.length) return;
-      if (SPINE_CHECKPOINTS[checkpointIndexRef.current] === "facade") stopCounters();
-      haltedRef.current = false;
-      travelDirRef.current = direction;
+      beginLeg(direction);
     };
 
     const onWheel = (e: WheelEvent) => {
@@ -357,7 +493,13 @@ export default function Spine() {
       lastTsRef.current = ts;
       const dt = last == null ? 0 : Math.min(0.05, (ts - last) / 1000);
 
-      if (!isAnimatingRef.current && isSpineNode(nodeRef.current) && !haltedRef.current && dt > 0) {
+      const programmatic = programmaticRef.current != null;
+      if (
+        (!isAnimatingRef.current || programmatic) &&
+        isSpineNode(nodeRef.current) &&
+        !haltedRef.current &&
+        dt > 0
+      ) {
         const dir = travelDirRef.current;
         const targetIndex = checkpointIndexRef.current + dir;
         const targetCp = SPINE_CHECKPOINTS[targetIndex];
@@ -367,35 +509,66 @@ export default function Spine() {
         velocityRef.current += (desiredVelocity(dir, p) - velocityRef.current) * VELOCITY_EASE;
 
         const { b1, b2, b3, b4 } = BOUNDS;
-        const v1 = video1Ref.current;
-        const v2 = video2Ref.current;
+        const vel = velocityRef.current;
+        const speed = Math.abs(vel);
+        const forward = vel > 0;
         let next: number | null = null;
+        let driven: Driven = null;
+        let keep: HTMLVideoElement | null = null;
 
-        if (v1 && p >= b1 && p < b2 && velocityRef.current > 0) {
-          next = drivePlayback(v1, velocityRef.current, b1, b2, DUR1);
-          if (next != null && v2 && !v2.paused) v2.pause();
-        } else if (v2 && p >= b3 && p < b4 && velocityRef.current > 0) {
-          next = drivePlayback(v2, velocityRef.current, b3, b4, DUR2);
-          if (next != null && v1 && !v1.paused) v1.pause();
-        } else {
-          if (v1 && !v1.paused) v1.pause();
-          if (v2 && !v2.paused) v2.pause();
+        // Zone membership is tested against where this frame is *heading*,
+        // not where it starts, and is half-open on the side we're travelling
+        // away from. Testing the current position instead left one frame per
+        // leg that had already crossed into a clip's zone without the driver
+        // having claimed it, so applyProgress positioned that clip by seeking
+        // — a ~1.3s decode on these 2K sources, right at the hand-off.
+        const pNext = p + vel * dt;
+        if (speed > 0.002 && activeClipRef.current == null) {
+          const inZone1 = forward ? pNext >= b1 && pNext < b2 : pNext > b1 && pNext <= b2;
+          const inZone2 = forward ? pNext >= b3 && pNext < b4 : pNext > b3 && pNext <= b4;
+          if (inZone1) activeClipRef.current = 1;
+          else if (inZone2) activeClipRef.current = 2;
         }
 
+        const active = speed > 0.002 ? activeClipRef.current : null;
+        if (active) {
+          const el = active === 1
+            ? forward ? video1Ref.current : rev1Ref.current
+            : forward ? video2Ref.current : rev2Ref.current;
+          const d = active === 1
+            ? forward ? dur1Ref.current : revDur1Ref.current
+            : forward ? dur2Ref.current : revDur2Ref.current;
+          const [zStart, zEnd] = active === 1 ? [b1, b2] : [b3, b4];
+          if (el) {
+            next = driveClip(el, speed, zStart, zEnd, d, forward ? 1 : -1);
+            if (next != null) {
+              driven = { which: active, dir: forward ? 1 : -1 };
+              keep = el;
+              // Played out — hand the rest of the leg back to plain cruising.
+              if (next === (forward ? zEnd : zStart)) activeClipRef.current = null;
+            } else {
+              activeClipRef.current = null;
+            }
+          } else {
+            activeClipRef.current = null;
+          }
+        }
+        pauseAllExcept(keep);
+
         if (next == null) {
-          next = p + velocityRef.current * dt;
+          next = pNext;
         }
 
         const arrived = dir > 0 ? next >= targetP : next <= targetP;
         if (arrived) {
           next = targetP;
-          if (v1 && !v1.paused) v1.pause();
-          if (v2 && !v2.paused) v2.pause();
+          driven = null;
+          pauseAllExcept(null);
           settleAt(targetCp);
         }
 
         progressRef.current = next;
-        applyProgress(next);
+        applyProgress(next, driven);
         syncScrollFromProgress(next);
       }
 
@@ -422,34 +595,33 @@ export default function Spine() {
 
   useEffect(() => {
     registerSpine({
-      goTo: async (target) => {
-        const p = REST_PROGRESS[target];
-        // isAnimating (set by JourneyContext before this runs) already keeps
-        // the checkpoint tick's own active block from touching progress
-        // while this tween drives it directly.
-        velocityRef.current = 0;
-        stopCounters();
-        if (video1Ref.current && !video1Ref.current.paused) video1Ref.current.pause();
-        if (video2Ref.current && !video2Ref.current.paused) video2Ref.current.pause();
-        const obj = { p: progressRef.current };
-
-        await new Promise<void>((resolve) => {
-          gsap.to(obj, {
-            p,
-            duration: 1.5,
-            ease: "power2.inOut",
-            onUpdate: () => {
-              progressRef.current = obj.p;
-              applyProgress(obj.p);
-              syncScrollFromProgress(obj.p);
-            },
-            onComplete: () => {
-              settleAt(target);
-              resolve();
-            },
-          });
-        });
-      },
+      // Journey-driven travel reuses the very same checkpoint machinery as a
+      // scroll gesture — identical cruise/studio rates, identical native
+      // playback in both directions — it just doesn't stop on the way. That
+      // keeps one implementation of "move the spine" instead of a parallel
+      // tween that scrubbed (and so rendered almost nothing going backwards).
+      goTo: (target) =>
+        new Promise<void>((resolve) => {
+          const idx = SPINE_CHECKPOINTS.indexOf(target);
+          if (idx < 0) {
+            resolve();
+            return;
+          }
+          if (idx === checkpointIndexRef.current && haltedRef.current) {
+            progressRef.current = REST_PROGRESS[target];
+            applyProgress(progressRef.current);
+            syncScrollFromProgress(progressRef.current);
+            resolve();
+            return;
+          }
+          stopCounters();
+          programmaticRef.current = { target, resolve };
+          const dir = idx > checkpointIndexRef.current ? 1 : -1;
+          if (!beginLeg(dir)) {
+            programmaticRef.current = null;
+            resolve();
+          }
+        }),
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -482,6 +654,24 @@ export default function Spine() {
           muted
           playsInline
           preload="auto"
+        />
+        <video
+          ref={rev1Ref}
+          className="spine-video"
+          src={withBasePath(REV_VIDEO_1)}
+          muted
+          playsInline
+          preload="none"
+          style={{ opacity: 0 }}
+        />
+        <video
+          ref={rev2Ref}
+          className="spine-video"
+          src={withBasePath(REV_VIDEO_2)}
+          muted
+          playsInline
+          preload="none"
+          style={{ opacity: 0 }}
         />
 
         <div className="landing-layer" ref={landingRef}>
