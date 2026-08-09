@@ -6,6 +6,7 @@ import { useJourney } from "@/context/JourneyContext";
 import { BOUNDS, REST_PROGRESS, SPINE_VH_TOTAL, clamp01 } from "@/lib/spineLayout";
 import { isSpineNode } from "@/lib/journey";
 import { withBasePath } from "@/lib/basePath";
+import { motionCurveMultiplier } from "@/lib/motionCurve";
 
 const DUR1 = 12.0;
 const DUR2 = 15.0;
@@ -120,7 +121,9 @@ export default function Spine() {
   ): number | null => {
     if (velocity <= 0.002) return null;
     if (v.paused) v.play().catch(() => {});
-    v.playbackRate = Math.min(6, Math.max(0.25, (velocity * dur) / (zoneEnd - zoneStart)));
+    const baseRate = (velocity * dur) / (zoneEnd - zoneStart);
+    const curve = motionCurveMultiplier(dur > 0 ? v.currentTime / dur : 0);
+    v.playbackRate = Math.min(10, Math.max(0.25, baseRate * curve));
     if (v.currentTime >= dur - 0.03) {
       v.pause();
       return zoneEnd;
@@ -313,7 +316,13 @@ export default function Spine() {
       lastTsRef.current = ts;
       const dt = last == null ? 0 : Math.min(0.05, (ts - last) / 1000);
 
-      if (!isAnimatingRef.current && dt > 0) {
+      // Gated on isSpineNode too, not just isAnimating: without this, the
+      // baseline auto-drift kept nudging progress (and reporting it) while
+      // a branch overlay was fully open and idle, silently dragging the
+      // tracked node back to "studio" behind the overlay — so by the time
+      // you clicked back, the app thought you were already at studio and
+      // skipped the branch's playReverse() entirely.
+      if (!isAnimatingRef.current && isSpineNode(nodeRef.current) && dt > 0) {
         inputVelocityRef.current *= Math.pow(IMPULSE_DECAY_PER_SEC, dt);
 
         const target = engagedRef.current

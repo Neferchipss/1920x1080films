@@ -10,6 +10,7 @@ import {
   REVERSE_SPEED_MULTIPLIER,
 } from "@/lib/journey";
 import { withBasePath } from "@/lib/basePath";
+import { motionCurveMultiplier } from "@/lib/motionCurve";
 
 type Props = {
   node: "about" | "portfolio" | "contact" | "services";
@@ -93,7 +94,17 @@ export default function BranchOverlay({ node, children, restBackground }: Props)
         if (vv) vv.style.opacity = idx === i ? "1" : "0";
       });
       v.currentTime = 0;
-      v.playbackRate = speeds[i] ?? speeds[speeds.length - 1] ?? 1.5;
+      const baseRate = speeds[i] ?? speeds[speeds.length - 1] ?? 1.5;
+      const dur = durations[i] || 1;
+      v.playbackRate = baseRate * motionCurveMultiplier(0);
+
+      const updateRate = () => {
+        if (cancelled || v.ended) return;
+        v.playbackRate = Math.min(10, Math.max(0.1, baseRate * motionCurveMultiplier(v.currentTime / dur)));
+        requestAnimationFrame(updateRate);
+      };
+      requestAnimationFrame(updateRate);
+
       const onEnded = () => {
         v.removeEventListener("ended", onEnded);
         if (cancelled) return;
