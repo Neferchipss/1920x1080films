@@ -310,8 +310,7 @@ button {
   display: block;
   width: clamp(220px, 34vw, 560px);
   height: auto;
-  filter: brightness(0) invert(1);
-  mix-blend-mode: difference;
+  filter: brightness(0);
 }
 
 .scene-footer {

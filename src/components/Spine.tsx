@@ -4,7 +4,7 @@ import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { useJourney } from "@/context/JourneyContext";
 import { BOUNDS, REST_PROGRESS, SPINE_VH_TOTAL, clamp01 } from "@/lib/spineLayout";
-import { isSpineNode, REVERSE_SPEED_MULTIPLIER } from "@/lib/journey";
+import { isSpineNode } from "@/lib/journey";
 import { withBasePath } from "@/lib/basePath";
 import { motionCurveMultiplier } from "@/lib/motionCurve";
 
@@ -18,11 +18,13 @@ const DUR2 = 15.0;
 // again — further input mid-transition is ignored until it settles.
 const SPINE_CHECKPOINTS: Array<"landing" | "facade" | "studio"> = ["landing", "facade", "studio"];
 const CRUISE_SPEED = 0.09; // progress/sec through the landing->facade clip and hold zones
-// "Studio animations" (the facade->studio clip, EDGE_VIDEO.studio) get an
-// explicit native-speed multiplier instead of the abstract cruise speed,
-// same pattern as branch clips.
-const STUDIO_ANIM_FORWARD_RATE = 1.75;
-const STUDIO_ANIM_REVERSE_RATE = STUDIO_ANIM_FORWARD_RATE * REVERSE_SPEED_MULTIPLIER;
+// "Studio animations" (the facade->studio clip, EDGE_VIDEO.studio, DUR2=15s)
+// get an explicit native-speed multiplier instead of the abstract cruise
+// speed, same pattern as branch clips. Both directions target ~2s
+// (15 / 7.5 = 2s), so forward and reverse use the same rate here rather
+// than a reverse multiplier.
+const STUDIO_ANIM_FORWARD_RATE = 7.5;
+const STUDIO_ANIM_REVERSE_RATE = 7.5;
 const VELOCITY_EASE = 0.12; // per-frame ease into CRUISE_SPEED at the start of a transition
 
 // Source-pixel bounding boxes measured directly off the 1600x900 studio
@@ -155,7 +157,10 @@ export default function Spine() {
     if (landingRef.current) landingRef.current.style.opacity = String(landingFade);
     if (cueRef.current) cueRef.current.style.opacity = String(landingFade);
     if (landingLogoRef.current) {
-      const t = clamp01(p / (b1 + 0.02));
+      // Denominator is b1 exactly (not b1 + slack) so the logo finishes
+      // fading out right as p reaches b1 — i.e. exactly when the clip
+      // itself starts moving, instead of lingering into it.
+      const t = clamp01(p / b1);
       landingLogoRef.current.style.transform = `translateY(-50%) scale(${1 - t * 0.55})`;
       landingLogoRef.current.style.opacity = String(1 - t);
     }

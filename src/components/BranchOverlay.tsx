@@ -98,6 +98,18 @@ export default function BranchOverlay({ node, children, restBackground }: Props)
       const dur = durations[i] || 1;
       v.playbackRate = baseRate * motionCurveMultiplier(0);
 
+      // Prime the next clip's first frame now, at the start of this clip's
+      // multi-second run, rather than at the exact instant of handoff — that
+      // was the jitter: the next clip only got seeked to 0 as it became
+      // visible, so it could still be painting a stale/blank frame for a
+      // beat before it caught up.
+      const nextV = videoRefs.current[i + 1];
+      if (nextV) {
+        try {
+          nextV.currentTime = 0;
+        } catch {}
+      }
+
       const updateRate = () => {
         if (cancelled || v.ended) return;
         v.playbackRate = Math.min(10, Math.max(0.1, baseRate * motionCurveMultiplier(v.currentTime / dur)));
