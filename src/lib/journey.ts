@@ -42,13 +42,13 @@ export const EDGE_DURATION: Partial<Record<NodeId, number[]>> = {
 
 /**
  * Independent speed multiplier per branch autoplay (studio -> leaf).
- * >1 plays faster than real time. Tuned so each branch feels distinct.
+ * >1 plays faster than real time.
  */
 export const BRANCH_SPEED: Partial<Record<NodeId, number>> = {
-  about: 1.5,
-  contact: 1.6,
-  services: 1.35,
-  portfolio: 1.9,
+  about: 1.25,
+  contact: 1.25,
+  services: 1.25,
+  portfolio: 1.5,
 };
 
 export function pathBetween(from: NodeId, to: NodeId): { up: NodeId[]; down: NodeId[] } {

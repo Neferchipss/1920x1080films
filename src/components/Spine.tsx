@@ -2,17 +2,24 @@
 
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
-import { ScrollToPlugin } from "gsap/ScrollToPlugin";
 import { useJourney } from "@/context/JourneyContext";
 import { BOUNDS, REST_PROGRESS, SPINE_VH_TOTAL, clamp01 } from "@/lib/spineLayout";
+import { isSpineNode } from "@/lib/journey";
 import { withBasePath } from "@/lib/basePath";
-
-if (typeof window !== "undefined") {
-  gsap.registerPlugin(ScrollToPlugin);
-}
 
 const DUR1 = 12.0;
 const DUR2 = 15.0;
+
+// Auto-scroll tuning: once engaged, the spine drifts forward on its own like
+// an autoplaying video. Manual wheel/touch/keyboard input adds a decaying
+// impulse on top of that baseline, so scrolling controls speed and direction
+// without ever position-locking progress to raw scroll deltas (the source of
+// the old scrub jank).
+const BASE_SPEED = 0.03; // progress/sec drift once engaged
+const MAX_SPEED = 0.5; // progress/sec clamp
+const INPUT_K = 0.0022; // px of scroll/touch delta -> progress/sec impulse
+const IMPULSE_DECAY_PER_SEC = 0.02; // multiplicative decay applied per second
+const VELOCITY_EASE = 0.12; // per-frame ease toward target velocity
 
 // Source-pixel bounding boxes measured directly off the 1600x900 studio
 // still (assets/studio.jpeg), one per interactive object. Positioned at
@@ -60,9 +67,27 @@ export default function Spine() {
   const hotspotRefs = useRef<Partial<Record<keyof typeof HOTSPOT_BOXES, HTMLButtonElement | null>>>({});
 
   const progressRef = useRef(0);
-  const targetProgressRef = useRef(0);
+  const velocityRef = useRef(0);
+  const inputVelocityRef = useRef(0);
+  const engagedRef = useRef(false);
+  const lastTsRef = useRef<number | null>(null);
   const rafRef = useRef<number | null>(null);
-  const suppressScrollRef = useRef(false);
+  const nodeRef = useRef(node);
+  const isAnimatingRef = useRef(isAnimating);
+
+  useEffect(() => {
+    nodeRef.current = node;
+    isAnimatingRef.current = isAnimating;
+  }, [node, isAnimating]);
+
+  const syncScrollFromProgress = (p: number) => {
+    const el = scrollerRef.current;
+    if (!el) return;
+    const total = el.offsetHeight - window.innerHeight;
+    if (total <= 0) return;
+    const y = el.offsetTop + p * total;
+    if (Math.abs(window.scrollY - y) > 0.5) window.scrollTo(0, y);
+  };
 
   const applyProgress = (p: number) => {
     const v1 = video1Ref.current;
@@ -188,51 +213,104 @@ export default function Spine() {
   }, []);
 
   useEffect(() => {
-    // The rAF loop only runs while progress is actually converging toward
-    // its target, instead of ticking forever at 60fps for the whole time
-    // the page is open — this is the main idle-CPU cost of a scroll-scrubbed
-    // page, and stopping it when settled measurably smooths out scrolling
-    // elsewhere on the page (fewer competing frame callbacks).
-    const tick = () => {
-      progressRef.current += (targetProgressRef.current - progressRef.current) * 0.16;
-      const settled = Math.abs(progressRef.current - targetProgressRef.current) < 0.0004;
-      if (settled) progressRef.current = targetProgressRef.current;
-      applyProgress(progressRef.current);
-      if (settled) {
-        rafRef.current = null;
-      } else {
-        rafRef.current = requestAnimationFrame(tick);
+    // Progress is no longer a direct function of scroll position (that 1:1
+    // mapping is what caused the old per-scroll-event video.currentTime
+    // jank). Instead a rAF loop integrates a velocity: once "engaged" by a
+    // first scroll-like gesture, progress drifts forward on its own at
+    // BASE_SPEED, and wheel/touch/keyboard input adds a decaying impulse on
+    // top that can speed it up, slow it down, or reverse it. The real page
+    // scroll position is then driven *from* progress (not the other way
+    // round) purely so the browser scrollbar stays in sync.
+    const addImpulse = (deltaY: number) => {
+      if (!isSpineNode(nodeRef.current) || isAnimatingRef.current) return;
+      engagedRef.current = true;
+      inputVelocityRef.current = Math.max(
+        -MAX_SPEED,
+        Math.min(MAX_SPEED, inputVelocityRef.current + deltaY * INPUT_K)
+      );
+    };
+
+    const normalizeWheelDelta = (e: WheelEvent) => {
+      if (e.deltaMode === 1) return e.deltaY * 16; // line -> px
+      if (e.deltaMode === 2) return e.deltaY * window.innerHeight; // page -> px
+      return e.deltaY;
+    };
+
+    const onWheel = (e: WheelEvent) => {
+      if (!isSpineNode(nodeRef.current) || isAnimatingRef.current) return;
+      e.preventDefault();
+      addImpulse(normalizeWheelDelta(e));
+    };
+
+    let touchLastY = 0;
+    const onTouchStart = (e: TouchEvent) => {
+      touchLastY = e.touches[0]?.clientY ?? 0;
+    };
+    const onTouchMove = (e: TouchEvent) => {
+      if (!isSpineNode(nodeRef.current) || isAnimatingRef.current) return;
+      const y = e.touches[0]?.clientY ?? touchLastY;
+      const deltaY = touchLastY - y; // finger moves up => content scrolls down
+      touchLastY = y;
+      e.preventDefault();
+      addImpulse(deltaY);
+    };
+
+    const KEY_STEP: Record<string, number> = {
+      ArrowDown: 60,
+      PageDown: 400,
+      ArrowUp: -60,
+      PageUp: -400,
+    };
+    const onKeyDown = (e: KeyboardEvent) => {
+      const step = KEY_STEP[e.key];
+      if (step === undefined) return;
+      if (!isSpineNode(nodeRef.current) || isAnimatingRef.current) return;
+      e.preventDefault();
+      addImpulse(step);
+    };
+
+    const tick = (ts: number) => {
+      const last = lastTsRef.current;
+      lastTsRef.current = ts;
+      const dt = last == null ? 0 : Math.min(0.05, (ts - last) / 1000);
+
+      if (!isAnimatingRef.current && dt > 0) {
+        inputVelocityRef.current *= Math.pow(IMPULSE_DECAY_PER_SEC, dt);
+
+        const target = engagedRef.current
+          ? Math.max(-MAX_SPEED, Math.min(MAX_SPEED, BASE_SPEED + inputVelocityRef.current))
+          : 0;
+        velocityRef.current += (target - velocityRef.current) * VELOCITY_EASE;
+
+        let next = progressRef.current + velocityRef.current * dt;
+        if (next <= 0) {
+          next = 0;
+          velocityRef.current = Math.max(velocityRef.current, 0);
+        } else if (next >= 1) {
+          next = 1;
+          velocityRef.current = Math.min(velocityRef.current, 0);
+        }
+        progressRef.current = next;
+        applyProgress(next);
+        syncScrollFromProgress(next);
       }
+
+      rafRef.current = requestAnimationFrame(tick);
     };
 
-    const ensureTicking = () => {
-      if (rafRef.current == null) {
-        rafRef.current = requestAnimationFrame(tick);
-      }
-    };
+    applyProgress(progressRef.current);
+    rafRef.current = requestAnimationFrame(tick);
 
-    const onScroll = () => {
-      if (suppressScrollRef.current) return;
-      const el = scrollerRef.current;
-      if (!el) return;
-      const rect = el.getBoundingClientRect();
-      const total = el.offsetHeight - window.innerHeight;
-      const scrolled = -rect.top;
-      const p = clamp01(total > 0 ? scrolled / total : 0);
-      targetProgressRef.current = p;
-      // Fallback for environments where rAF is throttled/paused (backgrounded
-      // tabs, some low-power devices): converge + apply directly off the
-      // scroll event itself so the spine never fully stalls. The rAF loop
-      // above still owns the smooth cinematic lag when frames are granted.
-      progressRef.current += (p - progressRef.current) * 0.5;
-      applyProgress(progressRef.current);
-      ensureTicking();
-    };
+    window.addEventListener("wheel", onWheel, { passive: false });
+    window.addEventListener("touchstart", onTouchStart, { passive: true });
+    window.addEventListener("touchmove", onTouchMove, { passive: false });
+    window.addEventListener("keydown", onKeyDown);
 
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
     return () => {
-      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("wheel", onWheel);
+      window.removeEventListener("touchstart", onTouchStart);
+      window.removeEventListener("touchmove", onTouchMove);
+      window.removeEventListener("keydown", onKeyDown);
       if (rafRef.current) cancelAnimationFrame(rafRef.current);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -241,35 +319,29 @@ export default function Spine() {
   useEffect(() => {
     registerSpine({
       goTo: async (target) => {
-        const el = scrollerRef.current;
-        if (!el) return;
-        const total = el.offsetHeight - window.innerHeight;
         const p = REST_PROGRESS[target];
-        const y = el.offsetTop + p * total;
+        velocityRef.current = 0;
+        inputVelocityRef.current = 0;
+        const obj = { p: progressRef.current };
 
         await new Promise<void>((resolve) => {
-          gsap.to(
-            {},
-            {
-              duration: 0.05,
-              onComplete: () => {
-                gsap.to(window, {
-                  scrollTo: { y, autoKill: false },
-                  duration: 1.5,
-                  ease: "power2.inOut",
-                  onUpdate: () => {
-                    targetProgressRef.current = p;
-                  },
-                  onComplete: () => {
-                    progressRef.current = p;
-                    targetProgressRef.current = p;
-                    applyProgress(p);
-                    resolve();
-                  },
-                });
-              },
-            }
-          );
+          gsap.to(obj, {
+            p,
+            duration: 1.5,
+            ease: "power2.inOut",
+            onUpdate: () => {
+              progressRef.current = obj.p;
+              applyProgress(obj.p);
+              syncScrollFromProgress(obj.p);
+            },
+            onComplete: () => {
+              progressRef.current = p;
+              applyProgress(p);
+              syncScrollFromProgress(p);
+              engagedRef.current = true;
+              resolve();
+            },
+          });
         });
       },
     });
