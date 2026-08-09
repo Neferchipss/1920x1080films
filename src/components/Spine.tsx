@@ -4,7 +4,7 @@ import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { useJourney } from "@/context/JourneyContext";
 import { BOUNDS, REST_PROGRESS, SPINE_VH_TOTAL, clamp01 } from "@/lib/spineLayout";
-import { isSpineNode } from "@/lib/journey";
+import { isSpineNode, REVERSE_SPEED_MULTIPLIER } from "@/lib/journey";
 import { withBasePath } from "@/lib/basePath";
 import { motionCurveMultiplier } from "@/lib/motionCurve";
 
@@ -17,7 +17,12 @@ const DUR2 = 15.0;
 // speed, not proportional to how hard they scrolled) which then halts
 // again — further input mid-transition is ignored until it settles.
 const SPINE_CHECKPOINTS: Array<"landing" | "facade" | "studio"> = ["landing", "facade", "studio"];
-const CRUISE_SPEED = 0.09; // progress/sec while committed to a transition
+const CRUISE_SPEED = 0.09; // progress/sec through the landing->facade clip and hold zones
+// "Studio animations" (the facade->studio clip, EDGE_VIDEO.studio) get an
+// explicit native-speed multiplier instead of the abstract cruise speed,
+// same pattern as branch clips.
+const STUDIO_ANIM_FORWARD_RATE = 1.75;
+const STUDIO_ANIM_REVERSE_RATE = STUDIO_ANIM_FORWARD_RATE * REVERSE_SPEED_MULTIPLIER;
 const VELOCITY_EASE = 0.12; // per-frame ease into CRUISE_SPEED at the start of a transition
 
 // Source-pixel bounding boxes measured directly off the 1600x900 studio
@@ -122,6 +127,20 @@ export default function Spine() {
       return zoneEnd;
     }
     return zoneStart + (v.currentTime / dur) * (zoneEnd - zoneStart);
+  };
+
+  // Converts the explicit native-speed rate for the studio clip into an
+  // equivalent progress/sec so it plugs into the same velocity-ease/zone
+  // machinery as everything else; falls back to the flat cruise speed
+  // outside that clip's zone (landing->facade clip, and hold zones, which
+  // have no native-rate concept of their own).
+  const desiredVelocity = (dir: number, p: number) => {
+    const { b3, b4 } = BOUNDS;
+    if (p >= b3 && p < b4) {
+      const rate = dir > 0 ? STUDIO_ANIM_FORWARD_RATE : STUDIO_ANIM_REVERSE_RATE;
+      return dir * rate * ((b4 - b3) / DUR2);
+    }
+    return dir * CRUISE_SPEED;
   };
 
   const applyProgress = (p: number) => {
@@ -339,10 +358,10 @@ export default function Spine() {
         const targetCp = SPINE_CHECKPOINTS[targetIndex];
         const targetP = REST_PROGRESS[targetCp];
 
-        velocityRef.current += (dir * CRUISE_SPEED - velocityRef.current) * VELOCITY_EASE;
+        const p = progressRef.current;
+        velocityRef.current += (desiredVelocity(dir, p) - velocityRef.current) * VELOCITY_EASE;
 
         const { b1, b2, b3, b4 } = BOUNDS;
-        const p = progressRef.current;
         const v1 = video1Ref.current;
         const v2 = video2Ref.current;
         let next: number | null = null;

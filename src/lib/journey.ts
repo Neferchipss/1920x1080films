@@ -50,10 +50,10 @@ export const BRANCH_SPEED: Partial<Record<NodeId, number[]>> = {
   about: [1.25],
   contact: [1.25],
   services: [1.25],
-  portfolio: [1.5, 2],
+  portfolio: [2, 2],
 };
 
-export const REVERSE_SPEED_MULTIPLIER = 1.5;
+export const REVERSE_SPEED_MULTIPLIER = 1.75;
 
 export function pathBetween(from: NodeId, to: NodeId): { up: NodeId[]; down: NodeId[] } {
   if (from === to) return { up: [], down: [] };
