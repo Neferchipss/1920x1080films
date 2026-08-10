@@ -505,8 +505,12 @@ button {
   position: fixed;
   inset: 0;
   z-index: 40;
-  transition: opacity 0.05s linear;
   overflow-y: auto;
+  /* No fade on opacity: branch-to-branch (e.g. portfolio -> about) reverses
+     one overlay then forwards another, sequentially. A fade on each meant
+     both sat below full opacity at once, which briefly exposed the studio
+     hub (hotspots and all) underneath as a flash mid-transition. A hard cut
+     removes the gap outright instead of trying to hide it. */
 }
 
 /**

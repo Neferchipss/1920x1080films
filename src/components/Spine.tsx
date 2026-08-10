@@ -197,6 +197,14 @@ export default function Spine() {
   /** Watchdog bookkeeping for the clip the driver currently owns. */
   const stallMsRef = useRef(0);
   const lastClipTimeRef = useRef(-1);
+  /** Total wall-clock time the current clip has been driven for, regardless
+   *  of whether currentTime is moving. A clip decoding too slowly to keep up
+   *  — inching forward a hair each frame rather than fully freezing — never
+   *  trips the "frozen" test above, so the leg can crawl forever without
+   *  ever reaching its target. This is the same wall-clock ceiling
+   *  BranchOverlay's playSequence already uses (its own safety `setTimeout`)
+   *  to guarantee a leg always resolves one way or another. */
+  const legElapsedMsRef = useRef(0);
   /** Which clip the playback driver currently owns. Held across frames so a
    *  clip that has been handed the leg keeps it until it plays out — deciding
    *  per frame from `p` alone let a boundary frame fall between the zones,
@@ -532,6 +540,7 @@ export default function Spine() {
     activeClipRef.current = null;
     stallMsRef.current = 0;
     lastClipTimeRef.current = -1;
+    legElapsedMsRef.current = 0;
     haltedRef.current = false;
     travelDirRef.current = dir;
     return true;
@@ -837,12 +846,19 @@ export default function Spine() {
                 stallMsRef.current = 0;
                 lastClipTimeRef.current = ct;
               }
-              if (stallMsRef.current > STALL_LIMIT_MS) {
+              legElapsedMsRef.current += dt * 1000;
+              // A clip that is technically still moving but nowhere near
+              // real time is just as stuck as a frozen one for a viewer
+              // watching it — give it a generous multiple of its own
+              // duration before giving up, same ceiling BranchOverlay uses.
+              const tooSlow = legElapsedMsRef.current > Math.max(400, d * 1000 * 3);
+              if (stallMsRef.current > STALL_LIMIT_MS || tooSlow) {
                 stillsModeRef.current = true;
                 stallCountRef.current += 1;
                 if (stallCountRef.current >= 2) stillsLatchedRef.current = true;
                 stallMsRef.current = 0;
                 lastClipTimeRef.current = -1;
+                legElapsedMsRef.current = 0;
                 activeClipRef.current = null;
                 pauseAllExcept(null);
                 progressRef.current = targetP;
