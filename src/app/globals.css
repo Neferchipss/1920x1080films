@@ -10,6 +10,7 @@
   --line: rgba(255, 255, 255, 0.14);
   --line-dark: rgba(0, 0, 0, 0.1);
   --ease-cam: cubic-bezier(0.16, 1, 0.3, 1);
+  --rec-red: #ff2b1f;
 }
 
 * {
@@ -291,6 +292,19 @@ button {
   transition: opacity 0.05s linear;
 }
 
+/* Stand-in for the video stack when motion is suppressed — see
+   CHECKPOINT_STILL in Spine.tsx. Sits above the clips, below the copy. */
+.spine-still {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 2;
+  opacity: 0;
+  pointer-events: none;
+}
+
 .landing-layer {
   position: absolute;
   inset: 0;
@@ -332,6 +346,25 @@ button {
 .scene-footer-social {
   display: flex;
   gap: 26px;
+}
+
+/* On a phone the two halves of the footer are wider than the viewport, so
+   space-between overlaps them on top of each other — and the scroll cue,
+   centred at the same height, lands on top of both. Stack them instead and
+   lift the cue clear. */
+@media (max-width: 899px) {
+  .scene-footer {
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    bottom: 18px;
+    font-size: 9px;
+    text-align: center;
+  }
+
+  .scroll-cue {
+    bottom: 92px;
+  }
 }
 
 .scene-footer-social a:hover {
@@ -416,6 +449,52 @@ button {
   transform: translateX(-50%);
 }
 
+/* Touch fallback for the studio's four entrances. The hotspots are positioned
+   against the source frame's object-fit:cover geometry, which on a portrait
+   phone crops away most of the frame's width — "about" (left wall) lands at
+   x = -361px and "services" (right wall) past the right edge, so half the
+   site's navigation is literally off-screen. Their labels are :hover-only too,
+   which never fires on touch, so the two that do land in view are invisible.
+   Coarse pointers get an explicit list instead. */
+.studio-menu {
+  display: none;
+}
+
+@media (hover: none) and (pointer: coarse), (max-width: 899px) {
+  .studio-hotspots {
+    display: none;
+  }
+
+  .studio-caption {
+    bottom: calc(clamp(52px, 8vh, 64px) * 2 + 26px);
+  }
+
+  .studio-menu {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    background: var(--line);
+    border-top: 1px solid var(--line);
+  }
+
+  .studio-menu-item {
+    min-height: clamp(52px, 8vh, 64px);
+    padding: 0 10px;
+    background: rgba(10, 10, 11, 0.74);
+    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(8px);
+    color: #fff;
+  }
+
+  .studio-menu-item:active {
+    background: rgba(176, 141, 87, 0.42);
+  }
+}
+
 @media (max-width: 899px) {
   .counters-grid { gap: 22px 34px; }
 }
@@ -430,6 +509,26 @@ button {
   overflow-y: auto;
 }
 
+/**
+ * Keep an unvisited branch's content out of the render tree completely.
+ *
+ * `opacity: 0` is not enough and is actively misleading here: the overlay is
+ * `position: fixed; inset: 0`, so every tile inside it is geometrically inside
+ * the viewport. Lazy <img> loading and IntersectionObserver both go by
+ * geometry, so both fire — measured at 46 requests / 5.4 MB of portfolio
+ * imagery pulled down on the *landing* page, for four branches the visitor has
+ * not opened. content-visibility skips layout and paint for the subtree, which
+ * takes the images and the film loops with it.
+ *
+ * Driven by a data attribute BranchOverlay sets imperatively rather than by
+ * React's `isTarget`, because the two flip at different moments: the entrance
+ * clip runs for ~1.8s before the journey marks the node arrived, and that is
+ * exactly the window in which the content underneath should be loading.
+ */
+.branch-overlay[data-content="idle"] .branch-content {
+  content-visibility: hidden;
+}
+
 .branch-video-stack {
   position: fixed;
   inset: 0;
@@ -442,7 +541,10 @@ button {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: opacity 0.05s linear;
+  /* No cross-fade on swap: portfolio's two entrance clips land on
+     near-identical but slightly misaligned framing at the join, and
+     blending two near-duplicate, mismatched-scale frames for even 50ms
+     reads as a ghosting flicker. A hard cut is the cleaner seam. */
 }
 
 .branch-content {
@@ -553,8 +655,8 @@ button {
 /* ---------------- portfolio ---------------- */
 
 .portfolio-wrap {
-  background: var(--paper);
-  color: var(--ink);
+  background: var(--ink);
+  color: var(--paper);
   min-height: 100vh;
   padding: 130px clamp(20px, 5vw, 70px) 90px;
 }
@@ -576,94 +678,109 @@ button {
 
 .portfolio-sub {
   max-width: 480px;
-  color: #55524a;
+  color: rgba(242, 237, 228, 0.65);
   font-size: 14px;
   line-height: 1.6;
 }
 
-.portfolio-filter {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  font-size: 12.5px;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: #1c1a17;
-  padding: 8px 2px;
-  margin-top: 8px;
+.portfolio-section {
+  margin-top: clamp(46px, 6vw, 78px);
 }
 
-.portfolio-hero-grid {
-  margin-top: 48px;
-  display: grid;
-  grid-template-columns: 1fr 1.1fr 0.6fr 1.05fr;
-  grid-template-rows: clamp(190px, 20vw, 270px) clamp(180px, 19vw, 250px);
-  gap: 14px;
+.portfolio-section-title {
+  color: rgba(242, 237, 228, 0.55);
+  padding-bottom: 12px;
+  margin-bottom: 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.14);
 }
 
-.portfolio-strip-grid {
-  margin-top: 14px;
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  grid-auto-rows: clamp(170px, 18vw, 230px);
-  gap: 14px;
+/* ---- films ---- */
+
+/* Column masonry, same technique as .photo-masonry: landscape and portrait
+   films interleave in one flow instead of sitting in segregated shelves. */
+.film-grid {
+  column-count: 3;
+  column-gap: 14px;
 }
 
-.portfolio-tile {
+.film-tile {
+  position: relative;
+  display: block;
+  width: 100%;
+  break-inside: avoid;
+  margin: 0 0 14px;
   overflow: hidden;
   border-radius: 1px;
+  background: #14130f;
 }
 
-.portfolio-tile img {
+.film-tile-poster,
+.film-tile-video {
+  position: absolute;
+  inset: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
   display: block;
-  transition: transform 0.6s var(--ease-cam);
 }
 
-.portfolio-tile:hover img {
-  transform: scale(1.045);
+.film-tile-video {
+  opacity: 0;
+  transition: opacity 0.45s ease;
 }
 
-.portfolio-tile--tall-left {
-  grid-column: 1;
-  grid-row: 1 / span 2;
+/* Only reveal the loop once it is genuinely playing — cross-fading to an
+   element that is still buffering shows a black rectangle where a photograph
+   was. */
+.film-tile-video[data-playing="true"] {
+  opacity: 1;
 }
 
-.portfolio-tile--wide-top {
-  grid-column: 2 / span 2;
-  grid-row: 1;
+/* ---- photography ---- */
+
+.photo-masonry {
+  column-count: 4;
+  column-gap: 14px;
 }
 
-.portfolio-tile--mid-left {
-  grid-column: 2;
-  grid-row: 2;
+.photo-tile {
+  break-inside: avoid;
+  margin: 0 0 14px;
+  overflow: hidden;
+  border-radius: 1px;
+  /* The inline LQIP data URI is painted here; cover stops the 16px source
+     from tiling across the tile. */
+  background-size: cover;
+  background-position: center;
 }
 
-.portfolio-tile--mid-right {
-  grid-column: 3;
-  grid-row: 2;
+.photo-tile picture,
+.photo-tile img {
+  display: block;
+  width: 100%;
+  height: auto;
 }
 
-.portfolio-tile--tall-right {
-  grid-column: 4;
-  grid-row: 1 / span 2;
+.photo-tile img {
+  transition: transform 0.6s var(--ease-cam), opacity 0.5s ease;
+}
+
+.photo-tile:hover img {
+  transform: scale(1.035);
+}
+
+@media (max-width: 1400px) {
+  .photo-masonry { column-count: 3; }
+  .film-grid { column-count: 2; }
 }
 
 @media (max-width: 900px) {
-  .portfolio-hero-grid {
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: repeat(4, clamp(160px, 42vw, 220px));
-  }
-  .portfolio-tile--tall-left { grid-column: 1; grid-row: 1 / span 2; }
-  .portfolio-tile--wide-top { grid-column: 1 / span 2; grid-row: 3; }
-  .portfolio-tile--mid-left { grid-column: 2; grid-row: 1; }
-  .portfolio-tile--mid-right { grid-column: 2; grid-row: 2; }
-  .portfolio-tile--tall-right { grid-column: 1 / span 2; grid-row: 4; }
-  .portfolio-strip-grid {
-    grid-template-columns: 1fr 1fr;
-  }
+  .photo-masonry { column-count: 2; }
+}
+
+@media (max-width: 560px) {
+  .photo-masonry { column-count: 1; }
+  .film-grid { column-count: 1; }
 }
 
 /* ---------------- contact ---------------- */
@@ -1063,4 +1180,101 @@ button {
 /* With the CTA present the nav no longer needs to claim the free space. */
 .ribbon-cta + .ribbon-persistent-nav {
   margin-left: 0;
+}
+
+/* ---------------- custom cursor ---------------- */
+
+/* Real cursor stays hidden only once JS confirms a fine pointer is present
+   and the replacement is mounted — never on touch, never with JS off. */
+.has-custom-cursor,
+.has-custom-cursor * {
+  cursor: none;
+}
+
+.custom-cursor {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  pointer-events: none;
+  opacity: 1;
+  transition: opacity 0.2s ease;
+}
+
+.cursor-hidden .custom-cursor {
+  opacity: 0;
+}
+
+.custom-cursor-dot,
+.custom-cursor-ring {
+  position: fixed;
+  top: 0;
+  left: 0;
+  will-change: transform;
+}
+
+/* The AF point: a solid red dot, like a camera's focus indicator. */
+.custom-cursor-dot {
+  width: 4px;
+  height: 4px;
+  margin: -2px 0 0 -2px;
+  border-radius: 50%;
+  background: var(--rec-red);
+  box-shadow: 0 0 4px rgba(255, 43, 31, 0.7);
+  transition: transform 0.06s linear;
+}
+
+/* The viewfinder ring around it, with four corner ticks like a lens'
+   focus-point bracket. Trails the dot slightly so quick moves read as a
+   camera racking focus rather than a mouse snapping into place. */
+.custom-cursor-ring {
+  width: 22px;
+  height: 22px;
+  margin: -11px 0 0 -11px;
+  border: 1px solid rgba(255, 43, 31, 0.65);
+  border-radius: 50%;
+  transition: transform 0.12s var(--ease-cam), width 0.2s var(--ease-cam),
+    height 0.2s var(--ease-cam), margin 0.2s var(--ease-cam),
+    border-color 0.2s var(--ease-cam), opacity 0.2s var(--ease-cam);
+}
+
+.custom-cursor-tick {
+  position: absolute;
+  background: rgba(255, 43, 31, 0.65);
+}
+
+.custom-cursor-tick--n,
+.custom-cursor-tick--s {
+  left: 50%;
+  width: 1px;
+  height: 5px;
+  margin-left: -0.5px;
+}
+
+.custom-cursor-tick--n { top: -5px; }
+.custom-cursor-tick--s { bottom: -5px; }
+
+.custom-cursor-tick--e,
+.custom-cursor-tick--w {
+  top: 50%;
+  width: 5px;
+  height: 1px;
+  margin-top: -0.5px;
+}
+
+.custom-cursor-tick--e { right: -5px; }
+.custom-cursor-tick--w { left: -5px; }
+
+/* Hovering something clickable: the ring closes in around the dot, like
+   autofocus locking onto a subject. */
+.custom-cursor-ring.is-hovering {
+  width: 30px;
+  height: 30px;
+  margin: -15px 0 0 -15px;
+  border-color: var(--rec-red);
+}
+
+.custom-cursor-ring.is-pressing {
+  width: 16px;
+  height: 16px;
+  margin: -8px 0 0 -8px;
 }

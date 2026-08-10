@@ -1,0 +1,83 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>1920x1080 films — device diagnostic</title>
+<style>
+  body { background:#111; color:#eee; font:14px/1.5 -apple-system, system-ui, sans-serif; margin:0; padding:16px; }
+  h1 { font-size:15px; letter-spacing:.12em; text-transform:uppercase; color:#999; }
+  .row { padding:6px 0; border-bottom:1px solid #262626; }
+  .k { color:#888; }
+  .v { color:#fff; font-weight:600; }
+  .bad { color:#ff6b6b; }
+  .good { color:#5cd68a; }
+  video { width:100%; background:#000; margin-top:12px; border:1px solid #333; }
+  #log { white-space:pre-wrap; font:12px/1.4 ui-monospace, Menlo, monospace; color:#9ad; margin-top:12px; }
+</style>
+</head>
+<body>
+<h1>Device diagnostic</h1>
+<div id="facts"></div>
+<video id="v" muted playsinline preload="auto" src="/1920x1080films/video/landing-facade.mp4"></video>
+<div id="log"></div>
+
+<script>
+/* Deliberately old-school JS: this page must run even on a Safari that the
+   app's own bundle would choke on. No arrows, no optional chaining. */
+var facts = document.getElementById('facts');
+var log = document.getElementById('log');
+
+function row(k, v, cls) {
+  var d = document.createElement('div');
+  d.className = 'row';
+  d.innerHTML = '<span class="k">' + k + ':</span> <span class="v ' + (cls || '') + '">' + v + '</span>';
+  facts.appendChild(d);
+}
+function say(m) { log.textContent += m + '\n'; }
+
+window.onerror = function (msg, src, line, col) {
+  say('JS ERROR: ' + msg + ' @ ' + src + ':' + line + ':' + col);
+  return false;
+};
+
+function mq(q) {
+  try { return window.matchMedia(q).matches; } catch (e) { return 'matchMedia failed'; }
+}
+
+var reduce = mq('(prefers-reduced-motion: reduce)');
+row('User agent', navigator.userAgent);
+row('Screen', window.innerWidth + ' x ' + window.innerHeight + ' @' + (window.devicePixelRatio || 1) + 'x');
+row('REDUCE MOTION', reduce ? 'ON  <- this disables the animations' : 'off',
+    reduce ? 'bad' : 'good');
+row('Low Power Mode', 'not readable from JS — check Settings > Battery', '');
+row('matchMedia.addEventListener', (window.matchMedia && window.matchMedia('(min-width:1px)').addEventListener) ? 'supported' : 'MISSING (old Safari)',
+    (window.matchMedia && window.matchMedia('(min-width:1px)').addEventListener) ? 'good' : 'bad');
+row('H.264 High support', document.createElement('video').canPlayType('video/mp4; codecs="avc1.640028"') || 'no');
+
+var v = document.getElementById('v');
+['loadedmetadata', 'loadeddata', 'canplay', 'canplaythrough', 'playing', 'stalled', 'suspend', 'error', 'waiting'].forEach(function (ev) {
+  v.addEventListener(ev, function () {
+    say(ev + '  (readyState=' + v.readyState + ', networkState=' + v.networkState + ')');
+  });
+});
+
+say('attempting autoplay (muted + playsinline)...');
+var p = v.play();
+if (p && p.then) {
+  p.then(function () {
+    say('play() RESOLVED — autoplay works on this device');
+    setTimeout(function () {
+      say('after 1.5s: currentTime=' + v.currentTime.toFixed(2) +
+          (v.currentTime > 0.1 ? '  -> VIDEO IS DECODING FINE' : '  -> clock not advancing'));
+    }, 1500);
+  })['catch'](function (e) {
+    say('play() REJECTED: ' + e.name + ' - ' + e.message);
+    say('  (Low Power Mode blocks muted autoplay on iOS)');
+  });
+} else {
+  say('play() returned no promise (very old Safari)');
+}
+</script>
+</body>
+</html>

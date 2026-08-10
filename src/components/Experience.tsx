@@ -13,7 +13,7 @@ export default function Experience() {
       <BranchOverlay node="about" restBackground="#141416">
         <AboutContent />
       </BranchOverlay>
-      <BranchOverlay node="portfolio" restBackground="#f2ede4">
+      <BranchOverlay node="portfolio" restBackground="#0a0a0b">
         <PortfolioContent />
       </BranchOverlay>
       <BranchOverlay node="contact" restBackground="#0a0a0b">

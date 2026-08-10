@@ -139,15 +139,17 @@ export function JourneyProvider({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Branch clips now play fast enough (4.5x-7.5x) to need real sustained
-  // bandwidth (see the request they were tuned against — tens of Mbps).
-  // Starting the fetch only at the exact moment of a click leaves zero
-  // buffer margin for that. Studio is where the user is deliberately
-  // deciding which branch to enter, so use that dwell time as a head
-  // start: kick off buffering for all four branches as soon as it's
-  // reached, well before any of them are actually clicked.
+  // Studio is where the user is deliberately deciding which branch to enter,
+  // so use that dwell time as a head start and buffer all four entrances
+  // before any of them is clicked. Since the clips were retimed this is ~9MB
+  // rather than ~40MB, which is what makes speculatively fetching all four
+  // reasonable at all — but it is still four files the user may never watch,
+  // so an explicit data-saver preference opts out and each branch falls back
+  // to fetching itself when it is actually entered.
   useEffect(() => {
     if (node !== "studio") return;
+    const conn = (navigator as Navigator & { connection?: { saveData?: boolean } }).connection;
+    if (conn?.saveData) return;
     Object.values(branchRefs.current).forEach((c) => c?.preload());
   }, [node]);
 

@@ -5,6 +5,7 @@ import type { ReactNode } from "react";
 import { JourneyProvider } from "@/context/JourneyContext";
 import { NodeId } from "@/lib/journey";
 import Ribbon from "@/components/Ribbon";
+import CustomCursor from "@/components/CustomCursor";
 
 const ROUTE_NODE: Record<string, NodeId> = {
   "/about": "about",
@@ -20,6 +21,7 @@ export default function AppShell({ children }: { children: ReactNode }) {
 
   return (
     <JourneyProvider initialTarget={initialTarget}>
+      <CustomCursor />
       <Ribbon />
       {children}
     </JourneyProvider>

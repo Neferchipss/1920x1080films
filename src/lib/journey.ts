@@ -35,29 +35,24 @@ export const EDGE_VIDEO: Partial<Record<NodeId, string[]>> = {
  * (forwards) to animate a branch exit.
  *
  * The exit used to be scrubbed — a rAF loop walking `video.currentTime`
- * down to 0. That can never render on these sources: they are 2560x1440
- * H.264 at 60fps, where a single *backward* seek measures ~840ms, and
- * assigning `currentTime` again while a seek is in flight replaces the
- * pending one. Instrumenting a real exit showed 57 `seeking` events and
- * exactly **one** `seeked` — the whole transition presented a single frame,
- * which is why the exit read as "nothing happens, then a hard cut".
+ * down to 0. That can never render on these sources: a single *backward*
+ * seek on a 2K/60fps clip measures ~840ms, and assigning `currentTime` again
+ * while a seek is in flight replaces the pending one. Instrumenting a real
+ * exit showed 57 `seeking` events and exactly **one** `seeked` — the whole
+ * transition presented a single frame, which is why the exit read as
+ * "nothing happens, then a hard cut".
  *
  * HTML5 video has no negative playbackRate, so the only way to get the
  * browser's normal decode pipeline (the same thing that makes the entrance
  * smooth) to run an exit is to hand it a clip that is already reversed.
- * These are encoded at 30fps rather than 60: the exit plays at ~9x, so
- * source frames beyond 30fps could never be presented anyway, and halving
- * them keeps the decode load at the entrance's proven level while halving
- * the download.
+ * Each exit clip is cut to half its entrance's length, which is what the
+ * exit's old 2x reverse-speed multiplier used to buy at playback time.
  *
  * Indexed opposite to EDGE_VIDEO — a multi-clip branch exits through its
  * clips back-to-front.
  *
- * Regenerate with (per clip, segmented because ffmpeg's `reverse` filter
- * buffers every frame in RAM):
- *   ffmpeg -ss S -t 2 -i in.mp4 -vf "fps=30,reverse" -an \
- *     -c:v libx264 -crf 22 -preset medium -pix_fmt yuv420p -g 15 seg.mp4
- * then concat the segments back-to-front with `-c copy -movflags +faststart`.
+ * Regenerate these (and every other transition clip) with
+ * `scripts/build_transition_clips.sh`.
  */
 export const EDGE_VIDEO_REVERSE: Partial<Record<NodeId, string[]>> = {
   about: ["/video/studio-about-rev.mp4"],
@@ -66,33 +61,54 @@ export const EDGE_VIDEO_REVERSE: Partial<Record<NodeId, string[]>> = {
   portfolio: ["/video/studio-portfolio-b-rev.mp4", "/video/studio-portfolio-a-rev.mp4"],
 };
 
-/** Native duration of each clip in seconds (2K/60fps sources), for scrub math. */
+/**
+ * Native duration of each shipped clip in seconds.
+ *
+ * Every clip is now cut to exactly the time it should occupy on screen, so
+ * these *are* the transition durations — nothing is sped up at playback.
+ * They must match the targets in `scripts/build_transition_clips.sh`.
+ */
 export const EDGE_DURATION: Partial<Record<NodeId, number[]>> = {
-  facade: [12.0],
-  studio: [15.0],
-  about: [7.97],
-  contact: [7.97],
-  services: [7.97],
-  portfolio: [4.97, 12.0],
+  // Spine clips: their rate is derived from their own duration against the
+  // scroll zone they cover, so these two are fixed by spineLayout rather
+  // than chosen (zone span / CRUISE_SPEED).
+  facade: [3.45],
+  studio: [1.9833],
+  about: [1.7667],
+  contact: [1.7667],
+  services: [1.7667],
+  portfolio: [1.9667, 1.6],
+};
+
+/** Exit clips, indexed opposite to EDGE_DURATION — half their entrance. */
+export const EDGE_DURATION_REVERSE: Partial<Record<NodeId, number[]>> = {
+  about: [0.8833],
+  contact: [0.8833],
+  services: [0.883],
+  portfolio: [0.8, 0.9833],
 };
 
 /**
- * Per-clip forward playback speed for each branch's entrance (studio ->
- * leaf), indexed the same as EDGE_VIDEO. >1 plays faster than real time.
- * Tuned so about/contact/services (7.97s native) land the whole entrance
- * around 1.5-2s (7.97/4.5 ≈ 1.77s), and portfolio's two-clip combination
- * (16.97s native total) lands around 3-3.5s (16.97/5.2 ≈ 3.26s). Reverse
- * (exit back to studio) plays at REVERSE_SPEED_MULTIPLIER times each
- * clip's own forward speed — i.e. in half the time.
+ * Per-clip forward playback rate for each branch's entrance (studio -> leaf),
+ * indexed the same as EDGE_VIDEO.
+ *
+ * These used to be 4.5x-5.2x against full-length masters, with the exit at
+ * twice that again. A high playbackRate does not do what it looks like it
+ * does: the media clock speeds up but the decoder cannot, so most frames are
+ * never presented (measured on desktop Chrome: 200 of 474 frames dropped for
+ * about's entrance at 4.5x, 108 of 235 for its exit at 9x — and mobile has a
+ * far smaller decode budget than that). Every clip is pre-retimed instead, so
+ * the rate is 1 and each frame in the file is actually shown.
  */
 export const BRANCH_SPEED: Partial<Record<NodeId, number[]>> = {
-  about: [4.5],
-  contact: [4.5],
-  services: [4.5],
-  portfolio: [5.2, 5.2],
+  about: [1],
+  contact: [1],
+  services: [1],
+  portfolio: [1, 1],
 };
 
-export const REVERSE_SPEED_MULTIPLIER = 2;
+/** Exits are shorter than entrances by encode, not by playback rate. */
+export const REVERSE_SPEED_MULTIPLIER = 1;
 
 export function pathBetween(from: NodeId, to: NodeId): { up: NodeId[]; down: NodeId[] } {
   if (from === to) return { up: [], down: [] };

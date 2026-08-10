@@ -6,9 +6,15 @@ export default function AboutContent() {
       <div className="about-frame">
         <div className="about-frame-inner">
           <div className="about-photo">
+            {/* Still a placeholder. The client's 2026-08-10 delivery was 111
+                interiors and 22 films — there is no portrait of Umesh in it,
+                and putting one of the interiors here would be a lie about what
+                the picture is. Lives under /img/brand/ rather than
+                /img/portfolio/ because build_portfolio_images.mjs wipes that
+                directory on every run. */}
             <img
-              src={withBasePath("/img/portfolio/frame-04.jpg")}
-              alt="Umesh Pednekar, studio portrait"
+              src={withBasePath("/img/brand/about-portrait-placeholder.jpg")}
+              alt=""
             />
           </div>
           <div className="about-copy">

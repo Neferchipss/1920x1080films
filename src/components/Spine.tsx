@@ -3,18 +3,20 @@
 import { useEffect, useRef } from "react";
 import { useJourney } from "@/context/JourneyContext";
 import { BOUNDS, REST_PROGRESS, SPINE_VH_TOTAL, clamp01 } from "@/lib/spineLayout";
-import { isSpineNode } from "@/lib/journey";
+import { NAV_LABEL, isSpineNode } from "@/lib/journey";
 import { withBasePath } from "@/lib/basePath";
-import { motionCurveMultiplier } from "@/lib/motionCurve";
+import { isMobileTier, tierSrc } from "@/lib/videoTier";
 
 // Fallbacks only — the real durations are read off the elements once their
-// metadata lands (see durRefs). They are NOT round numbers: facade-studio.mp4
-// actually runs 15.072s, and holding the clip at a hardcoded 15.0 meant every
-// arrival at studio ended with a 0.07s *backward* seek, which on a 2560x1440
-// source costs ~540ms of decode — the stutter that used to hit right as the
-// transition came to rest.
-const DUR1_FALLBACK = 12.0;
-const DUR2_FALLBACK = 15.0;
+// metadata lands (see durRefs). Holding a clip at a hardcoded duration that
+// is slightly short of the real one meant every arrival ended with a small
+// *backward* seek, which on a 2560x1440 source costs hundreds of ms of
+// decode — the stutter that used to hit right as a transition came to rest.
+// Both spine clips are pre-retimed to their on-screen length (see below), so
+// these are the real shipped durations, not the 12s / 15.07s of the masters
+// they were cut from.
+const DUR1_FALLBACK = 3.45;
+const DUR2_FALLBACK = 1.9833;
 
 // Paginated checkpoint model: the spine holds at landing/facade/studio and
 // only moves when the user picks a direction. That single gesture commits
@@ -24,29 +26,82 @@ const DUR2_FALLBACK = 15.0;
 type Checkpoint = "landing" | "facade" | "studio";
 const SPINE_CHECKPOINTS: Checkpoint[] = ["landing", "facade", "studio"];
 const CRUISE_SPEED = 0.09; // progress/sec through the landing->facade clip and hold zones
-// "Studio animations" (the facade->studio clip, EDGE_VIDEO.studio) get an
-// explicit native-speed multiplier instead of the abstract cruise speed,
-// same pattern as branch clips. Both directions target ~2s (15 / 7.5 = 2s),
-// so forward and reverse use the same rate here rather than a reverse
-// multiplier.
-const STUDIO_ANIM_FORWARD_RATE = 7.5;
-const STUDIO_ANIM_REVERSE_RATE = 7.5;
+/**
+ * "Studio animations" (the facade->studio clip) get an explicit native-speed
+ * multiplier instead of the abstract cruise speed, same pattern as branch
+ * clips. Both directions target ~2s and the clips are pre-retimed to exactly
+ * that length, so the rate is 1 — i.e. native speed.
+ *
+ * It used to be 7.5, against the 15.072s master. That does not work, and the
+ * failure is invisible in `currentTime`: at 7.5x on a 2560x1440/60fps source
+ * Chromium cannot decode fast enough to keep the *renderer* alongside the
+ * media clock. Instrumenting a real leg with requestVideoFrameCallback showed
+ * the media clock reaching 15.07s while the last frame actually presented to
+ * the compositor was at mediaTime 6.0s — 567 of 896 frames dropped. driveClip
+ * then pauses the element the moment currentTime hits the end, which kills the
+ * renderer's chance to catch up, so the picture froze roughly 40% into the
+ * move and the camera never arrived at the studio. Playing a clip that is
+ * already cut to length at rate 1 presents every frame instead.
+ *
+ * Every transition clip on the site is built this way now — regenerate them
+ * with `scripts/build_transition_clips.sh`.
+ */
+const STUDIO_ANIM_FORWARD_RATE = 1;
+const STUDIO_ANIM_REVERSE_RATE = 1;
 const VELOCITY_EASE = 0.12; // per-frame ease into CRUISE_SPEED at the start of a transition
-const MAX_RATE = 8;
+// Both clips play at ~1. This only catches a mis-sized asset; anything
+// meaningfully above 1 would start costing presented frames again.
+const MAX_RATE = 4;
 
 // Backward travel can't be done by winding `currentTime` down: a single
-// backward seek on these 2560x1440/60fps sources measures ~840ms, and
-// consecutive currentTime writes replace each other's pending seek, so a
-// scrubbed reverse presented roughly one frame for the whole transition.
-// These are the same shots pre-encoded back-to-front (at 30fps, since the
-// reverse plays at several times real time) so a backward leg can run
-// through the browser's normal decode pipeline exactly like a forward one.
+// backward seek on a 2K/60fps source measures ~840ms, and consecutive
+// currentTime writes replace each other's pending seek, so a scrubbed reverse
+// presented roughly one frame for the whole transition. These are the same
+// shots pre-encoded back-to-front, so a backward leg runs through the
+// browser's normal decode pipeline exactly like a forward one.
 const REV_VIDEO_1 = "/video/landing-facade-rev.mp4";
 const REV_VIDEO_2 = "/video/facade-studio-rev.mp4";
 
 /** Which clip, if any, is currently owned by native playback — applyProgress
  *  must not seek a video the playback driver is running. */
 type Driven = { which: 1 | 2; dir: 1 | -1 } | null;
+
+/**
+ * How long a driven clip may sit with a frozen `currentTime` before the spine
+ * gives up on video for the rest of the journey.
+ *
+ * Every play() on the spine is issued from the rAF loop and its rejection is
+ * swallowed (`.catch(() => {})`), and driveClip reads progress back *out* of
+ * currentTime — so anything that stops the media clock stops the whole site,
+ * silently and permanently. Two real conditions do that on phones and neither
+ * happens on a desktop:
+ *
+ *   - iOS refuses muted inline autoplay in Low Power Mode, and when
+ *     Settings > Safari > Auto-Play is "Never". play() rejects, currentTime
+ *     stays 0, and the spine never leaves landing.
+ *   - The clips are 1080p60 at 13-15 Mbit/s (5.8 MB for landing -> facade).
+ *     On mobile data the element stalls mid-clip waiting on the network and
+ *     the media clock halts there instead.
+ *
+ * Both used to read as "the site loads but nothing animates". The gesture
+ * priming below fixes the first outright; this watchdog is the backstop that
+ * guarantees the user always arrives at the next checkpoint either way.
+ */
+const STALL_LIMIT_MS = 1500;
+
+/**
+ * Reduced motion skips the clips, which means the videos may never play at
+ * all — and a <video> that has never played paints nothing on iOS Safari, so
+ * "no animation" degraded into "black screen" rather than into a still frame.
+ * These are the same three scenes as flat images, shown instead of the video
+ * stack whenever motion is suppressed. No decoder is involved at all, which
+ * is also the cheapest the journey can possibly be on a weak device.
+ */
+const CHECKPOINT_STILL: Record<Checkpoint, string> = {
+  landing: "/img/stills/landing.jpg",
+  facade: "/img/stills/facade.jpg",
+  studio: "/img/brand/studio-still.jpg",
+};
 
 // Source-pixel bounding boxes measured directly off the 1600x900 studio
 // still (assets/studio.jpeg), one per interactive object. Positioned at
@@ -63,6 +118,10 @@ const HOTSPOT_BOXES: Record<
   contact: { x: 925, y: 448, w: 165, h: 168 }, // iMac on the desk, back right
   services: { x: 1330, y: 148, w: 270, h: 410 }, // equipment pegboard, right wall
 };
+
+/** Reading order for the touch fallback list; the hotspots keep their own
+ *  spatial arrangement. */
+const STUDIO_OPTIONS = ["portfolio", "about", "services", "contact"] as const;
 
 const COUNTERS = [
   { value: 100, suffix: "+", label: "Luxury Homes" },
@@ -89,6 +148,7 @@ export default function Spine() {
   const cueRef = useRef<HTMLDivElement>(null);
   const facadeRef = useRef<HTMLDivElement>(null);
   const studioRef = useRef<HTMLDivElement>(null);
+  const stillRef = useRef<HTMLImageElement>(null);
   const brandMarkRef = useRef<HTMLDivElement>(null);
   const sceneFooterRef = useRef<HTMLDivElement>(null);
   const counterRefs = useRef<Array<HTMLSpanElement | null>>([]);
@@ -111,6 +171,32 @@ export default function Spine() {
   const revDur1Ref = useRef(DUR1_FALLBACK);
   const revDur2Ref = useRef(DUR2_FALLBACK);
   const revLoadedRef = useRef(false);
+  const clip2LoadedRef = useRef(false);
+  const reducedMotionRef = useRef(false);
+  /** The watchdog has caught a dead media clock on the leg in flight: finish
+   *  it on the stills rather than freezing on a clip that is not advancing. */
+  const stillsModeRef = useRef(false);
+  /**
+   * How many legs the watchdog has had to rescue, and whether it has given up
+   * on video for good.
+   *
+   * A single stall is not proof the device can't play the clips — a cold
+   * decoder, a browser that hasn't got the GPU path warm yet, or one slow
+   * buffer can all cost more than STALL_LIMIT_MS on the very first leg and
+   * then be fine forever after. Latching the stills permanently on that first
+   * stumble throws the whole animated journey away for the rest of the
+   * session, which is a much worse outcome than the stall itself. So the first
+   * stall only rescues its own leg, and the next leg tries video again;
+   * two stalls is a pattern, and that latches.
+   */
+  const stallCountRef = useRef(0);
+  const stillsLatchedRef = useRef(false);
+  /** Elements that have had play() called on them inside a real user gesture.
+   *  WebKit's autoplay restriction is per element, so this is per element. */
+  const primedRef = useRef<WeakSet<HTMLVideoElement>>(new WeakSet());
+  /** Watchdog bookkeeping for the clip the driver currently owns. */
+  const stallMsRef = useRef(0);
+  const lastClipTimeRef = useRef(-1);
   /** Which clip the playback driver currently owns. Held across frames so a
    *  clip that has been handed the leg keeps it until it plays out — deciding
    *  per frame from `p` alone let a boundary frame fall between the zones,
@@ -125,6 +211,37 @@ export default function Spine() {
     nodeRef.current = node;
     isAnimatingRef.current = isAnimating;
   }, [node, isAnimating]);
+
+  const showStillFor = (cp: Checkpoint) => {
+    const el = stillRef.current;
+    if (!el) return;
+    if (!reducedMotionRef.current && !stillsModeRef.current) {
+      el.style.opacity = "0";
+      return;
+    }
+    const next = withBasePath(CHECKPOINT_STILL[cp]);
+    if (!el.src.endsWith(CHECKPOINT_STILL[cp])) el.src = next;
+    el.style.opacity = "1";
+  };
+
+  useEffect(() => {
+    const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const sync = () => {
+      reducedMotionRef.current = mq.matches;
+      showStillFor(SPINE_CHECKPOINTS[checkpointIndexRef.current]);
+    };
+    sync();
+    // Safari only grew addEventListener on MediaQueryList in 14; fall back to
+    // the deprecated addListener rather than throwing during mount, which
+    // would take the whole spine down with it.
+    if (mq.addEventListener) mq.addEventListener("change", sync);
+    else mq.addListener(sync);
+    return () => {
+      if (mq.removeEventListener) mq.removeEventListener("change", sync);
+      else mq.removeListener(sync);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const syncScrollFromProgress = (p: number) => {
     const el = scrollerRef.current;
@@ -168,22 +285,42 @@ export default function Spine() {
     zoneStart: number,
     zoneEnd: number,
     dur: number,
-    dir: 1 | -1
+    dir: 1 | -1,
+    fresh = false
   ): number | null => {
     if (speed <= 0.002) return null;
-    if (v.paused) v.play().catch(() => {});
-    const span = zoneEnd - zoneStart;
-    const baseRate = (speed * dur) / span;
-    // The curve blasts through the near-static frame each clip holds on. A
-    // reversed encode carries that frame at its end, so the curve is read
-    // backwards for backward legs.
-    const frac = dur > 0 ? v.currentTime / dur : 0;
-    const curve = motionCurveMultiplier(dir > 0 ? frac : 1 - frac);
-    v.playbackRate = Math.min(MAX_RATE, Math.max(0.25, baseRate * curve));
-    if (v.currentTime >= dur - 0.03) {
-      v.pause();
+    // A clip that has run out must be recognised as finished *before* anything
+    // touches play(). HTMLMediaElement.play() on an element sitting at its
+    // duration rewinds it to 0, so the old order — play() first, "are we at
+    // the end?" second — turned an overshoot into a replay: the end test only
+    // covers the last 0.03s, but a leg advances currentTime by rate/60 per
+    // frame (0.058s on the landing<->facade clip at 3.5x), so a frame
+    // regularly stepped straight past the window to `ended`, got rewound by
+    // the next frame's play(), and reported progress back at the far end of
+    // the zone. That is the spine looping the same clip forever instead of
+    // coming to rest on a checkpoint.
+    //
+    // The rewind is still wanted on the frame the driver *claims* the clip
+    // (re-entering a leg whose clip is parked at its end), so that one frame
+    // asks for it explicitly rather than getting it as a side effect.
+    const spent = v.ended || v.currentTime >= dur - 0.03;
+    if (fresh) {
+      if (spent) {
+        try {
+          v.currentTime = 0;
+        } catch {}
+      }
+    } else if (spent) {
+      if (!v.paused) v.pause();
       return dir > 0 ? zoneEnd : zoneStart;
     }
+    if (v.paused) v.play().catch(() => {});
+    const span = zoneEnd - zoneStart;
+    // Both spine clips are cut to the length of the zone they cover at
+    // CRUISE_SPEED, so this lands on ~1 and only drifts while the velocity
+    // ease is still settling at the very start of a leg.
+    const baseRate = (speed * dur) / span;
+    v.playbackRate = Math.min(MAX_RATE, Math.max(0.25, baseRate));
     const done = dur > 0 ? v.currentTime / dur : 0;
     return dir > 0 ? zoneStart + done * span : zoneEnd - done * span;
   };
@@ -318,8 +455,14 @@ export default function Spine() {
   };
 
   // The reversed encodes are only needed once the journey is actually moving,
-  // so they stay preload="none" and start buffering on the first leg rather
-  // than competing with the forward clips for bandwidth on first paint.
+  // so they stay preload="none" and start buffering once the first checkpoint
+  // beyond landing is *reached*, not the moment the user departs toward it —
+  // kicking off two ~15MB downloads right as a leg begins competed with that
+  // same leg's own forward clip for bandwidth, which is what stalled the
+  // facade -> studio clip (and, if the stall was bad enough, meant progress
+  // never reached the studio checkpoint at all). Loading on arrival instead
+  // gives the reverse clips the whole ensuing hold/leg to buffer in the
+  // background rather than racing the video that's on screen.
   const ensureRevLoaded = () => {
     if (revLoadedRef.current) return;
     revLoadedRef.current = true;
@@ -330,13 +473,51 @@ export default function Spine() {
     });
   };
 
+  // Only the landing -> facade clip has to be buffered for the page to be
+  // usable, so it is the only one that fetches on first paint. The
+  // facade -> studio clip is pulled in as soon as the user commits to *any*
+  // move, which buys it the whole 3.4s leg plus the facade hold before it is
+  // needed — on a phone that is the difference between a ~4MB first-paint
+  // cost and a ~9MB one, for a clip that cannot be reached in under 4s.
+  const ensureClip2Loaded = () => {
+    if (clip2LoadedRef.current) return;
+    clip2LoadedRef.current = true;
+    const v = video2Ref.current;
+    if (!v) return;
+    v.preload = "auto";
+    v.load();
+  };
+
   /** Commit to travelling one checkpoint in `dir`. Returns false if there
    *  isn't one that way. */
   const beginLeg = (dir: 1 | -1) => {
     const targetIndex = checkpointIndexRef.current + dir;
     if (targetIndex < 0 || targetIndex >= SPINE_CHECKPOINTS.length) return false;
     if (SPINE_CHECKPOINTS[checkpointIndexRef.current] === "facade") stopCounters();
-    ensureRevLoaded();
+    ensureClip2Loaded();
+
+    // Clear the previous leg's stills rescue before the test below reads it —
+    // one stall rescues its own leg only, and this leg gets to try video
+    // again. Once the watchdog has latched, this stays true and every
+    // remaining leg takes the snap path.
+    if (!stillsLatchedRef.current) stillsModeRef.current = false;
+
+    // Reduced motion: honour it literally rather than playing the same
+    // transition more cheaply. Snapping progress to the destination skips the
+    // clip entirely — applyProgress parks both videos on the right still —
+    // which is also the cheapest possible path on a struggling device.
+    // A device whose media clock the watchdog has already caught dead takes
+    // the same path: the clips cannot animate there, so snap and let the
+    // stills carry the scene instead of freezing on a frame.
+    if (reducedMotionRef.current || stillsModeRef.current) {
+      const cp = SPINE_CHECKPOINTS[targetIndex];
+      progressRef.current = REST_PROGRESS[cp];
+      applyProgress(progressRef.current);
+      syncScrollFromProgress(progressRef.current);
+      settleAt(cp);
+      return true;
+    }
+
     if (dir < 0) {
       // A backward leg always starts at a checkpoint, i.e. outside both clip
       // zones, so the reversed encode always plays from its own first frame.
@@ -349,9 +530,54 @@ export default function Spine() {
       });
     }
     activeClipRef.current = null;
+    stallMsRef.current = 0;
+    lastClipTimeRef.current = -1;
     haltedRef.current = false;
     travelDirRef.current = dir;
     return true;
+  };
+
+  /**
+   * Clear WebKit's per-element autoplay restriction, from inside a real user
+   * gesture — the only place it can be cleared. Every subsequent play() the
+   * rAF driver issues on a primed element is then allowed, even in Low Power
+   * Mode or with Safari's Auto-Play set to "Never".
+   *
+   * It also forces the first frame to be decoded and painted, which matters
+   * independently of animation: a <video> that has never played paints
+   * nothing on iOS, and the landing logo is `filter: brightness(0)` because it
+   * is meant to sit on top of the bright first frame. Without this the landing
+   * is black text on a black box.
+   *
+   * Deliberately skips anything still on preload="none". Those are the two
+   * reverse encodes (~9.5 MB) which are not wanted until the user has actually
+   * reached a checkpoint beyond landing; play() would start their download and
+   * undo that. `ensureRevLoaded()` promotes them to preload="auto" on arrival,
+   * and the user's next gesture — necessarily before any reverse leg can run —
+   * primes them then.
+   */
+  const primeVideos = () => {
+    allVideos().forEach((v) => {
+      if (!v || v.preload === "none" || primedRef.current.has(v)) return;
+      primedRef.current.add(v);
+      const p = v.play();
+      if (p && typeof p.then === "function") {
+        p.then(() => {
+          // A leg may already have started between the gesture and this
+          // microtask resolving; the driver owns the element in that case and
+          // pausing it here would kill the transition we just asked for.
+          if (!haltedRef.current) return;
+          v.pause();
+          try {
+            v.currentTime = 0;
+          } catch {}
+        }).catch(() => {});
+      } else {
+        try {
+          v.pause();
+        } catch {}
+      }
+    });
   };
 
   const settleAt = (cp: Checkpoint) => {
@@ -361,6 +587,7 @@ export default function Spine() {
     checkpointIndexRef.current = SPINE_CHECKPOINTS.indexOf(cp);
     activeClipRef.current = null;
     pauseAllExcept(null);
+    if (cp !== "landing") ensureRevLoaded();
 
     const prog = programmaticRef.current;
     if (prog && cp !== prog.target) {
@@ -376,12 +603,40 @@ export default function Spine() {
     }
     if (cp === "facade") startCounters();
     else stopCounters();
+    showStillFor(cp);
     reportSpinePosition(cp);
   };
 
-  // These elements are server-rendered with their src, so `loadedmetadata`
-  // can fire before React ever attaches a handler — read whatever is already
-  // known on mount and only subscribe for the ones still pending.
+  /**
+   * Point each element at the encode this device should actually fetch.
+   *
+   * This has to happen here rather than in JSX because the tier depends on the
+   * viewport, the pointer type and the Network Information API, none of which
+   * exist during the static export — rendering a `src` on the server would
+   * either hydrate-mismatch or, worse, silently commit every phone to the
+   * 1080p files. The elements therefore ship with no `src` at all and get one
+   * on mount; `preload="none"` elements still don't fetch anything when
+   * assigned, so the staged loading strategy is unaffected.
+   *
+   * Declared before the duration effect so the sources are in place by the
+   * time it subscribes to `loadedmetadata`.
+   */
+  useEffect(() => {
+    const mobile = isMobileTier();
+    const pairs: Array<[HTMLVideoElement | null, string]> = [
+      [video1Ref.current, "/video/landing-facade.mp4"],
+      [video2Ref.current, "/video/facade-studio.mp4"],
+      [rev1Ref.current, REV_VIDEO_1],
+      [rev2Ref.current, REV_VIDEO_2],
+    ];
+    pairs.forEach(([el, path]) => {
+      if (el) el.src = withBasePath(tierSrc(path, mobile));
+    });
+  }, []);
+
+  // `loadedmetadata` can fire before React attaches a handler, so read
+  // whatever is already known on mount and only subscribe for the ones still
+  // pending.
   useEffect(() => {
     const pairs: Array<[HTMLVideoElement | null, React.RefObject<number>]> = [
       [video1Ref.current, dur1Ref],
@@ -395,6 +650,19 @@ export default function Spine() {
       const read = () => {
         const d = el.duration;
         if (Number.isFinite(d) && d > 0) ref.current = d;
+        // Nudge the landing clip off an exact 0 so a frame is actually
+        // decoded and painted. Parked at currentTime 0 and never played, this
+        // element paints nothing at all on iOS — and `applyProgress` won't
+        // correct it, because its rest-position seek to 0 is a no-op. The
+        // landing logo is `filter: brightness(0)` on the assumption that the
+        // bright first frame is behind it, so "no frame" reads as an empty
+        // black page rather than as a still. Well inside HOLD_EPS, so nothing
+        // downstream tries to seek it back.
+        if (el === video1Ref.current && el.currentTime === 0) {
+          try {
+            el.currentTime = 0.001;
+          } catch {}
+        }
       };
       read();
       if (!Number.isFinite(el.duration) || el.duration <= 0) {
@@ -454,6 +722,7 @@ export default function Spine() {
     };
 
     const onWheel = (e: WheelEvent) => {
+      primeVideos();
       if (!isSpineNode(nodeRef.current) || isAnimatingRef.current) return;
       e.preventDefault();
       if (Math.abs(e.deltaY) < 1) return;
@@ -462,6 +731,10 @@ export default function Spine() {
 
     let touchLastY = 0;
     const onTouchStart = (e: TouchEvent) => {
+      // The gesture that matters. Priming has to happen here, in the touch
+      // handler itself — by the time the rAF driver calls play() one frame
+      // later there is no user gesture in scope any more and iOS rejects it.
+      primeVideos();
       touchLastY = e.touches[0]?.clientY ?? 0;
     };
     const onTouchMove = (e: TouchEvent) => {
@@ -481,6 +754,7 @@ export default function Spine() {
       PageUp: -1,
     };
     const onKeyDown = (e: KeyboardEvent) => {
+      primeVideos();
       const dir = KEY_DIR[e.key];
       if (dir === undefined) return;
       if (!isSpineNode(nodeRef.current) || isAnimatingRef.current) return;
@@ -523,11 +797,13 @@ export default function Spine() {
         // having claimed it, so applyProgress positioned that clip by seeking
         // — a ~1.3s decode on these 2K sources, right at the hand-off.
         const pNext = p + vel * dt;
+        let justClaimed = false;
         if (speed > 0.002 && activeClipRef.current == null) {
           const inZone1 = forward ? pNext >= b1 && pNext < b2 : pNext > b1 && pNext <= b2;
           const inZone2 = forward ? pNext >= b3 && pNext < b4 : pNext > b3 && pNext <= b4;
           if (inZone1) activeClipRef.current = 1;
           else if (inZone2) activeClipRef.current = 2;
+          justClaimed = activeClipRef.current != null;
         }
 
         const active = speed > 0.002 ? activeClipRef.current : null;
@@ -540,12 +816,42 @@ export default function Spine() {
             : forward ? dur2Ref.current : revDur2Ref.current;
           const [zStart, zEnd] = active === 1 ? [b1, b2] : [b3, b4];
           if (el) {
-            next = driveClip(el, speed, zStart, zEnd, d, forward ? 1 : -1);
+            next = driveClip(el, speed, zStart, zEnd, d, forward ? 1 : -1, justClaimed);
             if (next != null) {
               driven = { which: active, dir: forward ? 1 : -1 };
               keep = el;
               // Played out — hand the rest of the leg back to plain cruising.
               if (next === (forward ? zEnd : zStart)) activeClipRef.current = null;
+
+              // Watchdog. driveClip derives progress from currentTime, so a
+              // media clock that has stopped advancing means the spine has
+              // stopped advancing — a rejected play() or a network stall both
+              // land here and neither surfaces as an error. Give the element
+              // STALL_LIMIT_MS to move (it legitimately reads 0 for the first
+              // few frames of a leg while play() spins up), then abandon video
+              // for good and finish this leg on the stills.
+              const ct = el.currentTime;
+              if (Math.abs(ct - lastClipTimeRef.current) < 1e-4) {
+                stallMsRef.current += dt * 1000;
+              } else {
+                stallMsRef.current = 0;
+                lastClipTimeRef.current = ct;
+              }
+              if (stallMsRef.current > STALL_LIMIT_MS) {
+                stillsModeRef.current = true;
+                stallCountRef.current += 1;
+                if (stallCountRef.current >= 2) stillsLatchedRef.current = true;
+                stallMsRef.current = 0;
+                lastClipTimeRef.current = -1;
+                activeClipRef.current = null;
+                pauseAllExcept(null);
+                progressRef.current = targetP;
+                applyProgress(targetP);
+                syncScrollFromProgress(targetP);
+                settleAt(targetCp);
+                rafRef.current = requestAnimationFrame(tick);
+                return;
+              }
             } else {
               activeClipRef.current = null;
             }
@@ -582,12 +888,17 @@ export default function Spine() {
     window.addEventListener("touchstart", onTouchStart, { passive: true });
     window.addEventListener("touchmove", onTouchMove, { passive: false });
     window.addEventListener("keydown", onKeyDown);
+    // Taps that never become a swipe — the ribbon's "See Studio", a studio
+    // hotspot — drive the spine programmatically and need the clips primed
+    // just as much as a scroll gesture does.
+    window.addEventListener("pointerdown", primeVideos, { passive: true });
 
     return () => {
       window.removeEventListener("wheel", onWheel);
       window.removeEventListener("touchstart", onTouchStart);
       window.removeEventListener("touchmove", onTouchMove);
       window.removeEventListener("keydown", onKeyDown);
+      window.removeEventListener("pointerdown", primeVideos);
       if (rafRef.current) cancelAnimationFrame(rafRef.current);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -633,16 +944,17 @@ export default function Spine() {
 
   return (
     <div ref={scrollerRef} style={{ height: `${SPINE_VH_TOTAL}vh`, position: "relative" }}>
-      <div className="brand-mark" ref={brandMarkRef} data-visible="false">
+      <div className="brand-mark" ref={brandMarkRef} data-visible="false" data-node={node}>
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src={withBasePath("/img/brand/logo.png")} alt="1920 x 1080 films" />
       </div>
 
       <div className="spine-pin" data-node={node}>
+        {/* No `src` here on purpose — the device-appropriate encode is
+            assigned on mount. See the tier effect above. */}
         <video
           ref={video1Ref}
           className="spine-video"
-          src={withBasePath("/video/landing-facade.mp4")}
           muted
           playsInline
           preload="auto"
@@ -650,15 +962,15 @@ export default function Spine() {
         <video
           ref={video2Ref}
           className="spine-video"
-          src={withBasePath("/video/facade-studio.mp4")}
           muted
           playsInline
-          preload="auto"
+          /* Upgraded to "auto" by ensureClip2Loaded() the moment the user
+             commits to a move — see there for why it is not fetched up front. */
+          preload="metadata"
         />
         <video
           ref={rev1Ref}
           className="spine-video"
-          src={withBasePath(REV_VIDEO_1)}
           muted
           playsInline
           preload="none"
@@ -667,12 +979,14 @@ export default function Spine() {
         <video
           ref={rev2Ref}
           className="spine-video"
-          src={withBasePath(REV_VIDEO_2)}
           muted
           playsInline
           preload="none"
           style={{ opacity: 0 }}
         />
+
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img ref={stillRef} className="spine-still" alt="" aria-hidden="true" />
 
         <div className="landing-layer" ref={landingRef}>
           <div className="landing-logo" ref={landingLogoRef}>
@@ -738,6 +1052,20 @@ export default function Spine() {
             </button>
           </div>
           <div className="studio-caption eyebrow">Select to enter</div>
+
+          {/* Touch fallback — CSS decides which of these two is live, so no
+              client-side branching and nothing to hydrate-mismatch. */}
+          <div className="studio-menu">
+            {STUDIO_OPTIONS.map((key) => (
+              <button
+                key={key}
+                className="studio-menu-item eyebrow"
+                onClick={() => jumpToStudioOption(key)}
+              >
+                {NAV_LABEL[key]}
+              </button>
+            ))}
+          </div>
         </div>
       </div>
     </div>

@@ -29,7 +29,7 @@ export default function Ribbon() {
 
   return (
     <>
-      <header className="ribbon">
+      <header className="ribbon" data-node={node}>
         <button
           type="button"
           aria-label="Back"
