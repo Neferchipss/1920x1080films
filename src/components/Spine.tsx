@@ -536,6 +536,26 @@ export default function Spine() {
           v.currentTime = 0;
         } catch {}
       });
+
+      // video1 sits hidden and untouched for the whole reverse leg — only
+      // the reversed encode is driven — so it is left parked wherever an
+      // earlier forward pass happened to leave it. Once the reverse clip
+      // hands off to plain cruising, applyProgress's seekVideo(video1, ...)
+      // tries to snap it to the frame the destination hold needs and swaps
+      // it back to visible in the very same tick. That seek is exactly the
+      // kind of backward jump this file elsewhere treats as slow/unreliable
+      // (hundreds of ms, sometimes never resolves before the leg halts) —
+      // so whatever stale frame video1 was left on shows through instead of
+      // the correct one. Requesting the seek now instead, while video1 is
+      // still hidden and the whole leg's duration remains, gives it ample
+      // time to land before it is ever shown again.
+      const v1 = video1Ref.current;
+      if (v1) {
+        const targetCp = SPINE_CHECKPOINTS[targetIndex];
+        try {
+          v1.currentTime = targetCp === "landing" ? 0 : dur1Ref.current;
+        } catch {}
+      }
     }
     activeClipRef.current = null;
     stallMsRef.current = 0;
