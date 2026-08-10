@@ -10,6 +10,7 @@ import {
   type ReactNode,
 } from "react";
 import { NodeId, PARENT, pathBetween, isBranchNode } from "@/lib/journey";
+import { isMobileTier } from "@/lib/videoTier";
 
 export type SpineController = {
   /** Animate the pinned scroll spine to rest exactly at this node. */
@@ -146,8 +147,19 @@ export function JourneyProvider({
   // reasonable at all — but it is still four files the user may never watch,
   // so an explicit data-saver preference opts out and each branch falls back
   // to fetching itself when it is actually entered.
+  //
+  // Mobile skips this too, byte count aside: it means 5 video elements
+  // (about, portfolio x2, contact, services) all buffering — and briefly
+  // decoding, since <video preload="auto"> primes a frame — at once, stacked
+  // on top of the spine's own 2. Phones have a hard concurrent-decoder
+  // ceiling; past it, frames silently drop instead of erroring, which is
+  // exactly "plays smooth, then stutters and never finishes" rather than any
+  // visible failure. Each branch still preloads itself the moment it is
+  // actually entered (see BranchOverlay's playForward), so this only trades
+  // away the speculative head start, not correctness.
   useEffect(() => {
     if (node !== "studio") return;
+    if (isMobileTier()) return;
     const conn = (navigator as Navigator & { connection?: { saveData?: boolean } }).connection;
     if (conn?.saveData) return;
     Object.values(branchRefs.current).forEach((c) => c?.preload());
