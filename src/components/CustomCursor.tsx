@@ -3,28 +3,27 @@
 import { useEffect, useRef } from "react";
 
 /**
- * A camera AF-point cursor: a small red dot in a thin ring, like the focus
- * indicator in a viewfinder. Positioned by directly mutating the node's
- * transform on every pointermove rather than through React state, so it
- * tracks the pointer with zero re-render lag.
+ * A REC-button cursor: black disc, white halo ring, red tally light —
+ * the record indicator on a camera body. It idles with a slow tally
+ * blink, locks focus and labels itself "REC" over interactive elements,
+ * and fires a shutter-ring pulse on click.
  */
 export default function CustomCursor() {
-  const dotRef = useRef<HTMLDivElement>(null);
-  const ringRef = useRef<HTMLDivElement>(null);
+  const buttonRef = useRef<HTMLDivElement>(null);
+  const rippleLayerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     // Coarse pointers (touch) have no cursor to replace.
     if (!window.matchMedia("(pointer: fine)").matches) return;
 
-    const dot = dotRef.current;
-    const ring = ringRef.current;
-    if (!dot || !ring) return;
+    const button = buttonRef.current;
+    const rippleLayer = rippleLayerRef.current;
+    if (!button || !rippleLayer) return;
 
     document.documentElement.classList.add("has-custom-cursor");
 
     const move = (e: PointerEvent) => {
-      dot.style.transform = `translate(${e.clientX}px, ${e.clientY}px)`;
-      ring.style.transform = `translate(${e.clientX}px, ${e.clientY}px)`;
+      button.style.transform = `translate(${e.clientX}px, ${e.clientY}px)`;
     };
 
     const interactiveSelector =
@@ -32,11 +31,20 @@ export default function CustomCursor() {
 
     const over = (e: PointerEvent) => {
       const target = e.target as Element | null;
-      ring.classList.toggle("is-hovering", !!target?.closest(interactiveSelector));
+      button.classList.toggle("is-hovering", !!target?.closest(interactiveSelector));
     };
 
-    const down = () => ring.classList.add("is-pressing");
-    const up = () => ring.classList.remove("is-pressing");
+    const down = (e: PointerEvent) => {
+      button.classList.add("is-pressing");
+
+      const ripple = document.createElement("span");
+      ripple.className = "custom-cursor-ripple";
+      ripple.style.left = `${e.clientX}px`;
+      ripple.style.top = `${e.clientY}px`;
+      ripple.addEventListener("animationend", () => ripple.remove());
+      rippleLayer.appendChild(ripple);
+    };
+    const up = () => button.classList.remove("is-pressing");
 
     const hide = () => document.documentElement.classList.add("cursor-hidden");
     const show = () => document.documentElement.classList.remove("cursor-hidden");
@@ -61,13 +69,13 @@ export default function CustomCursor() {
 
   return (
     <div className="custom-cursor" aria-hidden="true">
-      <div ref={ringRef} className="custom-cursor-ring">
-        <span className="custom-cursor-tick custom-cursor-tick--n" />
-        <span className="custom-cursor-tick custom-cursor-tick--e" />
-        <span className="custom-cursor-tick custom-cursor-tick--s" />
-        <span className="custom-cursor-tick custom-cursor-tick--w" />
+      <div ref={rippleLayerRef} className="custom-cursor-ripple-layer" />
+      <div ref={buttonRef} className="custom-cursor-rec">
+        <span className="custom-cursor-rec-pulse" />
+        <span className="custom-cursor-rec-ring" />
+        <span className="custom-cursor-rec-dot" />
+        <span className="custom-cursor-rec-label">REC</span>
       </div>
-      <div ref={dotRef} className="custom-cursor-dot" />
     </div>
   );
 }

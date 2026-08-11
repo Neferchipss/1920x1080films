@@ -1208,77 +1208,156 @@ button {
   opacity: 0;
 }
 
-.custom-cursor-dot,
-.custom-cursor-ring {
+/* The REC button itself: black disc, white tally halo, red light —
+   built from stacked absolutely-positioned children so only the outer
+   node needs to move on pointermove. */
+.custom-cursor-rec {
   position: fixed;
   top: 0;
   left: 0;
+  width: 26px;
+  height: 26px;
+  margin: -13px 0 0 -13px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: var(--ink);
+  box-shadow: 0 0 0 2px rgba(242, 237, 228, 0.85), 0 2px 10px rgba(0, 0, 0, 0.45);
   will-change: transform;
+  transition: transform 0.12s var(--ease-cam), width 0.25s var(--ease-cam),
+    height 0.25s var(--ease-cam), margin 0.25s var(--ease-cam),
+    box-shadow 0.25s var(--ease-cam);
 }
 
-/* The AF point: a solid red dot, like a camera's focus indicator. */
-.custom-cursor-dot {
-  width: 4px;
-  height: 4px;
-  margin: -2px 0 0 -2px;
+/* The tally light: idles with a slow broadcast blink so the cursor
+   reads as "live" even at rest. */
+.custom-cursor-rec-dot {
+  position: relative;
+  width: 10px;
+  height: 10px;
   border-radius: 50%;
   background: var(--rec-red);
-  box-shadow: 0 0 4px rgba(255, 43, 31, 0.7);
-  transition: transform 0.06s linear;
+  box-shadow: 0 0 6px rgba(255, 43, 31, 0.85);
+  animation: rec-tally 2.4s ease-in-out infinite;
+  transition: width 0.2s var(--ease-cam), height 0.2s var(--ease-cam);
 }
 
-/* The viewfinder ring around it, with four corner ticks like a lens'
-   focus-point bracket. Trails the dot slightly so quick moves read as a
-   camera racking focus rather than a mouse snapping into place. */
-.custom-cursor-ring {
-  width: 22px;
-  height: 22px;
-  margin: -11px 0 0 -11px;
-  border: 1px solid rgba(255, 43, 31, 0.65);
-  border-radius: 50%;
-  transition: transform 0.12s var(--ease-cam), width 0.2s var(--ease-cam),
-    height 0.2s var(--ease-cam), margin 0.2s var(--ease-cam),
-    border-color 0.2s var(--ease-cam), opacity 0.2s var(--ease-cam);
-}
-
-.custom-cursor-tick {
+/* A ring that quietly breathes outward from the button, like a light
+   broadcasting a signal — always on, barely there. */
+.custom-cursor-rec-pulse {
   position: absolute;
-  background: rgba(255, 43, 31, 0.65);
+  inset: 0;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 43, 31, 0.55);
+  animation: rec-broadcast 2.4s var(--ease-cam) infinite;
 }
 
-.custom-cursor-tick--n,
-.custom-cursor-tick--s {
-  left: 50%;
-  width: 1px;
-  height: 5px;
-  margin-left: -0.5px;
+.custom-cursor-rec-ring {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 1px solid rgba(242, 237, 228, 0.35);
+  transform: scale(1.35);
+  opacity: 0;
+  transition: opacity 0.25s var(--ease-cam), transform 0.25s var(--ease-cam);
 }
 
-.custom-cursor-tick--n { top: -5px; }
-.custom-cursor-tick--s { bottom: -5px; }
-
-.custom-cursor-tick--e,
-.custom-cursor-tick--w {
+/* "REC" label, tucked beside the button, only shown on hover. */
+.custom-cursor-rec-label {
+  position: absolute;
+  left: 22px;
   top: 50%;
-  width: 5px;
-  height: 1px;
-  margin-top: -0.5px;
+  transform: translateY(-50%) translateX(-4px);
+  font-family: var(--font-mono), monospace;
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  color: var(--rec-red);
+  opacity: 0;
+  white-space: nowrap;
+  transition: opacity 0.2s var(--ease-cam), transform 0.2s var(--ease-cam);
 }
 
-.custom-cursor-tick--e { right: -5px; }
-.custom-cursor-tick--w { left: -5px; }
-
-/* Hovering something clickable: the ring closes in around the dot, like
-   autofocus locking onto a subject. */
-.custom-cursor-ring.is-hovering {
-  width: 30px;
-  height: 30px;
-  margin: -15px 0 0 -15px;
-  border-color: var(--rec-red);
+/* Hovering something clickable: the button locks focus — grows, the
+   halo ring flares open, and the tally label announces itself. */
+.custom-cursor-rec.is-hovering {
+  width: 34px;
+  height: 34px;
+  margin: -17px 0 0 -17px;
+  box-shadow: 0 0 0 2px rgba(255, 43, 31, 0.9), 0 2px 14px rgba(0, 0, 0, 0.5);
 }
 
-.custom-cursor-ring.is-pressing {
-  width: 16px;
-  height: 16px;
-  margin: -8px 0 0 -8px;
+.custom-cursor-rec.is-hovering .custom-cursor-rec-ring {
+  opacity: 1;
+  transform: scale(1.6);
+}
+
+.custom-cursor-rec.is-hovering .custom-cursor-rec-label {
+  opacity: 1;
+  transform: translateY(-50%) translateX(0);
+}
+
+.custom-cursor-rec.is-hovering .custom-cursor-rec-dot {
+  width: 8px;
+  height: 8px;
+}
+
+/* Pressed: the button racks down like a physical shutter release. */
+.custom-cursor-rec.is-pressing {
+  width: 20px;
+  height: 20px;
+  margin: -10px 0 0 -10px;
+}
+
+@keyframes rec-tally {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.45;
+    transform: scale(0.82);
+  }
+}
+
+@keyframes rec-broadcast {
+  0% {
+    transform: scale(1);
+    opacity: 0.5;
+  }
+  100% {
+    transform: scale(1.9);
+    opacity: 0;
+  }
+}
+
+/* Shutter-click ripple: fired at the pointer position on every press,
+   expanding and fading, like a recording start flash. */
+.custom-cursor-ripple-layer {
+  position: fixed;
+  inset: 0;
+}
+
+.custom-cursor-ripple {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 26px;
+  height: 26px;
+  margin: -13px 0 0 -13px;
+  border-radius: 50%;
+  border: 1.5px solid var(--rec-red);
+  animation: rec-shutter 0.5s var(--ease-cam) forwards;
+}
+
+@keyframes rec-shutter {
+  0% {
+    transform: scale(0.6);
+    opacity: 0.9;
+  }
+  100% {
+    transform: scale(2.4);
+    opacity: 0;
+  }
 }
