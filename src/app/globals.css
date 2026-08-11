@@ -413,7 +413,7 @@ html[data-ribbon-on-light="true"] .brand-mark img {
   top: 34%;
   transform: translateY(-50%);
   transform-origin: left center;
-  will-change: transform, opacity;
+  will-change: transform, opacity, filter;
 }
 
 .landing-logo img {

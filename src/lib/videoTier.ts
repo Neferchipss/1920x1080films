@@ -1,13 +1,13 @@
 /**
  * Which encode of the transition clips this device should fetch.
  *
- * The desktop tier is 1080p60 at CRF 19 — 13-15 Mbit/s, 5.8 MB for the
- * landing -> facade clip alone. Over mobile data the element cannot keep that
- * fed, so it stalls mid-clip; and because the spine reads its progress back
- * out of `currentTime`, a stalled decoder is a stalled site. The `-m` tier is
- * the same clip at 720p60 / CRF 26 — about a fifth of the bytes, and visually
- * indistinguishable on a phone, where the video is full-bleed on a ~400pt-wide
- * viewport. Both are produced by `scripts/build_transition_clips.sh`.
+ * The `-m` files used to be a genuinely lower-res, lower-bitrate encode for
+ * metered/slow connections. They're now byte-identical copies of their
+ * desktop counterpart — full resolution, same bitrate — because a downscaled
+ * mobile tier was a visible quality cut the site no longer wants. The
+ * `isMobileTier`/`tierSrc` split is kept as-is (rather than collapsed to one
+ * URL everywhere) so the two tiers can diverge again later without touching
+ * every call site.
  */
 
 /**

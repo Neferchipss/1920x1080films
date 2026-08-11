@@ -131,6 +131,15 @@ export default function Spine() {
   const dur1Ref = useRef(DUR1_FALLBACK);
   const dur2Ref = useRef(DUR2_FALLBACK);
   const clip2LoadedRef = useRef(false);
+  /** One in-flight `currentTime` write per video at a time. A scrub can
+   *  demand a new target every rAF, but the decoder can't necessarily
+   *  finish a seek that fast — firing another write before `seeked` queues
+   *  up behind it and the video visibly stutters/catches up instead of
+   *  tracking the scrollbar. Only the latest target during a seek is kept;
+   *  everything in between is disposable. */
+  const seekStateRef = useRef(
+    new Map<HTMLVideoElement, { seeking: boolean; pendingT: number | null; pendingEps: number }>()
+  );
   const reducedMotionRef = useRef(false);
   /** Elements that have had play() called on them inside a real user
    *  gesture. WebKit's autoplay restriction is per element, and a <video>
@@ -193,7 +202,14 @@ export default function Spine() {
   // that just played out sits a few hundredths off its nominal end, and
   // "correcting" that is a backward seek costing hundreds of milliseconds.
   const seekVideo = (v: HTMLVideoElement, t: number, eps = 0.004) => {
-    if (Math.abs(v.currentTime - t) > eps) v.currentTime = t;
+    if (Math.abs(v.currentTime - t) <= eps) return;
+    const state = seekStateRef.current.get(v);
+    if (state?.seeking) {
+      state.pendingT = t;
+      state.pendingEps = eps;
+      return;
+    }
+    v.currentTime = t;
   };
   const HOLD_EPS = 0.25;
 
@@ -288,8 +304,16 @@ export default function Spine() {
       // fading out right as p reaches b1 — i.e. exactly when the clip
       // itself starts moving, instead of lingering into it.
       const t = clamp01(p / b1);
-      landingLogoRef.current.style.transform = `translateY(-50%) scale(${1 - t * 0.55})`;
-      landingLogoRef.current.style.opacity = String(1 - t);
+      // Smoothstep instead of a raw linear `t`: the logo holds crisp for
+      // the first bit of scroll, does most of its dissolving through the
+      // middle, then eases out rather than trailing off at a constant
+      // rate the whole way — reads as a considered exit instead of a
+      // dial being turned down.
+      const eased = t * t * (3 - 2 * t);
+      const lift = eased * 22;
+      landingLogoRef.current.style.transform = `translateY(calc(-50% - ${lift}px)) scale(${1 - eased * 0.55})`;
+      landingLogoRef.current.style.opacity = String(1 - eased);
+      landingLogoRef.current.style.filter = `blur(${eased * 7}px)`;
     }
     // No fade curve of its own — visible exactly whenever the landing frame
     // isn't what's on screen, which the CSS crossfades on its own terms.
@@ -485,6 +509,38 @@ export default function Spine() {
       tweenRef.current = { raf: requestAnimationFrame(step), resolve };
     });
   };
+
+  // Tracks each video's in-flight seek so `seekVideo` can coalesce rapid
+  // scrub targets instead of queueing a write behind one the decoder
+  // hasn't finished yet — see `seekStateRef`.
+  useEffect(() => {
+    const videos = [video1Ref.current, video2Ref.current].filter(
+      (v): v is HTMLVideoElement => v != null
+    );
+    const map = seekStateRef.current;
+    const cleanups: Array<() => void> = [];
+    videos.forEach((v) => {
+      const state = { seeking: false, pendingT: null as number | null, pendingEps: 0.004 };
+      map.set(v, state);
+      const onSeeking = () => {
+        state.seeking = true;
+      };
+      const onSeeked = () => {
+        state.seeking = false;
+        const t = state.pendingT;
+        state.pendingT = null;
+        if (t != null && Math.abs(v.currentTime - t) > state.pendingEps) v.currentTime = t;
+      };
+      v.addEventListener("seeking", onSeeking);
+      v.addEventListener("seeked", onSeeked);
+      cleanups.push(() => {
+        v.removeEventListener("seeking", onSeeking);
+        v.removeEventListener("seeked", onSeeked);
+        map.delete(v);
+      });
+    });
+    return () => cleanups.forEach((fn) => fn());
+  }, []);
 
   /**
    * Point each element at the encode this device should actually fetch.
