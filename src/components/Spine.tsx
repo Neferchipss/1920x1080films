@@ -3,7 +3,7 @@
 import { useEffect, useRef } from "react";
 import { useJourney } from "@/context/JourneyContext";
 import { BOUNDS, REST_PROGRESS, SPINE_VH_TOTAL, clamp01 } from "@/lib/spineLayout";
-import { NAV_LABEL, isSpineNode } from "@/lib/journey";
+import { isSpineNode } from "@/lib/journey";
 import { withBasePath } from "@/lib/basePath";
 import { isMobileTier, tierSrc } from "@/lib/videoTier";
 
@@ -53,10 +53,6 @@ const HOTSPOT_BOXES: Record<
   contact: { x: 925, y: 448, w: 165, h: 168 }, // iMac on the desk, back right
   services: { x: 1330, y: 148, w: 270, h: 410 }, // equipment pegboard, right wall
 };
-
-/** Reading order for the touch fallback list; the hotspots keep their own
- *  spatial arrangement. */
-const STUDIO_OPTIONS = ["portfolio", "about", "services", "contact"] as const;
 
 // Source-pixel bounds measured off the 1280x720 facade still (the same
 // frame the landing->facade clip holds on): the blank stretch of wall
@@ -846,20 +842,6 @@ export default function Spine() {
             </button>
           </div>
           <div className="studio-caption eyebrow">Select to enter</div>
-
-          {/* Touch fallback — CSS decides which of these two is live, so no
-              client-side branching and nothing to hydrate-mismatch. */}
-          <div className="studio-menu">
-            {STUDIO_OPTIONS.map((key) => (
-              <button
-                key={key}
-                className="studio-menu-item eyebrow"
-                onClick={() => jumpToStudioOption(key)}
-              >
-                {NAV_LABEL[key]}
-              </button>
-            ))}
-          </div>
         </div>
       </div>
     </div>

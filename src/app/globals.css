@@ -559,49 +559,17 @@ html[data-ribbon-on-light="true"] .brand-mark img {
   transform: translateX(-50%);
 }
 
-/* Touch fallback for the studio's four entrances. The hotspots are positioned
-   against the source frame's object-fit:cover geometry, which on a portrait
-   phone crops away most of the frame's width — "about" (left wall) lands at
-   x = -361px and "services" (right wall) past the right edge, so half the
-   site's navigation is literally off-screen. Their labels are :hover-only too,
-   which never fires on touch, so the two that do land in view are invisible.
-   Coarse pointers get an explicit list instead. */
-.studio-menu {
-  display: none;
-}
-
+/* The hotspots are positioned against the source frame's object-fit:cover
+   geometry, which on a portrait phone crops away most of the frame's width —
+   "about" (left wall) lands at x = -361px and "services" (right wall) past
+   the right edge, so half the site's navigation is literally off-screen.
+   Their labels are :hover-only too, which never fires on touch, so the two
+   that do land in view are invisible. Coarse pointers get the hamburger nav
+   instead of a studio-local fallback — see Ribbon.tsx's mobile-nav-overlay. */
 @media (hover: none) and (pointer: coarse), (max-width: 899px) {
-  .studio-hotspots {
-    display: none;
-  }
-
+  .studio-hotspots,
   .studio-caption {
-    bottom: calc(clamp(52px, 8vh, 64px) * 2 + 26px);
-  }
-
-  .studio-menu {
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1px;
-    background: var(--line);
-    border-top: 1px solid var(--line);
-  }
-
-  .studio-menu-item {
-    min-height: clamp(52px, 8vh, 64px);
-    padding: 0 10px;
-    background: rgba(10, 10, 11, 0.74);
-    -webkit-backdrop-filter: blur(8px);
-    backdrop-filter: blur(8px);
-    color: #fff;
-  }
-
-  .studio-menu-item:active {
-    background: rgba(176, 141, 87, 0.42);
+    display: none;
   }
 }
 
