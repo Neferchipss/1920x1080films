@@ -183,8 +183,7 @@ html[data-ribbon-on-light="true"] .ribbon-icon-btn:hover:not(:disabled) {
    guessing from scroll position, which would drift the moment the clip,
    crop, or timing changes. */
 html[data-ribbon-on-light="true"] .ribbon-icon-btn,
-html[data-ribbon-on-light="true"] .ribbon-nav-link,
-html[data-ribbon-on-light="true"] .ribbon-cta {
+html[data-ribbon-on-light="true"] .ribbon-nav-link {
   color: var(--ink);
 }
 
@@ -229,6 +228,76 @@ html[data-ribbon-on-light="true"] .ribbon-nav-link::after {
   color: var(--brass);
 }
 
+/* ---------------- context menu ---------------- */
+
+.context-menu {
+  position: fixed;
+  z-index: 200;
+  width: 176px;
+  padding: 8px;
+  border-radius: 10px;
+  background: rgba(10, 10, 11, 0.92);
+  border: 1px solid var(--line);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  animation: context-menu-in 0.12s var(--ease-cam);
+}
+
+@keyframes context-menu-in {
+  from {
+    opacity: 0;
+    transform: scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.context-menu-item {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: 40px;
+  padding: 0 12px;
+  border-radius: 6px;
+  font-family: var(--font-mono), monospace;
+  font-size: 12px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #fff;
+  text-align: left;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.context-menu-item::before {
+  content: "";
+  width: 5px;
+  height: 5px;
+  margin-right: 10px;
+  border-radius: 50%;
+  background: var(--rec-red);
+  opacity: 0;
+  transition: opacity 0.15s ease;
+}
+
+.context-menu-item:hover:not(:disabled),
+.context-menu-item:focus-visible:not(:disabled) {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--rec-red);
+}
+
+.context-menu-item:hover:not(:disabled)::before,
+.context-menu-item:focus-visible:not(:disabled)::before {
+  opacity: 1;
+}
+
+.context-menu-item:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
 /* ---------------- shared bits ---------------- */
 
 .eyebrow {
@@ -268,13 +337,18 @@ html[data-ribbon-on-light="true"] .ribbon-nav-link::after {
   50% { opacity: 1; }
 }
 
+/* Sits in the same fixed-header row as the ribbon's back button — offset
+   past it (button width + gap) rather than sharing its corner, which is
+   what used to overlap the two. Vertically centered on the button's own
+   44px box so they read as one row instead of two independently-placed
+   fixed elements that happen to be nearby. */
 .brand-mark {
   position: fixed;
-  top: 28px;
-  left: clamp(20px, 4vw, 48px);
+  top: 36px;
+  left: calc(clamp(20px, 4vw, 48px) + 44px + 16px);
   z-index: 50;
   opacity: 0;
-  transition: opacity 0.6s var(--ease-cam);
+  transition: opacity 0.3s ease;
   pointer-events: none;
 }
 
@@ -287,7 +361,11 @@ html[data-ribbon-on-light="true"] .ribbon-nav-link::after {
   height: 17px;
   width: auto;
   filter: brightness(0) invert(1);
-  mix-blend-mode: difference;
+  transition: filter 0.3s ease;
+}
+
+html[data-ribbon-on-light="true"] .brand-mark img {
+  filter: brightness(0);
 }
 
 /* ---------------- spine ---------------- */
@@ -389,6 +467,13 @@ html[data-ribbon-on-light="true"] .ribbon-nav-link::after {
   color: #fff;
 }
 
+/* left/top/width are pinned in JS (see Spine.tsx's layoutFacadeCounters) to
+   the blank stretch of wall the video actually shows there, since that
+   position — and how much room is on either side of it — shifts with the
+   viewport's aspect ratio the same way the studio hotspots do. The values
+   below are only the narrow/portrait fallback, for the one case JS opts
+   out of (see FACADE_BOX_MIN_VW). container-type lets the counters scale
+   off the box's real width either way, instead of the full viewport's. */
 .facade-layer {
   position: absolute;
   left: clamp(24px, 8vw, 130px);
@@ -397,20 +482,27 @@ html[data-ribbon-on-light="true"] .ribbon-nav-link::after {
   z-index: 5;
   opacity: 0;
   transition: opacity 0.5s ease;
+  container-type: inline-size;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
 }
 
 .facade-eyebrow {
-  margin-bottom: 20px;
+  margin-bottom: clamp(8px, 2cqw, 20px);
 }
 
 .counters-grid {
   display: flex;
   flex-wrap: wrap;
-  gap: clamp(20px, 4vw, 56px);
+  justify-content: center;
+  gap: clamp(10px, 2.5cqw, 28px);
 }
 
 .counter-value {
-  font-size: clamp(26px, 3.6vw, 44px);
+  font-size: clamp(18px, 5.5cqw, 40px);
   color: #fff;
 }
 
@@ -1171,46 +1263,6 @@ html[data-ribbon-on-light="true"] .ribbon-nav-link::after {
     animation-duration: 0.001ms !important;
     transition-duration: 0.001ms !important;
   }
-}
-
-/* "See Studio" — landing-only shortcut that plays straight through to the
-   studio without halting on the facade checkpoint. */
-.ribbon-cta {
-  margin-left: auto;
-  margin-right: clamp(18px, 2.4vw, 36px);
-  font-size: 12px;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: #fff;
-  padding: 9px 18px;
-  white-space: nowrap;
-  border: 1px solid rgba(255, 255, 255, 0.45);
-  border-radius: 999px;
-  transition: background 0.3s var(--ease-cam), border-color 0.3s var(--ease-cam),
-    opacity 0.3s var(--ease-cam), color 0.3s ease;
-}
-
-.ribbon-cta:hover:not(:disabled) {
-  background: rgba(255, 255, 255, 0.12);
-  border-color: rgba(255, 255, 255, 0.85);
-}
-
-.ribbon-cta:disabled {
-  opacity: 0.45;
-}
-
-html[data-ribbon-on-light="true"] .ribbon-cta {
-  border-color: rgba(10, 10, 11, 0.4);
-}
-
-html[data-ribbon-on-light="true"] .ribbon-cta:hover:not(:disabled) {
-  background: rgba(10, 10, 11, 0.08);
-  border-color: rgba(10, 10, 11, 0.75);
-}
-
-/* With the CTA present the nav no longer needs to claim the free space. */
-.ribbon-cta + .ribbon-persistent-nav {
-  margin-left: 0;
 }
 
 /* ---------------- custom cursor ---------------- */

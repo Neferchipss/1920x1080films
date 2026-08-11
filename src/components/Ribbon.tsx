@@ -17,10 +17,6 @@ export default function Ribbon() {
   }, []);
 
   const canGoBack = node !== "landing";
-  // Offered only from the landing frame: one continuous play through both
-  // spine clips to the studio, skipping the facade halt. Once studio is
-  // reached — by this or by scrolling — it gives way to the studio hotspots.
-  const showSeeStudio = node === "landing";
 
   const handleNav = (target: NodeId) => {
     if (isAnimating) return;
@@ -48,17 +44,6 @@ export default function Ribbon() {
             />
           </svg>
         </button>
-
-        {showSeeStudio && (
-          <button
-            type="button"
-            className="ribbon-cta"
-            onClick={() => handleNav("studio")}
-            disabled={isAnimating}
-          >
-            See Studio
-          </button>
-        )}
 
         {isDesktop ? (
           <nav className="ribbon-persistent-nav">

@@ -6,6 +6,7 @@ import { JourneyProvider } from "@/context/JourneyContext";
 import { NodeId } from "@/lib/journey";
 import Ribbon from "@/components/Ribbon";
 import CustomCursor from "@/components/CustomCursor";
+import ContextMenu from "@/components/ContextMenu";
 
 const ROUTE_NODE: Record<string, NodeId> = {
   "/about": "about",
@@ -23,6 +24,7 @@ export default function AppShell({ children }: { children: ReactNode }) {
     <JourneyProvider initialTarget={initialTarget}>
       <CustomCursor />
       <Ribbon />
+      <ContextMenu />
       {children}
     </JourneyProvider>
   );
