@@ -78,12 +78,15 @@ button {
   color: #fff;
   border-radius: 999px;
   transition: opacity 0.35s var(--ease-cam), transform 0.35s var(--ease-cam),
-    background-color 0.25s ease;
-  mix-blend-mode: difference;
+    background-color 0.25s ease, color 0.3s ease;
 }
 
 .ribbon-icon-btn:hover:not(:disabled) {
   background: rgba(255, 255, 255, 0.12);
+}
+
+html[data-ribbon-on-light="true"] .ribbon-icon-btn:hover:not(:disabled) {
+  background: rgba(10, 10, 11, 0.08);
 }
 
 .ribbon-icon-btn[data-hidden="true"] {
@@ -145,8 +148,7 @@ button {
   color: #fff;
   padding: 6px 2px;
   white-space: nowrap;
-  transition: opacity 0.25s ease;
-  mix-blend-mode: difference;
+  transition: opacity 0.25s ease, color 0.3s ease;
 }
 
 .ribbon-nav-link:hover:not(:disabled) {
@@ -172,6 +174,22 @@ button {
 
 .ribbon-nav-link:disabled {
   opacity: 0.5;
+}
+
+/* The ribbon rides over a continuously-scrubbing hero video whose brightness
+   swings from a pale sky to a near-black facade, so a fixed text color reads
+   fine at one end and disappears at the other. Spine.tsx samples the actual
+   pixels behind the header on every tick and flags the result here — no
+   guessing from scroll position, which would drift the moment the clip,
+   crop, or timing changes. */
+html[data-ribbon-on-light="true"] .ribbon-icon-btn,
+html[data-ribbon-on-light="true"] .ribbon-nav-link,
+html[data-ribbon-on-light="true"] .ribbon-cta {
+  color: var(--ink);
+}
+
+html[data-ribbon-on-light="true"] .ribbon-nav-link::after {
+  background: var(--ink);
 }
 
 .mobile-nav-overlay {
@@ -1169,7 +1187,7 @@ button {
   border: 1px solid rgba(255, 255, 255, 0.45);
   border-radius: 999px;
   transition: background 0.3s var(--ease-cam), border-color 0.3s var(--ease-cam),
-    opacity 0.3s var(--ease-cam);
+    opacity 0.3s var(--ease-cam), color 0.3s ease;
 }
 
 .ribbon-cta:hover:not(:disabled) {
@@ -1179,6 +1197,15 @@ button {
 
 .ribbon-cta:disabled {
   opacity: 0.45;
+}
+
+html[data-ribbon-on-light="true"] .ribbon-cta {
+  border-color: rgba(10, 10, 11, 0.4);
+}
+
+html[data-ribbon-on-light="true"] .ribbon-cta:hover:not(:disabled) {
+  background: rgba(10, 10, 11, 0.08);
+  border-color: rgba(10, 10, 11, 0.75);
 }
 
 /* With the CTA present the nav no longer needs to claim the free space. */

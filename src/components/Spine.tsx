@@ -166,6 +166,13 @@ export default function Spine() {
   const nodeRef = useRef(node);
   const isAnimatingRef = useRef(isAnimating);
 
+  /** Offscreen scratch canvas the ribbon-contrast sampler draws into — built
+   *  lazily on first use rather than on mount, since most sessions never
+   *  scroll fast enough to need more than a few samples a second. */
+  const brightCanvasRef = useRef<HTMLCanvasElement | null>(null);
+  const lastBrightSampleRef = useRef(0);
+  const ribbonOnLightRef = useRef(false);
+
   const dur1Ref = useRef(DUR1_FALLBACK);
   const dur2Ref = useRef(DUR2_FALLBACK);
   const revDur1Ref = useRef(DUR1_FALLBACK);
@@ -271,6 +278,77 @@ export default function Spine() {
   const HOLD_EPS = 0.25;
 
   const allVideos = () => [video1Ref.current, video2Ref.current, rev1Ref.current, rev2Ref.current];
+
+  /**
+   * Reads the actual pixels currently on screen under the ribbon and flags
+   * whether they're light or dark, so the CSS in globals.css can swap the
+   * nav to dark-on-light instead of guessing from scroll position. Scroll
+   * position can't drive this directly: the hero is one continuous shot
+   * sweeping from a pale sky to a near-black facade, so "how far through
+   * the clip" and "how bright the strip under the header is" are only
+   * loosely related and drift apart the moment the footage, crop, or
+   * transition timing changes.
+   *
+   * Downsamples the visible frame into a tiny offscreen canvas — cheap
+   * enough to run every ~150ms without competing with the clip's own
+   * decode — and averages the luminance of just its top slice, which is
+   * roughly what sits behind the ribbon.
+   */
+  const sampleRibbonContrast = (ts: number) => {
+    if (ts - lastBrightSampleRef.current < 150) return;
+    lastBrightSampleRef.current = ts;
+
+    const still = stillRef.current;
+    const opacityOf = (el: HTMLElement | null) => (el ? Number(el.style.opacity || "0") : 0);
+    const candidates: Array<HTMLVideoElement | HTMLImageElement | null> = [
+      still && opacityOf(still) > 0.5 ? still : null,
+      rev1Ref.current && opacityOf(rev1Ref.current) > 0.5 ? rev1Ref.current : null,
+      rev2Ref.current && opacityOf(rev2Ref.current) > 0.5 ? rev2Ref.current : null,
+      video2Ref.current && opacityOf(video2Ref.current) > 0.5 ? video2Ref.current : null,
+      video1Ref.current && opacityOf(video1Ref.current) > 0.5 ? video1Ref.current : null,
+    ];
+    const source = candidates.find((c) => c != null) ?? null;
+    if (!source) return;
+
+    const isVideo = source instanceof HTMLVideoElement;
+    const w = isVideo ? source.videoWidth : source.naturalWidth;
+    const h = isVideo ? source.videoHeight : source.naturalHeight;
+    if (!w || !h) return;
+
+    let canvas = brightCanvasRef.current;
+    if (!canvas) {
+      canvas = document.createElement("canvas");
+      canvas.width = 32;
+      canvas.height = 18;
+      brightCanvasRef.current = canvas;
+    }
+    const ctx = canvas.getContext("2d", { willReadFrequently: true });
+    if (!ctx) return;
+
+    try {
+      // object-fit: cover crops to the viewport's aspect ratio; the 32x18
+      // canvas mirrors that ratio closely enough for an average-brightness
+      // read, so a plain full-frame draw stands in for the real crop.
+      ctx.drawImage(source, 0, 0, 32, 18);
+      // Roughly the header's share of a typical viewport height — just the
+      // top slice, not the whole frame.
+      const stripRows = 3;
+      const { data } = ctx.getImageData(0, 0, 32, stripRows);
+      let sum = 0;
+      for (let i = 0; i < data.length; i += 4) {
+        sum += 0.2126 * data[i] + 0.7152 * data[i + 1] + 0.0722 * data[i + 2];
+      }
+      const avgLuma = sum / (data.length / 4) / 255;
+      const onLight = avgLuma > 0.55;
+      if (onLight !== ribbonOnLightRef.current) {
+        ribbonOnLightRef.current = onLight;
+        document.documentElement.dataset.ribbonOnLight = String(onLight);
+      }
+    } catch {
+      // Same-origin video/image sources never taint the canvas in practice;
+      // if a future asset host ever does, just skip this sample.
+    }
+  };
 
   const pauseAllExcept = (keep: HTMLVideoElement | null) => {
     allVideos().forEach((v) => {
@@ -795,6 +873,8 @@ export default function Spine() {
       const last = lastTsRef.current;
       lastTsRef.current = ts;
       const dt = last == null ? 0 : Math.min(0.05, (ts - last) / 1000);
+
+      sampleRibbonContrast(ts);
 
       const programmatic = programmaticRef.current != null;
       if (
