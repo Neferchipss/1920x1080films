@@ -638,100 +638,72 @@ html[data-ribbon-on-light="true"] .brand-mark img {
 
 /* ---------------- about ---------------- */
 
+/* No boxed frame graphic and no flat fill — the branch-overlay's studio
+   clip dollies in and holds on the framed print on the wall (see
+   BranchOverlay.tsx), and that print IS the background here. The copy sits
+   inside the print's own pale mat rather than off to the side, so it reads
+   dark-on-light instead of needing a scrim to survive on top of the shot.
+   The mat's on-screen position is fixed by how that clip is framed (not
+   measured live), so the width below is tuned to that shot, not a generic
+   layout choice. Sized off vmin (not just vw/vh) so a short viewport
+   shrinks the type instead of overflowing it; the wrap has no scroll to
+   fall back on. */
 .about-wrap {
   position: relative;
-  min-height: 100vh;
+  height: 100svh;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 140px clamp(20px, 6vw, 90px) 80px;
+  padding: clamp(40px, 8vmin, 100px) clamp(24px, 6vw, 90px);
+  overflow: hidden;
+  box-sizing: border-box;
 }
 
-/* A single framed poster, matching the object hanging on the studio wall:
-   heavy black mat + a warm paper ground, photo on top, copy below. */
-.about-frame {
-  width: min(480px, 90vw);
-  background: #0c0c0d;
-  padding: clamp(14px, 1.6vw, 20px);
-  box-shadow: 0 40px 90px rgba(0, 0, 0, 0.55);
-}
-
-.about-frame-inner {
-  background: var(--paper);
+.about-inner {
+  width: min(420px, 30vw);
   color: #1c1a17;
 }
 
-.about-photo img {
-  display: block;
-  width: 100%;
-  aspect-ratio: 4 / 3;
-  object-fit: cover;
-  filter: grayscale(1) contrast(1.05);
-}
-
-.about-copy {
-  padding: clamp(20px, 3vw, 34px) clamp(22px, 3.4vw, 36px) clamp(26px, 3.4vw, 36px);
+.about-eyebrow {
+  font-family: var(--font-mono), monospace;
+  font-size: clamp(9px, 1vmin, 11px);
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--brass);
+  margin: 0 0 clamp(10px, 1.6vmin, 16px);
 }
 
 .about-copy-head {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 16px;
-}
-
-.about-copy .eyebrow {
-  color: #7a7468;
+  margin-bottom: clamp(20px, 3.4vmin, 40px);
 }
 
 .about-name {
-  font-size: clamp(26px, 3.6vw, 36px);
-  line-height: 1.05;
-  margin: 8px 0 0;
+  font-size: clamp(26px, 4.8vmin, 48px);
+  line-height: 1.08;
+  letter-spacing: -0.01em;
+  margin: 0 0 clamp(14px, 2.2vmin, 22px);
   color: #161513;
 }
 
-.about-sig {
-  font-style: italic;
-  font-size: clamp(16px, 1.8vw, 20px);
-  color: #161513;
-  white-space: nowrap;
-  margin-top: 10px;
-  transform: rotate(-2deg);
-}
-
-.about-role {
-  margin: 18px 0 14px;
-  color: #4a453d;
+.about-rule {
+  width: 44px;
+  height: 1px;
+  background: var(--brass);
+  border: none;
+  margin: 0;
 }
 
 .about-copy p {
-  color: #3a362f;
-  line-height: 1.6;
-  margin: 0 0 12px;
-  font-size: 13.5px;
+  color: #2c2822;
+  line-height: 1.62;
+  margin: 0 0 clamp(12px, 2vmin, 20px);
+  font-size: clamp(13px, 1.9vmin, 16px);
+  letter-spacing: 0.005em;
 }
 
-.about-meta {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 20px;
-  border-top: 1px solid rgba(0, 0, 0, 0.14);
-  margin-top: 8px;
-  padding-top: 16px;
-}
-
-.about-meta p {
-  font-size: 12.5px;
-  margin: 6px 0 0;
-  color: #3a362f;
-}
-
-@media (max-width: 560px) {
-  .about-copy-head {
-    flex-direction: column;
-    gap: 4px;
-  }
+.about-copy p:last-child {
+  margin-bottom: 0;
 }
 
 /* ---------------- portfolio ---------------- */
