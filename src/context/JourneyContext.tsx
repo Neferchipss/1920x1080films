@@ -22,6 +22,10 @@ export type BranchController = {
   playReverse: () => Promise<void>;
   /** Start buffering this branch's clips ahead of an actual click. */
   preload: () => void;
+  /** Skip the transition clip and land on/leave this branch's resting frame
+   *  immediately — see jumpTo. */
+  openInstant: () => void;
+  closeInstant: () => void;
 };
 
 type JourneyState = {
@@ -32,6 +36,10 @@ type JourneyState = {
 
 type JourneyApi = JourneyState & {
   goTo: (target: NodeId) => Promise<void>;
+  /** Branch-to-branch only, and only between two leaves (see the guard in
+   *  the implementation) — swaps which branch is showing with no transition
+   *  clip, for links that want to land the user on content immediately. */
+  jumpTo: (target: NodeId) => void;
   goBack: () => Promise<void>;
   setNavOpen: (open: boolean) => void;
   registerSpine: (controller: SpineController) => void;
@@ -125,6 +133,20 @@ export function JourneyProvider({
     }
   }, []);
 
+  const jumpTo = useCallback((target: NodeId) => {
+    if (busyRef.current) return;
+    const current = nodeRef.current;
+    if (current === target) return;
+    // Only wired for branch-to-branch — a spine node has no BranchController
+    // to call openInstant/closeInstant on, and nothing currently needs an
+    // instant jump to/from one.
+    if (!isBranchNode(current) || !isBranchNode(target)) return;
+    branchRefs.current[current]?.closeInstant();
+    branchRefs.current[target]?.openInstant();
+    nodeRef.current = target;
+    setNode(target);
+  }, []);
+
   const goBack = useCallback(async () => {
     const parent = PARENT[nodeRef.current];
     if (!parent) return;
@@ -173,6 +195,7 @@ export function JourneyProvider({
         navOpen,
         setNavOpen,
         goTo,
+        jumpTo,
         goBack,
         reportSpinePosition,
         registerSpine,

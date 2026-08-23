@@ -2,6 +2,8 @@
 
 import { useEffect, useRef, useState } from "react";
 import { withBasePath } from "@/lib/basePath";
+import { useJourney } from "@/context/JourneyContext";
+import { consumeContactPrefill } from "@/lib/contactPrefill";
 
 // Mumbai (19.076N 72.877E) as a fraction of the equirectangular source map.
 const MUMBAI_X_FRAC = 0.7024;
@@ -21,7 +23,35 @@ type SubmitStatus = "idle" | "sending" | "sent" | "error";
 export default function ContactContent() {
   const mapImgRef = useRef<HTMLImageElement>(null);
   const pinRef = useRef<HTMLDivElement>(null);
+  const messageRef = useRef<HTMLTextAreaElement>(null);
   const [status, setStatus] = useState<SubmitStatus>("idle");
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  // True only when this branch was jumped to directly with something
+  // pre-filled (see Services' "Select Plan") — skipping the transition also
+  // skips the usual "read the page, then start typing" runway, so arriving
+  // here needs its own explicit prompt rather than relying on the browser's
+  // native required-field validation on submit.
+  const [flagRequired, setFlagRequired] = useState(false);
+  const { node } = useJourney();
+
+  // Other pages (e.g. Services' "Select Plan") can hand over a default
+  // message via setContactPrefill before calling jumpTo("contact"). This
+  // component never unmounts between branches — see contactPrefill.ts — so
+  // the pickup has to be keyed on the branch actually becoming active
+  // rather than on mount.
+  useEffect(() => {
+    if (node !== "contact") return;
+    const message = consumeContactPrefill();
+    if (message) {
+      if (messageRef.current) messageRef.current.value = message;
+      // Reacting to an external signal (another component's navigation
+      // call), not deriving from this component's own props/state — the
+      // usual "move it into render" fix for this rule doesn't apply here.
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setFlagRequired(true);
+    }
+  }, [node]);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -36,6 +66,12 @@ export default function ContactContent() {
       if (!res.ok) throw new Error("Request failed");
       setStatus("sent");
       form.reset();
+      // name/email are controlled, so the native reset() above only clears
+      // the DOM value — without this the next render puts the old React
+      // state right back into the input.
+      setName("");
+      setEmail("");
+      setFlagRequired(false);
     } catch {
       setStatus("error");
     }
@@ -89,6 +125,13 @@ export default function ContactContent() {
             I&apos;d love to hear what you&apos;re working on.
           </p>
 
+          {flagRequired && (!name || !email) && (
+            <p className="contact-flag">
+              A couple of details are still needed — the fields marked{" "}
+              <span className="contact-flag-star">*</span> below.
+            </p>
+          )}
+
           <form className="contact-form" onSubmit={handleSubmit}>
             <input type="hidden" name="_subject" value="New project enquiry — 1920x1080 Films" />
             <input type="hidden" name="_template" value="table" />
@@ -103,12 +146,32 @@ export default function ContactContent() {
             />
 
             <label className="field">
-              <span className="eyebrow">Your name</span>
-              <input type="text" name="name" required disabled={status === "sending"} />
+              <span className="eyebrow">
+                Your name<span className="field-required">*</span>
+              </span>
+              <input
+                type="text"
+                name="name"
+                required
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                disabled={status === "sending"}
+                data-invalid={flagRequired && !name}
+              />
             </label>
             <label className="field">
-              <span className="eyebrow">Email address</span>
-              <input type="email" name="email" required disabled={status === "sending"} />
+              <span className="eyebrow">
+                Email address<span className="field-required">*</span>
+              </span>
+              <input
+                type="email"
+                name="email"
+                required
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                disabled={status === "sending"}
+                data-invalid={flagRequired && !email}
+              />
             </label>
             <label className="field">
               <span className="eyebrow">Phone number</span>
@@ -128,7 +191,12 @@ export default function ContactContent() {
             </label>
             <label className="field">
               <span className="eyebrow">Tell me about your project</span>
-              <textarea name="message" rows={3} disabled={status === "sending"} />
+              <textarea
+                ref={messageRef}
+                name="message"
+                rows={2}
+                disabled={status === "sending"}
+              />
             </label>
 
             <button

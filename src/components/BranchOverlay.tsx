@@ -318,6 +318,50 @@ export default function BranchOverlay({ node, children, restBackground }: Props)
             resolve();
           });
         }),
+      // Skips the entrance/exit clips entirely and jumps straight to the
+      // resting frame each one would otherwise animate to — for an in-app
+      // link that wants to land the user on a branch's content immediately
+      // (e.g. Services' "Select Plan" going to Contact) rather than making
+      // them sit through the studio transition again.
+      openInstant: () => {
+        cancelSequenceRef.current?.();
+        cancelSequenceRef.current = null;
+        activeRef.current = true;
+        preload();
+        const root = rootRef.current;
+        if (root) {
+          root.style.pointerEvents = "auto";
+          root.style.opacity = "1";
+          root.dataset.content = "live";
+        }
+        videoRefs.current.forEach((v) => {
+          if (v) v.style.opacity = "0";
+        });
+        revVideoRefs.current.forEach((v) => {
+          if (v) v.style.opacity = "0";
+        });
+        if (contentRef.current) {
+          contentRef.current.style.opacity = "1";
+          contentRef.current.style.pointerEvents = "auto";
+        }
+      },
+      closeInstant: () => {
+        cancelSequenceRef.current?.();
+        cancelSequenceRef.current = null;
+        const root = rootRef.current;
+        if (root) {
+          root.style.opacity = "0";
+          root.style.pointerEvents = "none";
+          root.dataset.content = "idle";
+        }
+        videoRefs.current.forEach((v) => v?.pause());
+        revVideoRefs.current.forEach((v) => v?.pause());
+        if (contentRef.current) {
+          contentRef.current.style.opacity = "0";
+          contentRef.current.style.pointerEvents = "none";
+        }
+        activeRef.current = false;
+      },
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

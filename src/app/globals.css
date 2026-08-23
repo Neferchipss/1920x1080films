@@ -718,46 +718,17 @@ html[data-ribbon-on-light="true"] .brand-mark img {
   padding: 130px clamp(20px, 5vw, 70px) 90px;
 }
 
-.portfolio-head {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 24px;
-  flex-wrap: wrap;
-}
-
-.portfolio-title {
-  font-size: clamp(34px, 4.4vw, 48px);
-  text-transform: uppercase;
-  letter-spacing: 0.01em;
-  margin: 0 0 14px;
-}
-
-.portfolio-sub {
-  max-width: 480px;
-  color: rgba(242, 237, 228, 0.65);
-  font-size: 14px;
-  line-height: 1.6;
-}
-
-.portfolio-section {
-  margin-top: clamp(46px, 6vw, 78px);
-}
-
-.portfolio-section-title {
-  color: rgba(242, 237, 228, 0.55);
-  padding-bottom: 12px;
-  margin-bottom: 20px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.14);
-}
-
-/* ---- films ---- */
-
-/* Column masonry, same technique as .photo-masonry: landscape and portrait
-   films interleave in one flow instead of sitting in segregated shelves. */
-.film-grid {
-  column-count: 3;
+/* One mixed masonry for films and photos together — see the seeded shuffle
+   in PortfolioContent.tsx for why the order is stable rather than truly
+   random. */
+.portfolio-grid {
+  column-count: 4;
   column-gap: 14px;
+}
+
+.film-tile,
+.photo-tile {
+  cursor: pointer;
 }
 
 .film-tile {
@@ -779,11 +750,14 @@ html[data-ribbon-on-light="true"] .brand-mark img {
   height: 100%;
   object-fit: cover;
   display: block;
+  /* Black & white until hovered — see .film-tile:hover below. */
+  filter: grayscale(1);
+  transition: filter 0.5s ease;
 }
 
 .film-tile-video {
   opacity: 0;
-  transition: opacity 0.45s ease;
+  transition: opacity 0.45s ease, filter 0.5s ease;
 }
 
 /* Only reveal the loop once it is genuinely playing — cross-fading to an
@@ -793,11 +767,11 @@ html[data-ribbon-on-light="true"] .brand-mark img {
   opacity: 1;
 }
 
-/* ---- photography ---- */
-
-.photo-masonry {
-  column-count: 4;
-  column-gap: 14px;
+.film-tile:hover .film-tile-poster,
+.film-tile:hover .film-tile-video,
+.film-tile:focus-visible .film-tile-poster,
+.film-tile:focus-visible .film-tile-video {
+  filter: grayscale(0);
 }
 
 .photo-tile {
@@ -819,25 +793,133 @@ html[data-ribbon-on-light="true"] .brand-mark img {
 }
 
 .photo-tile img {
-  transition: transform 0.6s var(--ease-cam), opacity 0.5s ease;
+  /* Black & white until hovered — full colour is the "reveal." */
+  filter: grayscale(1);
+  transition: transform 0.6s var(--ease-cam), opacity 0.5s ease,
+    filter 0.5s ease;
 }
 
-.photo-tile:hover img {
+.photo-tile:hover img,
+.photo-tile:focus-visible img {
   transform: scale(1.035);
+  filter: grayscale(0);
 }
 
 @media (max-width: 1400px) {
-  .photo-masonry { column-count: 3; }
-  .film-grid { column-count: 2; }
+  .portfolio-grid { column-count: 3; }
 }
 
 @media (max-width: 900px) {
-  .photo-masonry { column-count: 2; }
+  .portfolio-grid { column-count: 2; }
 }
 
 @media (max-width: 560px) {
-  .photo-masonry { column-count: 1; }
-  .film-grid { column-count: 1; }
+  .portfolio-grid { column-count: 1; }
+}
+
+/* ---- lightbox ---- */
+
+.lightbox-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 300;
+  background: rgba(6, 6, 7, 0.97);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(16px, 4vw, 48px);
+  animation: lightbox-in 0.25s ease;
+}
+
+@keyframes lightbox-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.lightbox-stage {
+  position: relative;
+  max-width: 100%;
+  max-height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Always full colour, regardless of the grid's hover-to-reveal treatment —
+   this is the "true" view. */
+.lightbox-media {
+  display: block;
+  max-width: min(88vw, 1400px);
+  max-height: 80vh;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  filter: none;
+  background: #0a0a0b;
+}
+
+.lightbox-caption {
+  margin-top: 16px;
+  color: rgba(242, 237, 228, 0.6);
+  text-align: center;
+}
+
+.lightbox-close {
+  position: absolute;
+  /* Clears the Ribbon's own row (88px tall) rather than sitting inside it —
+     the overlay's background isn't fully opaque, so anything placed at the
+     same height as the nav still read as crowding it. */
+  top: clamp(96px, 11vh, 116px);
+  right: clamp(16px, 3vw, 32px);
+  z-index: 2;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  border-radius: 999px;
+  transition: background-color 0.2s ease;
+}
+
+.lightbox-close:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.lightbox-nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 2;
+  width: 52px;
+  height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  border-radius: 999px;
+  transition: background-color 0.2s ease, opacity 0.2s ease;
+  opacity: 0.7;
+}
+
+.lightbox-nav:hover {
+  opacity: 1;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.lightbox-prev {
+  left: clamp(4px, 2vw, 24px);
+}
+
+.lightbox-next {
+  right: clamp(4px, 2vw, 24px);
+}
+
+@media (max-width: 700px) {
+  .lightbox-nav {
+    width: 40px;
+    height: 40px;
+  }
 }
 
 /* ---------------- contact ---------------- */
@@ -855,34 +937,51 @@ html[data-ribbon-on-light="true"] .brand-mark img {
 }
 
 .contact-left {
-  padding: 140px clamp(24px, 6vw, 80px) 70px;
+  padding: clamp(56px, 9vh, 140px) clamp(24px, 6vw, 80px) clamp(24px, 4vh, 70px);
 }
 
 .contact-title {
-  font-size: clamp(34px, 5vw, 58px);
-  line-height: 1.08;
-  margin: 16px 0 18px;
+  font-size: clamp(24px, 3.6vw, 52px);
+  line-height: 1.04;
+  margin: 8px 0 10px;
 }
 
 .contact-sub {
   color: var(--stone);
   max-width: 420px;
-  line-height: 1.6;
-  margin-bottom: 36px;
-  font-size: 14.5px;
+  line-height: 1.45;
+  margin-bottom: clamp(8px, 1.6vh, 26px);
+  font-size: 13px;
+}
+
+.contact-flag {
+  max-width: 420px;
+  margin: -2px 0 10px;
+  color: #e0796b;
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+.contact-flag-star {
+  font-weight: 600;
+}
+
+.field-required {
+  color: #e0796b;
+  margin-left: 3px;
 }
 
 .contact-form {
   display: flex;
   flex-direction: column;
-  gap: 22px;
+  gap: clamp(8px, 1.2vh, 22px);
   max-width: 480px;
 }
 
 .field {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 4px;
 }
 
 .field input,
@@ -892,9 +991,14 @@ html[data-ribbon-on-light="true"] .brand-mark img {
   border: none;
   border-bottom: 1px solid var(--line);
   color: #fff;
-  padding: 8px 2px;
-  font-size: 15px;
+  padding: 5px 2px;
+  font-size: 14.5px;
   font-family: var(--font-body);
+  transition: border-color 0.2s ease;
+}
+
+.field input[data-invalid="true"] {
+  border-bottom-color: #e0796b;
 }
 
 .field select option {
@@ -909,10 +1013,10 @@ html[data-ribbon-on-light="true"] .brand-mark img {
 }
 
 .contact-submit {
-  margin-top: 8px;
+  margin-top: 4px;
   background: #fff;
   color: #0a0a0b;
-  padding: 16px 22px;
+  padding: 12px 22px;
   border-radius: 2px;
   display: flex;
   align-items: center;

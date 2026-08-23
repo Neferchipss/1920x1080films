@@ -1,7 +1,11 @@
+"use client";
+
+import { useState } from "react";
 import { withBasePath } from "@/lib/basePath";
 import { PORTFOLIO_IMAGES, type PortfolioImage } from "@/data/portfolio";
 import { PORTFOLIO_FILMS } from "@/data/films";
 import FilmTile from "@/components/content/FilmTile";
+import Lightbox, { type LightboxItem } from "@/components/content/Lightbox";
 
 /**
  * Both manifests are generated from the client's masters — see
@@ -15,7 +19,41 @@ import FilmTile from "@/components/content/FilmTile";
  *  1800px content column on desktop, and full-bleed on a phone. */
 const SIZES = "(max-width: 700px) 92vw, (max-width: 1100px) 46vw, 24vw";
 
-function Tile({ image }: { image: PortfolioImage }) {
+/** A plain Fisher-Yates seeded off a fixed constant (not Math.random / Date)
+ *  so the build's static render and the browser's hydration pass compute the
+ *  exact same order — a real shuffle would otherwise mismatch between the
+ *  two and React would throw on hydration. The order only changes if the
+ *  underlying manifests do (a re-run of the build scripts), which is fine:
+ *  "shuffled" here means "not grouped by type," not "different every visit." */
+function seededShuffle<T>(arr: T[], seed: number): T[] {
+  const out = arr.slice();
+  let s = seed;
+  const next = () => {
+    s = (s * 1103515245 + 12345) & 0x7fffffff;
+    return s / 0x7fffffff;
+  };
+  for (let i = out.length - 1; i > 0; i--) {
+    const j = Math.floor(next() * (i + 1));
+    [out[i], out[j]] = [out[j], out[i]];
+  }
+  return out;
+}
+
+const GALLERY: LightboxItem[] = seededShuffle(
+  [
+    ...PORTFOLIO_FILMS.map((film): LightboxItem => ({ type: "film", film })),
+    ...PORTFOLIO_IMAGES.map((image): LightboxItem => ({ type: "photo", image })),
+  ],
+  1920
+);
+
+function PhotoTile({
+  image,
+  onOpen,
+}: {
+  image: PortfolioImage;
+  onOpen: () => void;
+}) {
   const srcset = (ext: "avif" | "webp") =>
     image.widths
       .map((w) => `${withBasePath(`/img/portfolio/${image.slug}-${w}.${ext}`)} ${w}w`)
@@ -32,10 +70,20 @@ function Tile({ image }: { image: PortfolioImage }) {
       style={{
         aspectRatio: `${image.width} / ${image.height}`,
         // The blur holds the tile's exact shape while the real image decodes,
-        // so a 111-tile grid settles once instead of reflowing all the way
+        // so a 114-tile grid settles once instead of reflowing all the way
         // down the page.
         backgroundImage: `url(${image.lqip})`,
       }}
+      onClick={onOpen}
+      role="button"
+      tabIndex={0}
+      onKeyDown={(e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          onOpen();
+        }
+      }}
+      aria-label={`Open ${image.title}`}
     >
       <picture>
         <source type="image/avif" srcSet={srcset("avif")} sizes={SIZES} />
@@ -54,35 +102,42 @@ function Tile({ image }: { image: PortfolioImage }) {
 }
 
 export default function PortfolioContent() {
+  const [openAt, setOpenAt] = useState<number | null>(null);
+
   return (
     <div className="portfolio-wrap">
-      {PORTFOLIO_FILMS.length > 0 && (
-        <section className="portfolio-section">
-          <h2 className="portfolio-section-title eyebrow">Films</h2>
+      {/* One mixed masonry — films and photos interleaved rather than
+          sitting in separate shelves, per the shoot. */}
+      <div className="portfolio-grid">
+        {GALLERY.map((item, i) =>
+          item.type === "film" ? (
+            <FilmTile
+              key={item.film.slug}
+              film={item.film}
+              onOpen={() => setOpenAt(i)}
+            />
+          ) : (
+            <PhotoTile
+              key={item.image.slug}
+              image={item.image}
+              onOpen={() => setOpenAt(i)}
+            />
+          )
+        )}
+      </div>
 
-          {/* Column masonry, same technique as the photo grid below: mixing
-              landscape and portrait films in one flow reads as a real reel
-              rather than two segregated shelves. */}
-          <div className="film-grid">
-            {PORTFOLIO_FILMS.map((film) => (
-              <FilmTile key={film.slug} film={film} />
-            ))}
-          </div>
-        </section>
+      {openAt !== null && (
+        <Lightbox
+          items={GALLERY}
+          index={openAt}
+          onClose={() => setOpenAt(null)}
+          onNav={(delta) =>
+            setOpenAt((cur) =>
+              cur === null ? null : (cur + delta + GALLERY.length) % GALLERY.length
+            )
+          }
+        />
       )}
-
-      <section className="portfolio-section">
-        <h2 className="portfolio-section-title eyebrow">Photography</h2>
-        {/* Column masonry rather than a row grid: these are 24 MP masters in
-            two orientations, and cropping them to a uniform cell would be a
-            strange thing to do to a photographer's portfolio. Each tile keeps
-            its true aspect ratio and the columns absorb the difference. */}
-        <div className="photo-masonry">
-          {PORTFOLIO_IMAGES.map((image) => (
-            <Tile key={image.slug} image={image} />
-          ))}
-        </div>
-      </section>
     </div>
   );
 }

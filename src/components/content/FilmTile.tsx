@@ -22,7 +22,13 @@ import type { PortfolioFilm } from "@/data/films";
  * video never loads at all (blocked autoplay, dead connection) the tile is
  * still a photograph rather than a black box.
  */
-export default function FilmTile({ film }: { film: PortfolioFilm }) {
+export default function FilmTile({
+  film,
+  onOpen,
+}: {
+  film: PortfolioFilm;
+  onOpen?: () => void;
+}) {
   const rootRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const [playing, setPlaying] = useState(false);
@@ -76,6 +82,20 @@ export default function FilmTile({ film }: { film: PortfolioFilm }) {
       ref={rootRef}
       className="film-tile"
       style={{ aspectRatio: `${film.width} / ${film.height}` }}
+      onClick={onOpen}
+      role={onOpen ? "button" : undefined}
+      tabIndex={onOpen ? 0 : undefined}
+      onKeyDown={
+        onOpen
+          ? (e) => {
+              if (e.key === "Enter" || e.key === " ") {
+                e.preventDefault();
+                onOpen();
+              }
+            }
+          : undefined
+      }
+      aria-label={onOpen ? `Open ${film.title}` : undefined}
     >
       {film.poster && (
         // eslint-disable-next-line @next/next/no-img-element
