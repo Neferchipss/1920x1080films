@@ -34,850 +34,7 @@ export type PortfolioProject = {
 
 export const PORTFOLIO_IMAGES: PortfolioImage[] = [
   {
-    "slug": "maneka-lodha-world-view-l01",
-    "key": "Maneka_Lodha_World_View",
-    "title": "Maneka Lodha World View",
-    "orientation": "landscape",
-    "width": 7008,
-    "height": 4672,
-    "widths": [
-      640,
-      1280,
-      1920,
-      2560
-    ],
-    "lqip": "data:image/webp;base64,UklGRnAAAABXRUJQVlA4IGQAAAAQAgCdASoQAAsAA4BaJQBOgCB/feFY4FgAAP7tKgC92vG+VOSiq7LnVXgqtQ4Usi3JzpdPeZ/YnGLJB008/AhYLq7/ngiTbown0vdLFjX5roUC4RKsXVJ436MS3yK8n3tN9gAA",
-    "source": "photos/landscape/001_Maneka_Lodha_World_View.jpg"
-  },
-  {
-    "slug": "smridhioberoi-spelnder-l02",
-    "key": "SmridhiOberoi_Spelnder",
-    "title": "Smridhi Oberoi Spelnder",
-    "orientation": "landscape",
-    "width": 6124,
-    "height": 4082,
-    "widths": [
-      640,
-      1280,
-      1920,
-      2560
-    ],
-    "lqip": "data:image/webp;base64,UklGRkwAAABXRUJQVlA4IEAAAADQAQCdASoQAAsAA4BaJYwCsAC6DFSRgAD++Rav8HtG1GPc1up1/eJsbpWPsXrsuXYl20xWvM0NxEyCqcO+HAAA",
-    "source": "photos/landscape/002_SmridhiOberoi_Spelnder.jpg"
-  },
-  {
-    "slug": "aarshyaatelier-bunglow-lonavla-l03",
-    "key": "Aarshyaatelier_Bunglow_Lonavla",
-    "title": "Aarshyaatelier Bunglow Lonavla",
-    "orientation": "landscape",
-    "width": 6000,
-    "height": 4000,
-    "widths": [
-      640,
-      1280,
-      1920,
-      2560
-    ],
-    "lqip": "data:image/webp;base64,UklGRlgAAABXRUJQVlA4IEwAAADwAQCdASoQAAsAA4BaJQBdgCHfK+0O1VAA/vIFoSoN8SkRpjfRp2cT20/ZRGX+X0h+e8s20TZtRJO1aduYpeAK4mEMfNh1ncnIAAAA",
-    "source": "photos/landscape/005_Aarshyaatelier_Bunglow_Lonavla.jpg"
-  },
-  {
-    "slug": "sagar-gala-designsghatkopar-2bhk-l04",
-    "key": "Sagar_Gala_DesignsGhatkopar_2bhk",
-    "title": "Sagar Gala Designs Ghatkopar 2bhk",
-    "orientation": "landscape",
-    "width": 6000,
-    "height": 4000,
-    "widths": [
-      640,
-      1280,
-      1920,
-      2560
-    ],
-    "lqip": "data:image/webp;base64,UklGRmAAAABXRUJQVlA4IFQAAAAQAgCdASoQAAsAA4BaJZQCdAEKVj9hxgoAAP7ydRlVkBSBSCg4PCFID3AZuAtVBRQJdXlaCCvWutX3G0RfAAddAebnAxzLg1dQX069I2zNxecSAAA=",
-    "source": "photos/landscape/006_Sagar_Gala_DesignsGhatkopar_2bhk.jpg"
-  },
-  {
-    "slug": "clay-house-design2bhk-residential-l05",
-    "key": "Clay_House_Design2BHK_residential",
-    "title": "Clay House Design2 BHK Residential",
-    "orientation": "landscape",
-    "width": 6000,
-    "height": 4000,
-    "widths": [
-      640,
-      1280,
-      1920,
-      2560
-    ],
-    "lqip": "data:image/webp;base64,UklGRnAAAABXRUJQVlA4IGQAAAAQAgCdASoQAAsAA4BaJZQAD5FQ4OPRUzUAAP4mKTMgWTJJ7oAoVMcZCaFgAMNNdv9Bi4RJjrSzd1LkQ1Ot5L1pR1QMW8cf8/IWJdiQi9NFTAGjHVCbcVvwedpGj0930AVpQOAA",
-    "source": "photos/landscape/007_Clay_House_Design2BHK_residential.jpg"
-  },
-  {
-    "slug": "design-hues3bhkthane-l06",
-    "key": "Design_hues3bhkThane",
-    "title": "Design Hues3bhk Thane",
-    "orientation": "landscape",
-    "width": 6000,
-    "height": 4000,
-    "widths": [
-      640,
-      1280,
-      1920,
-      2560
-    ],
-    "lqip": "data:image/webp;base64,UklGRlgAAABXRUJQVlA4IEwAAADQAQCdASoQAAsAA4BaJZwAAo+RMLpRIAD+9msH3nzTnp9juv09lkoaEjeFi5Y086dN9/gM2EkxQK0L7nWSTKZksAkcLaBkFxbgAAAA",
-    "source": "photos/landscape/008_Design_hues3bhkThane.jpg"
-  },
-  {
-    "slug": "78-designsgirgaon3bhk-l07",
-    "key": "78_DesignsGirgaon3bhk",
-    "title": "78 Designs Girgaon3bhk",
-    "orientation": "landscape",
-    "width": 1616,
-    "height": 1080,
-    "widths": [
-      640,
-      1280
-    ],
-    "lqip": "data:image/webp;base64,UklGRlAAAABXRUJQVlA4IEQAAADwAQCdASoQAAsAA4BaJYwCdADG/y6HVQAAzjeH8EeS6Fm3F+3d0zBy4zIgnGpz/B41GroayHvpJIqc/WCLt6QKaEbMAA==",
-    "source": "photos/landscape/009_78_DesignsGirgaon3bhk.jpg"
-  },
-  {
-    "slug": "kinjallonavla-l08",
-    "key": "KinjalLonavla",
-    "title": "Kinjal Lonavla",
-    "orientation": "landscape",
-    "width": 4608,
-    "height": 3072,
-    "widths": [
-      640,
-      1280,
-      1920,
-      2560
-    ],
-    "lqip": "data:image/webp;base64,UklGRmgAAABXRUJQVlA4IFwAAAAwAgCdASoQAAsAA4BaJZQAAn3LvjOEmNRAQAD+l/hgF7OgtQYfAfWGYEV9Z/Vb1kq6+51yj8ZIi0DndGgNjYZvkhqaC+4q1rQleNip5XpLR5lJdaujG2M4B4AAAA==",
-    "source": "photos/landscape/010_KinjalLonavla.jpg"
-  },
-  {
-    "slug": "home-maneka-thapar-designs-l09",
-    "key": "Home_Maneka_Thapar_Designs",
-    "title": "Home Maneka Thapar Designs",
-    "orientation": "landscape",
-    "width": 6000,
-    "height": 4000,
-    "widths": [
-      640,
-      1280,
-      1920,
-      2560
-    ],
-    "lqip": "data:image/webp;base64,UklGRm4AAABXRUJQVlA4IGIAAADwAQCdASoQAAsAA4BaJagCdAEN2WgGEtgA/uaWkx378zuUi8P1Ev/6DA+Htqb1NbN43o0OckEoDa433QrIVb38kNFCVXq/WpiL0ggiHkquEEqa3SDbibdom2oYe4EkuAAAAA==",
-    "source": "photos/landscape/011_Home_Maneka_Thapar_Designs.jpg"
-  },
-  {
-    "slug": "krishikaurvashi-l10",
-    "key": "KrishikaUrvashi",
-    "title": "Krishika Urvashi",
-    "orientation": "landscape",
-    "width": 5771,
-    "height": 4332,
-    "widths": [
-      640,
-      1280,
-      1920,
-      2560
-    ],
-    "lqip": "data:image/webp;base64,UklGRlwAAABXRUJQVlA4IFAAAAAQAgCdASoQAAwAA4BaJbACdAEUa97mCigAAP4mklzfJD4g7ueW4wmDxShLORd1DsNPF6rplF5H8D6SE4rd5Qnfr7RiF5uBpnyNzu/Q/HwAAA==",
-    "source": "photos/landscape/012_KrishikaUrvashi.jpg"
-  },
-  {
-    "slug": "sakshipeppermoney-l11",
-    "key": "SakshiPepperMoney",
-    "title": "Sakshi Pepper Money",
-    "orientation": "landscape",
-    "width": 6124,
-    "height": 4082,
-    "widths": [
-      640,
-      1280,
-      1920,
-      2560
-    ],
-    "lqip": "data:image/webp;base64,UklGRmoAAABXRUJQVlA4IF4AAADwAQCdASoQAAsAA4BaJQBOgCGwU37fXIAA/uxbxL+RvNpTAatnr0euR3auKHhUuvRECWOB4Hhscvf64HlXIMRdMjjoz0SN4K/Z41o7eGkIerBDKZNj70vG0gOoLAAA",
-    "source": "photos/landscape/013_SakshiPepperMoney.jpg"
-  },
-  {
-    "slug": "omkarsalon-l12",
-    "key": "omkarsalon",
-    "title": "Omkarsalon",
-    "orientation": "landscape",
-    "width": 6124,
-    "height": 4082,
-    "widths": [
-      640,
-      1280,
-      1920,
-      2560
-    ],
-    "lqip": "data:image/webp;base64,UklGRnQAAABXRUJQVlA4IGgAAABQAgCdASoQAAsAA4BaJYwCsAYuvuFnnNO4O6AA/ut5prFe1sKuWvW8UCPAK4L9Lbx37IMbvPb8Hc1+xDTa4/XkaHcyVXg7VGpYHKmfzF/9+Lo7h1tedqbUZt7UNMSiLgCqQ78G0rEAAA==",
-    "source": "photos/landscape/014_omkarsalon.jpg"
-  },
-  {
-    "slug": "claydeepak-jyoti-l13",
-    "key": "claydeepak_jyoti",
-    "title": "Claydeepak Jyoti",
-    "orientation": "landscape",
-    "width": 6124,
-    "height": 4082,
-    "widths": [
-      640,
-      1280,
-      1920,
-      2560
-    ],
-    "lqip": "data:image/webp;base64,UklGRloAAABXRUJQVlA4IE4AAADwAQCdASoQAAsAA4BaJYwC7AEUiaTKOcAA/u3rpaziRRhxtb4cKLhI3s12Zjun4KPq42qAPU+25xa1KSaeluIfezNcmjIMDMZoxjyJwAA=",
-    "source": "photos/landscape/015_claydeepak_jyoti.jpg"
-  },
-  {
-    "slug": "bombay-cot78-design-l14",
-    "key": "bombay_cot78_Design",
-    "title": "Bombay Cot78 Design",
-    "orientation": "landscape",
-    "width": 1616,
-    "height": 1080,
-    "widths": [
-      640,
-      1280
-    ],
-    "lqip": "data:image/webp;base64,UklGRmAAAABXRUJQVlA4IFQAAAAQAgCdASoQAAsAA4BaJZQC7ADjeeW1nL8AAPw6oFLbg801U/gVLKfyo3MVpXhZL3N/elPWJB9UDcoSup0v4xi0n2l3rD7o9F7tA68N74nmJTBKIAA=",
-    "source": "photos/landscape/016_bombay_cot78_Design.jpg"
-  },
-  {
-    "slug": "design-hueshome-l15",
-    "key": "Design_HuesHome",
-    "title": "Design Hues Home",
-    "orientation": "landscape",
-    "width": 1920,
-    "height": 1080,
-    "widths": [
-      640,
-      1280,
-      1920
-    ],
-    "lqip": "data:image/webp;base64,UklGRmgAAABXRUJQVlA4IFwAAAAQAgCdASoQAAkAA4BaJZQC7AYuRCxcij+AAP5p/E+pPFQqVje/dFVk0n88cxkBi+4++r9j6qloAM+8pRkP0lIDuzRyMk6qoGLx1qcjv2uxdr4pELCZQBOngW+AAA==",
-    "source": "photos/landscape/017_Design_HuesHome.jpg"
-  },
-  {
-    "slug": "priyadahaus-l16",
-    "key": "PriyaDahaus",
-    "title": "Priya Dahaus",
-    "orientation": "landscape",
-    "width": 6000,
-    "height": 4000,
-    "widths": [
-      640,
-      1280,
-      1920,
-      2560
-    ],
-    "lqip": "data:image/webp;base64,UklGRkwAAABXRUJQVlA4IEAAAADwAQCdASoQAAsAA4BaJZQAApywfpNnMQAA/u0ZBOc6NBRDpFfXZCDd0orHNqdJ3y+FHoqBYTmJDw7/XI1dYAAA",
-    "source": "photos/landscape/018_PriyaDahaus.jpg"
-  },
-  {
-    "slug": "kea-design-labdahisar-l17",
-    "key": "KEA_Design_LabDahisar",
-    "title": "KEA Design Lab Dahisar",
-    "orientation": "landscape",
-    "width": 7008,
-    "height": 4672,
-    "widths": [
-      640,
-      1280,
-      1920,
-      2560
-    ],
-    "lqip": "data:image/webp;base64,UklGRl4AAABXRUJQVlA4IFIAAADQAQCdASoQAAsAA4BaJZQAAeu7wXZ7IAD+iMES488ekUDtaGsEXWAqjO8Bd15pC4HhrjKVUtBgSBj6mWOcufORIpWuYb/8HhvsjNvJYLPdYAAA",
-    "source": "photos/landscape/019_KEA_Design_LabDahisar.jpg"
-  },
-  {
-    "slug": "omkar-beaumonte-l18",
-    "key": "Omkar_Beaumonte",
-    "title": "Omkar Beaumonte",
-    "orientation": "landscape",
-    "width": 6124,
-    "height": 4083,
-    "widths": [
-      640,
-      1280,
-      1920,
-      2560
-    ],
-    "lqip": "data:image/webp;base64,UklGRmgAAABXRUJQVlA4IFwAAAAwAgCdASoQAAsAA4BaJQBOgCPz9jS/0RJWgAD97Yreyg/ppTuL/znY+oUDVANX61A3yBL4ubz7sw6gsKrC0Ve1z3p50XNzqbk9PEntveWas4ebVtIaVg2II4AAAA==",
-    "source": "photos/landscape/020_Omkar_Beaumonte.jpg"
-  },
-  {
-    "slug": "arzoo-jain2bhk-l19",
-    "key": "Arzoo_Jain2bhk",
-    "title": "Arzoo Jain2bhk",
-    "orientation": "landscape",
-    "width": 4402,
-    "height": 3072,
-    "widths": [
-      640,
-      1280,
-      1920,
-      2560
-    ],
-    "lqip": "data:image/webp;base64,UklGRk4AAABXRUJQVlA4IEIAAAAwAgCdASoQAAsAA4BaJZwC7AEC2BJ+W17hAAD+alF+Q2PH7msst7CZx/DYew/j/X69jK1mvkHbepCEzE734okAAAA=",
-    "source": "photos/landscape/021_Arzoo_Jain2bhk.jpg"
-  },
-  {
-    "slug": "mahimdesign-hive-l20",
-    "key": "MahimDesign_Hive",
-    "title": "Mahim Design Hive",
-    "orientation": "landscape",
-    "width": 14004,
-    "height": 9336,
-    "widths": [
-      640,
-      1280,
-      1920,
-      2560
-    ],
-    "lqip": "data:image/webp;base64,UklGRmAAAABXRUJQVlA4IFQAAAAQAgCdASoQAAsAA4BaJQBOgB9ilTXK8zDgAP7l8Wd5OPAkwPfRE6Qwk6JfT+Rqwq8ZVIczhl/ny3xwHH/3laWde3HPNSUx4FRW+fn2q44jbjgJAAA=",
-    "source": "photos/landscape/022_MahimDesign_Hive.jpeg"
-  },
-  {
-    "slug": "omkar2bhk-pune-l21",
-    "key": "Omkar2bhk_Pune",
-    "title": "Omkar2bhk Pune",
-    "orientation": "landscape",
-    "width": 7008,
-    "height": 4672,
-    "widths": [
-      640,
-      1280,
-      1920,
-      2560
-    ],
-    "lqip": "data:image/webp;base64,UklGRloAAABXRUJQVlA4IE4AAADwAQCdASoQAAsAA4BaJYwCdAD2PCqaPgAA/m0hGA9VvunRvfdOyjXyXsNbRoORwcvwv/qUsNHSUHOWSLC/2XkJM9hbAopQU4m7N/9HAAA=",
-    "source": "photos/landscape/023_Omkar2bhk_Pune.tif"
-  },
-  {
-    "slug": "omkarpune-office-l22",
-    "key": "OmkarPune_Office",
-    "title": "Omkar Pune Office",
-    "orientation": "landscape",
-    "width": 7005,
-    "height": 4670,
-    "widths": [
-      640,
-      1280,
-      1920,
-      2560
-    ],
-    "lqip": "data:image/webp;base64,UklGRmIAAABXRUJQVlA4IFYAAAAQAgCdASoQAAsAA4BaJQBOgCLVDtcR6D6AAP7dj5I6rZHNPwKOfyapF2IpH/jNKyLDJ0Gjouet7okEbdDAznfyWNJOI/fWb309s+naLiX2kQgfyHIAAA==",
-    "source": "photos/landscape/024_OmkarPune_Office.tif"
-  },
-  {
-    "slug": "78-design-studiounicot-l23",
-    "key": "78_Design_StudioUnicot",
-    "title": "78 Design Studio Unicot",
-    "orientation": "landscape",
-    "width": 7008,
-    "height": 4672,
-    "widths": [
-      640,
-      1280,
-      1920,
-      2560
-    ],
-    "lqip": "data:image/webp;base64,UklGRl4AAABXRUJQVlA4IFIAAADwAQCdASoQAAsAA4BaJQBOgBozjI2aVgAA/Y8NEE455X4b8oWerl9CPwtIYwSQlDdGF0JGzRhtbL7/qrUALV1n3lOm4sP8nckLzZTE8mNQAAAA",
-    "source": "photos/landscape/025_78_Design_StudioUnicot.jpg"
-  },
-  {
-    "slug": "78-design-lodha-l24",
-    "key": "78_Design_Lodha",
-    "title": "78 Design Lodha",
-    "orientation": "landscape",
-    "width": 4608,
-    "height": 3072,
-    "widths": [
-      640,
-      1280,
-      1920,
-      2560
-    ],
-    "lqip": "data:image/webp;base64,UklGRlYAAABXRUJQVlA4IEoAAADwAQCdASoQAAsAA4BaJYwCw7EMrMlrsgAA+N2hYUg+nA62WU/VK9N+cTY8QkfdzCrXbq/H0uSnzuROiMhpP9Fd/655Av46sawAAA==",
-    "source": "photos/landscape/026_78_Design_Lodha.jpg"
-  },
-  {
-    "slug": "dorityversova-l25",
-    "key": "DorityVersova",
-    "title": "Dority Versova",
-    "orientation": "landscape",
-    "width": 7008,
-    "height": 4672,
-    "widths": [
-      640,
-      1280,
-      1920,
-      2560
-    ],
-    "lqip": "data:image/webp;base64,UklGRnIAAABXRUJQVlA4IGYAAAAQAgCdASoQAAsAA4BaJQBOgCLJ9Wv/zFwAAP7q3EH5VBrrWGFu/YlvdFAywh6v4i9TQFgsxDVZNoxzY0TZCP2bOBPo5hwnUAx1Q/WlpXvgvdDAGwfnF4WOrle5lFHVZUnSkyfhYAA=",
-    "source": "photos/landscape/027_DorityVersova.jpg"
-  },
-  {
-    "slug": "naitiklodha-bellisimo-l26",
-    "key": "NaitikLodha_Bellisimo",
-    "title": "Naitik Lodha Bellisimo",
-    "orientation": "landscape",
-    "width": 6124,
-    "height": 4083,
-    "widths": [
-      640,
-      1280,
-      1920,
-      2560
-    ],
-    "lqip": "data:image/webp;base64,UklGRmwAAABXRUJQVlA4IGAAAADQAQCdASoQAAsAA4BaJQBOgBnx5mPoYAD+wdlFv9vAzzGOV1LXX7BxWejk32kxfv3JhSX8Xs2CtyOi2SBRL4IL7of+rpxDm9S1bMTp/ow+pQYhqW6iqONLvY83sh7AAAA=",
-    "source": "photos/landscape/028_NaitikLodha_Bellisimo.jpg"
-  },
-  {
-    "slug": "naitik-shahsky-forest-2-l27",
-    "key": "Naitik_ShahSky_Forest_[2]",
-    "title": "Naitik Shah Sky Forest",
-    "orientation": "landscape",
-    "width": 7008,
-    "height": 4672,
-    "widths": [
-      640,
-      1280,
-      1920,
-      2560
-    ],
-    "lqip": "data:image/webp;base64,UklGRmoAAABXRUJQVlA4IF4AAAAQAgCdASoQAAsAA4BaJaACdAEOcDKXe5IAAP7vLTVDygp3CR1v2tjwW3iRPIjv/lYxGo1/b8v+zV6Zgea1+AJqE1FbcfFQCa4l1gNTzNsJ43OcypVfqEOyKqbyIiAA",
-    "source": "photos/landscape/029_Naitik_ShahSky_Forest_[2].jpeg"
-  },
-  {
-    "slug": "omkarakshar-l28",
-    "key": "OmkarAkshar",
-    "title": "Omkar Akshar",
-    "orientation": "landscape",
-    "width": 7004,
-    "height": 4669,
-    "widths": [
-      640,
-      1280,
-      1920,
-      2560
-    ],
-    "lqip": "data:image/webp;base64,UklGRmAAAABXRUJQVlA4IFQAAAAQAgCdASoQAAsAA4BaJYwCdAD7AmfK5JMAAP7ClqksxaPgq2fOD9qwwqu7/jeElD8FjRMV1EDBm+ldQ+afbVxl7yET1xaf+852C5bB5BKrGvLAAAA=",
-    "source": "photos/landscape/031_OmkarAkshar.jpg"
-  },
-  {
-    "slug": "shyam-nivas-monisha-mistry-l29",
-    "key": "Shyam_Nivas_Monisha_Mistry",
-    "title": "Shyam Nivas Monisha Mistry",
-    "orientation": "landscape",
-    "width": 4608,
-    "height": 3072,
-    "widths": [
-      640,
-      1280,
-      1920,
-      2560
-    ],
-    "lqip": "data:image/webp;base64,UklGRlwAAABXRUJQVlA4IFAAAADQAQCdASoQAAsAA4BaJZQAApNK2Gd4IAD+qdPyj5jzDGcB0eGUjDfkDaNE9IBszOoynMFax8PDMr8A7kp1ErlSO5fdf8cUr1m256vnjAoAAA==",
-    "source": "photos/landscape/032_Shyam_Nivas_Monisha_Mistry.jpg"
-  },
-  {
-    "slug": "3mindperspectivelodha-m-l30",
-    "key": "3mindperspectiveLodha_M",
-    "title": "3mindperspective Lodha M",
-    "orientation": "landscape",
-    "width": 7004,
-    "height": 4669,
-    "widths": [
-      640,
-      1280,
-      1920,
-      2560
-    ],
-    "lqip": "data:image/webp;base64,UklGRmgAAABXRUJQVlA4IFwAAAAwAgCdASoQAAsAA4BaJZACdAD1eLndqQOwAAD+0k8bNXNHrDQviHOCrsrFXC0A6ng/uBZZfJFPh2VJhDBXG3pfdWNhl0wGQ7xJCcbzJ9HU0E67pvXc3h1lpCwAAA==",
-    "source": "photos/landscape/033_3mindperspectiveLodha_M.jpg"
-  },
-  {
-    "slug": "78-designsmahim-l31",
-    "key": "78_DesignsMahim",
-    "title": "78 Designs Mahim",
-    "orientation": "landscape",
-    "width": 7008,
-    "height": 4672,
-    "widths": [
-      640,
-      1280,
-      1920,
-      2560
-    ],
-    "lqip": "data:image/webp;base64,UklGRnAAAABXRUJQVlA4IGQAAAAQAgCdASoQAAsAA4BaJYgCdAYvDK9FSuCAAP71PwyvLm8Yq84z7OaJwPacSeYSMqpC668IHdxfBs1mABTyZvDTLU7zgR8WzztknnXLKQ/WIr9dyTVayY8lUJVGoRQu42ExIAAA",
-    "source": "photos/landscape/034_78_DesignsMahim.jpg"
-  },
-  {
-    "slug": "prachiborivali-l32",
-    "key": "PrachiBorivali",
-    "title": "Prachi Borivali",
-    "orientation": "landscape",
-    "width": 6124,
-    "height": 4082,
-    "widths": [
-      640,
-      1280,
-      1920,
-      2560
-    ],
-    "lqip": "data:image/webp;base64,UklGRmYAAABXRUJQVlA4IFoAAADQAQCdASoQAAsAA4BaJQBOgB9r//4bVAD+wGrDy2sKjzATF8c/+6YJ1by94Hg7roz64eZEnXDFOXN9iM68MrmGtzza9l40sE++B/TCB+nswRtrCjANyviAAAA=",
-    "source": "photos/landscape/035_PrachiBorivali.jpg"
-  },
-  {
-    "slug": "rahulthane-l33",
-    "key": "RahulThane",
-    "title": "Rahul Thane",
-    "orientation": "landscape",
-    "width": 6124,
-    "height": 4082,
-    "widths": [
-      640,
-      1280,
-      1920,
-      2560
-    ],
-    "lqip": "data:image/webp;base64,UklGRnIAAABXRUJQVlA4IGYAAABwAgCdASoQAAsAA4BaJYwC7AYwx2ya0KFFGzwAAP7YIVT3+ZJPfjmoubo9TFS02tftk2vhU8/RMvsTqI7awQTqv2WGi0fNb6PVD2aIbXm/o60JyWanzBLcw0p/0hgxqZoeetoyuAA=",
-    "source": "photos/landscape/036_RahulThane.jpg"
-  },
-  {
-    "slug": "zorkoborivali-l34",
-    "key": "ZorkoBorivali",
-    "title": "Zorko Borivali",
-    "orientation": "landscape",
-    "width": 7008,
-    "height": 4672,
-    "widths": [
-      640,
-      1280,
-      1920,
-      2560
-    ],
-    "lqip": "data:image/webp;base64,UklGRnQAAABXRUJQVlA4IGgAAAAwAgCdASoQAAsAA4BaJbACdAEK+FgZnmV68AD+eTFi+0CUbSDDH4KpAxtB6Z7yxTJ8ICnEugk0zx3ugC5vRjSZBKBhZ4zgzpsIPdoEsUrPJCm3v5IXSsUzNRpNAwFjS2eViVvuHRxgAA==",
-    "source": "photos/landscape/037_ZorkoBorivali.jpg"
-  },
-  {
-    "slug": "zrl-designs-l35",
-    "key": "ZRL_Designs",
-    "title": "ZRL Designs",
-    "orientation": "landscape",
-    "width": 7008,
-    "height": 4672,
-    "widths": [
-      640,
-      1280,
-      1920,
-      2560
-    ],
-    "lqip": "data:image/webp;base64,UklGRmoAAABXRUJQVlA4IF4AAADwAQCdASoQAAsAA4BaJZgCdADHc6PHtOAA/rEGAcrtmC9cspaOc/FlNX7FFRaVZtKHz8yAhr+up7XJ/8pzda9S7SD+vYTj3vG31+iPHbUN8l0Lfu1pxJSChaY+usAA",
-    "source": "photos/landscape/038_ZRL_Designs.jpg"
-  },
-  {
-    "slug": "hk-architectsparinee-11-west-l36",
-    "key": "HK_ArchitectsParinee_11_West",
-    "title": "HK Architects Parinee 11 West",
-    "orientation": "landscape",
-    "width": 7008,
-    "height": 4672,
-    "widths": [
-      640,
-      1280,
-      1920,
-      2560
-    ],
-    "lqip": "data:image/webp;base64,UklGRm4AAABXRUJQVlA4IGIAAADQAQCdASoQAAsAA4BaJZACdACb52PygAD+Sd1xHDjUHdISrSU/7nSHOFRk3EVspLMRQmmT1Wi4eo2O1Puknmm6aMTfzQOVZxN51AyCoIuaVoGkGSLMTHo/CUvHn2JeAAAAAA==",
-    "source": "photos/landscape/039_HK_ArchitectsParinee_11_West.jpg"
-  },
-  {
-    "slug": "rashikohinoor-altissimo-l37",
-    "key": "RashiKohinoor_Altissimo",
-    "title": "Rashi Kohinoor Altissimo",
-    "orientation": "landscape",
-    "width": 7008,
-    "height": 4672,
-    "widths": [
-      640,
-      1280,
-      1920,
-      2560
-    ],
-    "lqip": "data:image/webp;base64,UklGRlIAAABXRUJQVlA4IEYAAADwAQCdASoQAAsAA4BaJZQAAsdhURpDDXAA/lWxUe4TcOZf+nb7Ai/hG/GgPBFdK+QFnEFtccwvAVo9VWu0LvrfdpPIUIAA",
-    "source": "photos/landscape/040_RashiKohinoor_Altissimo.jpg"
-  },
-  {
-    "slug": "muktaclinic-l38",
-    "key": "MuktaClinic",
-    "title": "Mukta Clinic",
-    "orientation": "landscape",
-    "width": 5976,
-    "height": 3984,
-    "widths": [
-      640,
-      1280,
-      1920,
-      2560
-    ],
-    "lqip": "data:image/webp;base64,UklGRlwAAABXRUJQVlA4IFAAAAAwAgCdASoQAAsAA4BaJaACdH8AGMYSuSAQAAD+VWbNq8bKo3MHbh53Xf8nEVoPZ0gXURUIs/rzKOdB3jksZ02hCrTyz9ed7C7D0eMPngAAAA==",
-    "source": "photos/landscape/041_MuktaClinic.jpg"
-  },
-  {
-    "slug": "omkarhema-waghle-l39",
-    "key": "OmkarHema_Waghle",
-    "title": "Omkar Hema Waghle",
-    "orientation": "landscape",
-    "width": 5988,
-    "height": 3992,
-    "widths": [
-      640,
-      1280,
-      1920,
-      2560
-    ],
-    "lqip": "data:image/webp;base64,UklGRmgAAABXRUJQVlA4IFwAAAAwAgCdASoQAAsAA4BaJbACdAED/J/eqd9AAAD8GA1b8hL0uSKDTcF6b+JGDPV4PyifvbSOoPOFplFycBssc7r/3YQiUSKof+M8OjYdrDZazmqIA1oyaG414r4AAA==",
-    "source": "photos/landscape/042_OmkarHema_Waghle.jpg"
-  },
-  {
-    "slug": "dorityoberoi-l40",
-    "key": "DorityOberoi",
-    "title": "Dority Oberoi",
-    "orientation": "landscape",
-    "width": 6000,
-    "height": 4000,
-    "widths": [
-      640,
-      1280,
-      1920,
-      2560
-    ],
-    "lqip": "data:image/webp;base64,UklGRmIAAABXRUJQVlA4IFYAAADwAQCdASoQAAsAA4BaJQBfnBjbVlXLZ4AA9r+6MO3jVE/0OrSLX1bSKIycz3MBK21NmFpmDflC4kNlKGX2d67xKvAwpjtcOSLKNAS7C8/sRwXbi0AAAA==",
-    "source": "photos/landscape/043_DorityOberoi.jpg"
-  },
-  {
-    "slug": "hk-architectsshreeji-tower-l41",
-    "key": "HK_ArchitectsShreeji_Tower",
-    "title": "HK Architects Shreeji Tower",
-    "orientation": "landscape",
-    "width": 6000,
-    "height": 4000,
-    "widths": [
-      640,
-      1280,
-      1920,
-      2560
-    ],
-    "lqip": "data:image/webp;base64,UklGRlYAAABXRUJQVlA4IEoAAADwAQCdASoQAAsAA4BaJZQCdAC9QEMD2wAA/rNELoc0xPMa8ujtyDQzR0Up6cLOM2Wom+f7iTDXmKZFYaEfC8WBUn3qn+vBFkAAAA==",
-    "source": "photos/landscape/044_HK_ArchitectsShreeji_Tower.jpg"
-  },
-  {
-    "slug": "anupam-studiotdh-l42",
-    "key": "Anupam_StudioTDH",
-    "title": "Anupam Studio TDH",
-    "orientation": "landscape",
-    "width": 6000,
-    "height": 4000,
-    "widths": [
-      640,
-      1280,
-      1920,
-      2560
-    ],
-    "lqip": "data:image/webp;base64,UklGRm4AAABXRUJQVlA4IGIAAABQAgCdASoQAAsAA4BaJYwCdAfwBVEk5c2GgYAA/opnc6Eptpi+sJ6Y35Rlw383/cwWgW2+s7kYz1YDmb+3WYkkfyCALAI2G6qaDPk+kL8i5fTn99YJ0dXkwXttPIgayYAAAA==",
-    "source": "photos/landscape/045_Anupam_StudioTDH.jpg"
-  },
-  {
-    "slug": "aura-ids-l43",
-    "key": "Aura_IDS",
-    "title": "Aura IDS",
-    "orientation": "landscape",
-    "width": 6000,
-    "height": 4000,
-    "widths": [
-      640,
-      1280,
-      1920,
-      2560
-    ],
-    "lqip": "data:image/webp;base64,UklGRmAAAABXRUJQVlA4IFQAAADQAQCdASoQAAsAA4BaJQBOgBcFscQ8QAD8138YasGzCWAVuKojXtIXBcGhF9h4EJCHore1Lbw9yFzXu9eIg7I+41AFh7v6hxexTMLvqNzNrCcYAAA=",
-    "source": "photos/landscape/046_Aura_IDS.jpg"
-  },
-  {
-    "slug": "naksh-design-studio-l44",
-    "key": "Naksh_Design_Studio",
-    "title": "Naksh Design Studio",
-    "orientation": "landscape",
-    "width": 6000,
-    "height": 4000,
-    "widths": [
-      640,
-      1280,
-      1920,
-      2560
-    ],
-    "lqip": "data:image/webp;base64,UklGRmAAAABXRUJQVlA4IFQAAAAwAgCdASoQAAsAA4BaJZgCdAEXew0bJsxJAAD8xHPgBL2kWQcnJ/tTQTHBNnRWAuWTG73r2HxDtR1BcF98oWzY3dUex/XXZ/yfwtQwBJGG5T4kAAA=",
-    "source": "photos/landscape/047_Naksh_Design_Studio.jpg"
-  },
-  {
-    "slug": "adndkalpatru-l45",
-    "key": "ADNDKalpatru",
-    "title": "ADNDKalpatru",
-    "orientation": "landscape",
-    "width": 6000,
-    "height": 4000,
-    "widths": [
-      640,
-      1280,
-      1920,
-      2560
-    ],
-    "lqip": "data:image/webp;base64,UklGRloAAABXRUJQVlA4IE4AAAAwAgCdASoQAAsAA4BaJYwCdAEKy6KoVl0wAAD+uBMk/R6oUVwuwx7kvF+n1ECDFuoPaI5p7mjYNUWBB/KSU8IrXDeBNgzghKDU7DmAAAA=",
-    "source": "photos/landscape/048_ADNDKalpatru.jpg"
-  },
-  {
-    "slug": "govindhamvinay-l46",
-    "key": "GovindhamVinay",
-    "title": "Govindham Vinay",
-    "orientation": "landscape",
-    "width": 6000,
-    "height": 4000,
-    "widths": [
-      640,
-      1280,
-      1920,
-      2560
-    ],
-    "lqip": "data:image/webp;base64,UklGRl4AAABXRUJQVlA4IFIAAADwAQCdASoQAAsAA4BaJYgCsADG4rIAkAAA/vb4crrpCC+bPhIMGrP5wqT246USqxE7kdQV0JXGsaUd6FTHIk0CWSRlkyuUcry1REydqMrkAAAA",
-    "source": "photos/landscape/050_GovindhamVinay.jpg"
-  },
-  {
-    "slug": "oberoidesign-hue-l47",
-    "key": "OberoiDesign_Hue",
-    "title": "Oberoi Design Hue",
-    "orientation": "landscape",
-    "width": 6000,
-    "height": 4000,
-    "widths": [
-      640,
-      1280,
-      1920,
-      2560
-    ],
-    "lqip": "data:image/webp;base64,UklGRkwAAABXRUJQVlA4IEAAAACQAQCdASoQAAsAA4BaJZwAApc6pQAA/taxkV2j4hfu1mD+n72dzILcLtLqL8++Eq+/7HJ1oVr5iFHBkDbm7GAA",
-    "source": "photos/landscape/051_OberoiDesign_Hue.jpg"
-  },
-  {
-    "slug": "crescent-baytdh-l48",
-    "key": "Crescent_BayTDH",
-    "title": "Crescent Bay TDH",
-    "orientation": "landscape",
-    "width": 6000,
-    "height": 4000,
-    "widths": [
-      640,
-      1280,
-      1920,
-      2560
-    ],
-    "lqip": "data:image/webp;base64,UklGRmAAAABXRUJQVlA4IFQAAAAQAgCdASoQAAsAA4BaJZQCdAEYES+C16BQAP40aJfPPkcPebYsV8F1wTEqJqPOYZUvt/UZ53U5THXK1qhRGeOpo6hlBb1Eu2lhv8PkDDvOSpEDYAA=",
-    "source": "photos/landscape/052_Crescent_BayTDH.jpg"
-  },
-  {
-    "slug": "oberoi-esquire78-design-studio-l49",
-    "key": "Oberoi_Esquire78_Design_Studio",
-    "title": "Oberoi Esquire78 Design Studio",
-    "orientation": "landscape",
-    "width": 6000,
-    "height": 4000,
-    "widths": [
-      640,
-      1280,
-      1920,
-      2560
-    ],
-    "lqip": "data:image/webp;base64,UklGRloAAABXRUJQVlA4IE4AAAAwAgCdASoQAAsAA4BaJZQAAwsCfz6+0zWsAAD+9UiJrhodUu7zAXm4y0NhuenUpNRbCDJ+37xsSPyZncm03gzI9P0fewG4h1lAXd6HIAA=",
-    "source": "photos/landscape/053_Oberoi_Esquire78_Design_Studio.jpg"
-  },
-  {
-    "slug": "yaffa-skhargar-office-l50",
-    "key": "Yaffa'sKhargar_Office",
-    "title": "Yaffa's Khargar Office",
-    "orientation": "landscape",
-    "width": 6000,
-    "height": 4000,
-    "widths": [
-      640,
-      1280,
-      1920,
-      2560
-    ],
-    "lqip": "data:image/webp;base64,UklGRmwAAABXRUJQVlA4IGAAAAAQAgCdASoQAAsAA4BaJYwAAp/NEhtM5weAAOGV2vFUwouKAzT3MZ9B1GL9QBeoo//EZJeYnNbs8ry9uYTOEZlz9WdwgHZrGb99NTymc9RAJmXWJRkwNGnt8Izb4oJgAAA=",
-    "source": "photos/landscape/054_Yaffa'sKhargar_Office.jpg"
-  },
-  {
-    "slug": "elysian-dsgodrej-l51",
-    "key": "Elysian_DSGodrej",
-    "title": "Elysian DSGodrej",
-    "orientation": "landscape",
-    "width": 6000,
-    "height": 4000,
-    "widths": [
-      640,
-      1280,
-      1920,
-      2560
-    ],
-    "lqip": "data:image/webp;base64,UklGRngAAABXRUJQVlA4IGwAAABQAgCdASoQAAsAA4BaJagCdAYvNal/oeaU2QAA+Sps7La0/25oGfUc0MWd8cYMiDArJSYT7ju881+LkY0NcPqb3IpQyEm049EhQTVbC/3tH/vDbymz9pX8Pn2yDGj08VxltOasXH6lq9QwAAA=",
-    "source": "photos/landscape/055_Elysian_DSGodrej.jpg"
-  },
-  {
-    "slug": "dority-savana-l52",
-    "key": "Dority_Savana",
-    "title": "Dority Savana",
-    "orientation": "landscape",
-    "width": 6000,
-    "height": 4000,
-    "widths": [
-      640,
-      1280,
-      1920,
-      2560
-    ],
-    "lqip": "data:image/webp;base64,UklGRmwAAABXRUJQVlA4IGAAAABwAgCdASoQAAsAA4BaJZQCxC8AgqyR4x5ahNwAAP4xTzWA190R24bopJ1j6KpHtaWR5IEKcfiSkX9a4VsD8nDeWzD/ljBp3rgoXaWJ7JePRDWZcRnP95W+M8xPD9sIAAA=",
-    "source": "photos/landscape/056_Dority_Savana.jpg"
-  },
-  {
-    "slug": "unattributed-1-l53",
-    "key": "unattributed",
-    "title": "Unattributed",
-    "orientation": "landscape",
-    "width": 6124,
-    "height": 4082,
-    "widths": [
-      640,
-      1280,
-      1920,
-      2560
-    ],
-    "lqip": "data:image/webp;base64,UklGRmwAAABXRUJQVlA4IGAAAAAQAgCdASoQAAsAA4BaJZACdAD6mXY410eAAP5NFJqwIVFhTvXl/MoXAyybd6ZP1W9LsZOhlu/HzeX/YfVuYsm2W+IeKe+fhKvwF+FYU+txhqH2N4Td2Xfgd5FNpm9mAAA=",
-    "source": "photos/landscape/1.JPG"
-  },
-  {
-    "slug": "unattributed-12-l54",
+    "slug": "unattributed-15-l01",
     "key": "unattributed",
     "title": "Unattributed",
     "orientation": "landscape",
@@ -889,27 +46,11 @@ export const PORTFOLIO_IMAGES: PortfolioImage[] = [
       1920,
       2560
     ],
-    "lqip": "data:image/webp;base64,UklGRmoAAABXRUJQVlA4IF4AAAAwAgCdASoQAAsAA4BaJZQC7AYvXK964WgYAAD+ieYDTsaoHbxcO8YvfnWZ2jrJH75UQtGw8ZFyW4+lwspLYC/gaWK2CfZW2+g5/1naIGITkoBC1257n2PEgjhYeAAA",
-    "source": "photos/landscape/12.jpg"
+    "lqip": "data:image/webp;base64,UklGRmAAAABXRUJQVlA4IFQAAAAQAgCdASoQAAsAA4BaJZQC7ADdjDEkIREAAP6FDammvCWoZ2pbQcGOy0vxosFOLNSnEpauattmeEZHV/qXe5vIhTWab0qnMgugzrHpzswqLG0AAAA=",
+    "source": "photos/landscape/15.jpg"
   },
   {
-    "slug": "unattributed-gam00244-l55",
-    "key": "unattributed",
-    "title": "Unattributed",
-    "orientation": "landscape",
-    "width": 6000,
-    "height": 3376,
-    "widths": [
-      640,
-      1280,
-      1920,
-      2560
-    ],
-    "lqip": "data:image/webp;base64,UklGRmQAAABXRUJQVlA4IFgAAADQAQCdASoQAAkAA4BaJZAC7ADbnJ0JCAD+YRe19zg8x7e8bQrvWle+v3Mfd5s/ymUNdMQ26cGxjb7hXe6Ay/XedG1LVKtz51Z6t6B6qxmCD/ur1qFrnAAA",
-    "source": "photos/landscape/GAM00244.jpg"
-  },
-  {
-    "slug": "unattributed-img-2626-l56",
+    "slug": "unattributed-26-l02",
     "key": "unattributed",
     "title": "Unattributed",
     "orientation": "landscape",
@@ -921,13 +62,909 @@ export const PORTFOLIO_IMAGES: PortfolioImage[] = [
       1920,
       2560
     ],
-    "lqip": "data:image/webp;base64,UklGRm4AAABXRUJQVlA4IGIAAADwAQCdASoQAAsAA4BaJbACdADWqKp0lgAA/qyWolYZ1KIqbTi1kU4j1XJAZdiAnVVS/Rca6nWXms+fPeydERvQi/M0DQ1lxy180Bxh2roaREaZPqtcHLm4BQuhAezfRQAAAA==",
-    "source": "photos/landscape/IMG_2626.JPG"
+    "lqip": "data:image/webp;base64,UklGRm4AAABXRUJQVlA4IGIAAABQAgCdASoQAAsAA4BaJQBOgMXr5DT5eaAL51QA/pTVg4EaOR3uKJJs40gPzEIkqGSzxklVbFl5ZP3jbbeCVnAHXPdyRBcOdl71qGaZks5gw0UpvBEXrNABK2RUilPkCYAAAA==",
+    "source": "photos/landscape/26.JPG"
   },
   {
-    "slug": "bombay-cot78-design-p01",
-    "key": "bombay_cot78_Design",
-    "title": "Bombay Cot78 Design",
+    "slug": "unattributed-4-l03",
+    "key": "unattributed",
+    "title": "Unattributed",
+    "orientation": "landscape",
+    "width": 6000,
+    "height": 4000,
+    "widths": [
+      640,
+      1280,
+      1920,
+      2560
+    ],
+    "lqip": "data:image/webp;base64,UklGRlYAAABXRUJQVlA4IEoAAADQAQCdASoQAAsAA4BaJZQCdADWh8S2QAD+yObm9uggMU5b+VmzTvVe3Tr+//JcEVsJ52iyQ2DNguvKfjPGTwq9mv3ugU/hVyAAAA==",
+    "source": "photos/landscape/4.jpg"
+  },
+  {
+    "slug": "dsc00155-hdr-l04",
+    "key": "DSC00155-HDR",
+    "title": "DSC00155 HDR",
+    "orientation": "landscape",
+    "width": 5988,
+    "height": 3992,
+    "widths": [
+      640,
+      1280,
+      1920,
+      2560
+    ],
+    "lqip": "data:image/webp;base64,UklGRmgAAABXRUJQVlA4IFwAAAAwAgCdASoQAAsAA4BaJbACdAED/J/eqd9AAAD8GA1b8hL0uSKDTcF6b+JGDPV4PyifvbSOoPOFplFycBssc7r/3YQiUSKof+M8OjYdrDZazmqIA1oyaG414r4AAA==",
+    "source": "photos/landscape/DSC00155-HDR.jpg"
+  },
+  {
+    "slug": "dsc00180-hdr-l05",
+    "key": "DSC00180-HDR",
+    "title": "DSC00180 HDR",
+    "orientation": "landscape",
+    "width": 7002,
+    "height": 4448,
+    "widths": [
+      640,
+      1280,
+      1920,
+      2560
+    ],
+    "lqip": "data:image/webp;base64,UklGRmIAAABXRUJQVlA4IFYAAAAQAgCdASoQAAoAA4BaJZACdAD1XqNSbLEAAP7rrp6Qtm5re/aANi4PfKjVSN9INP1jje/rXMnizJzHfn022kxWdBvzizAA2wReiQWP5WQkuxDp7rAAAA==",
+    "source": "photos/landscape/DSC00180-HDR.jpg"
+  },
+  {
+    "slug": "dsc00233-hdr-2-enhanced-sr-l06",
+    "key": "DSC00233-HDR-2-Enhanced-SR",
+    "title": "DSC00233 HDR 2 Enhanced SR",
+    "orientation": "landscape",
+    "width": 14004,
+    "height": 9336,
+    "widths": [
+      640,
+      1280,
+      1920,
+      2560
+    ],
+    "lqip": "data:image/webp;base64,UklGRmAAAABXRUJQVlA4IFQAAAAQAgCdASoQAAsAA4BaJQBOgB9ilTXK8zDgAP7l8Wd5OPAkwPfRE6Qwk6JfT+Rqwq8ZVIczhl/ny3xwHH/3laWde3HPNSUx4FRW+fn2q44jbjgJAAA=",
+    "source": "photos/landscape/DSC00233-HDR-2-Enhanced-SR.jpeg"
+  },
+  {
+    "slug": "dsc00240-enhanced-nr-l07",
+    "key": "DSC00240-Enhanced-NR",
+    "title": "DSC00240 Enhanced NR",
+    "orientation": "landscape",
+    "width": 7008,
+    "height": 4672,
+    "widths": [
+      640,
+      1280,
+      1920,
+      2560
+    ],
+    "lqip": "data:image/webp;base64,UklGRmIAAABXRUJQVlA4IFYAAADwAQCdASoQAAsAA4BaJYwCdADcRxb7igAA/oQPZj6utWdo3NTkz3uAXvzYM88JPZqIYSCX6jYSXjfLQepsUNOHN2s6EFvMLnmdS0C+vGFbIyUWkqAAAA==",
+    "source": "photos/landscape/DSC00240-Enhanced-NR.jpeg"
+  },
+  {
+    "slug": "dsc00243-enhanced-nr-l08",
+    "key": "DSC00243-Enhanced-NR",
+    "title": "DSC00243 Enhanced NR",
+    "orientation": "landscape",
+    "width": 7008,
+    "height": 4672,
+    "widths": [
+      640,
+      1280,
+      1920,
+      2560
+    ],
+    "lqip": "data:image/webp;base64,UklGRmgAAABXRUJQVlA4IFwAAAAQAgCdASoQAAsAA4BaJQBOgCPQP2WYs+QAAP6EC08XSuyCVXMsFen1b3u+gHvMURAcu9Xc234g9CknHB4osRjNHDISwgp3mmCz4KFENItb2Wp0a0fkTx3epwAAAA==",
+    "source": "photos/landscape/DSC00243-Enhanced-NR.jpeg"
+  },
+  {
+    "slug": "unattributed-dsc00360-l09",
+    "key": "unattributed",
+    "title": "Unattributed",
+    "orientation": "landscape",
+    "width": 7008,
+    "height": 4672,
+    "widths": [
+      640,
+      1280,
+      1920,
+      2560
+    ],
+    "lqip": "data:image/webp;base64,UklGRmQAAABXRUJQVlA4IFgAAAAwAgCdASoQAAsAA4BaJYgCdAERB42fCXZ+DAD+J4K1eu4jCyKFmpFOZxAFgcVQ//aIX8DjisaR55BZ0+hvF+xwzFIX5RVThrdbfVilpO/W7+ieKLALAAAA",
+    "source": "photos/landscape/DSC00360.jpeg"
+  },
+  {
+    "slug": "unattributed-dsc00414-l10",
+    "key": "unattributed",
+    "title": "Unattributed",
+    "orientation": "landscape",
+    "width": 6807,
+    "height": 4538,
+    "widths": [
+      640,
+      1280,
+      1920,
+      2560
+    ],
+    "lqip": "data:image/webp;base64,UklGRmQAAABXRUJQVlA4IFgAAADQAQCdASoQAAsAA4BaJQBOj+AC6r66gAD+fK40ux7PpB47hfUR50dtqKNTZxAXOJeycslqFQZGjxe0PNpZboR/BN1VM3Ux+bZo1pTEJs3hROgmmhkdGaAA",
+    "source": "photos/landscape/DSC00414.jpeg"
+  },
+  {
+    "slug": "dsc00850-hdr-l11",
+    "key": "DSC00850-HDR",
+    "title": "DSC00850 HDR",
+    "orientation": "landscape",
+    "width": 6956,
+    "height": 4637,
+    "widths": [
+      640,
+      1280,
+      1920,
+      2560
+    ],
+    "lqip": "data:image/webp;base64,UklGRnIAAABXRUJQVlA4IGYAAABwAgCdASoQAAsAA4BaJZACdAYuRwWW+yM3PI8AAP2dC6KyJ9K+qZQDJH1X5bk2xZmTG3BttvfmRag8XNF1CD/0cZLDYlFneecY0KyJwVtwQh2n7Thvo8fN5HJiMijRDea1++FtQAA=",
+    "source": "photos/landscape/DSC00850-HDR.jpg"
+  },
+  {
+    "slug": "dsc00964-hdr-l12",
+    "key": "DSC00964-HDR",
+    "title": "DSC00964 HDR",
+    "orientation": "landscape",
+    "width": 6880,
+    "height": 4587,
+    "widths": [
+      640,
+      1280,
+      1920,
+      2560
+    ],
+    "lqip": "data:image/webp;base64,UklGRmgAAABXRUJQVlA4IFwAAAAQAgCdASoQAAsAA4BaJbACdADjcCw4nmCkAP7Sjtwx6mxyFhhLRLMUvuaiqZyuiqF7c8nyVf/XE8VV5WypD3MDyWpCu3YxEkoEGRzzfMi5FxKd1613xrx2EWYQAA==",
+    "source": "photos/landscape/DSC00964-HDR.jpg"
+  },
+  {
+    "slug": "unattributed-dsc01293-l13",
+    "key": "unattributed",
+    "title": "Unattributed",
+    "orientation": "landscape",
+    "width": 7008,
+    "height": 4672,
+    "widths": [
+      640,
+      1280,
+      1920,
+      2560
+    ],
+    "lqip": "data:image/webp;base64,UklGRlIAAABXRUJQVlA4IEYAAADwAQCdASoQAAsAA4BaJZQAAsdhURpDDXAA/lWxUe4TcOZf+nb7Ai/hG/GgPBFdK+QFnEFtccwvAVo9VWu0LvrfdpPIUIAA",
+    "source": "photos/landscape/DSC01293.jpg"
+  },
+  {
+    "slug": "unattributed-dsc03519-l14",
+    "key": "unattributed",
+    "title": "Unattributed",
+    "orientation": "landscape",
+    "width": 5209,
+    "height": 3473,
+    "widths": [
+      640,
+      1280,
+      1920,
+      2560
+    ],
+    "lqip": "data:image/webp;base64,UklGRmwAAABXRUJQVlA4IGAAAAAQAgCdASoQAAsAA4BaJQBOgBeQor+23iQAAP5DbJWTtEn2+P1P8JJzYSf6urHAD+JoeC5p3JF4AajPSZOSLcn+YaphMM9HQ+YJBnQXYyA3gjRFk4dEOZ72YC44UjhSQAA=",
+    "source": "photos/landscape/DSC03519.jpg"
+  },
+  {
+    "slug": "unattributed-dsc05342-l15",
+    "key": "unattributed",
+    "title": "Unattributed",
+    "orientation": "landscape",
+    "width": 6000,
+    "height": 4000,
+    "widths": [
+      640,
+      1280,
+      1920,
+      2560
+    ],
+    "lqip": "data:image/webp;base64,UklGRmYAAABXRUJQVlA4IFoAAAAQAgCdASoQAAsAA4BaJQBOgBujUsIMLKoAAP7zU1dZASgyOnehEb/zxieG+sD4qbg/bRPkV+Go4+CWusPmfAVcRtJsEchVRnvqdIHt8fdlkVwJWX3kBjdRQAA=",
+    "source": "photos/landscape/DSC05342.jpg"
+  },
+  {
+    "slug": "unattributed-dsc05363-l16",
+    "key": "unattributed",
+    "title": "Unattributed",
+    "orientation": "landscape",
+    "width": 6000,
+    "height": 4000,
+    "widths": [
+      640,
+      1280,
+      1920,
+      2560
+    ],
+    "lqip": "data:image/webp;base64,UklGRmgAAABXRUJQVlA4IFwAAAAQAgCdASoQAAsAA4BaJaACdAEVLplXIIcAAP70pIArRNF59b0J5EB5iuzURzVV53ZpEMS+oDjKw4oT30MW8t0dE0FdwWe0xfDBHtnnRQNesHo8nQKdH/bCGAqAAA==",
+    "source": "photos/landscape/DSC05363.jpg"
+  },
+  {
+    "slug": "unattributed-gam00001-l17",
+    "key": "unattributed",
+    "title": "Unattributed",
+    "orientation": "landscape",
+    "width": 6000,
+    "height": 4000,
+    "widths": [
+      640,
+      1280,
+      1920,
+      2560
+    ],
+    "lqip": "data:image/webp;base64,UklGRlgAAABXRUJQVlA4IEwAAADQAQCdASoQAAsAA4BaJZwAAo+RMLpRIAD+9msH3nzTnp9juv09lkoaEjeFi5Y086dN9/gM2EkxQK0L7nWSTKZksAkcLaBkFxbgAAAA",
+    "source": "photos/landscape/GAM00001.jpg"
+  },
+  {
+    "slug": "unattributed-gam00019-l18",
+    "key": "unattributed",
+    "title": "Unattributed",
+    "orientation": "landscape",
+    "width": 6000,
+    "height": 4000,
+    "widths": [
+      640,
+      1280,
+      1920,
+      2560
+    ],
+    "lqip": "data:image/webp;base64,UklGRl4AAABXRUJQVlA4IFIAAABwAgCdASoQAAsAA4BaJZQCsAYtV29Mqt5NqIwAAP7tmYlu4GS6KqwSMrQ8+dupItFnPGUFXSHJ0KvFp1Mx3WF6kOpCGUVuIh0zMSSWDJVoAAAA",
+    "source": "photos/landscape/GAM00019.jpg"
+  },
+  {
+    "slug": "unattributed-gam00025-l19",
+    "key": "unattributed",
+    "title": "Unattributed",
+    "orientation": "landscape",
+    "width": 6000,
+    "height": 4000,
+    "widths": [
+      640,
+      1280,
+      1920,
+      2560
+    ],
+    "lqip": "data:image/webp;base64,UklGRmAAAABXRUJQVlA4IFQAAAAwAgCdASoQAAsAA4BaJYwCdAD5MwJPLSI0GAD+1QaFWhvQQCdJhjMkDIBVk9eCTLCUS6J4gXufB7A0SLb1OGpvgz3hTcHjCNnqJm67ISBu25oGAAA=",
+    "source": "photos/landscape/GAM00025.jpg"
+  },
+  {
+    "slug": "unattributed-gam00033-l20",
+    "key": "unattributed",
+    "title": "Unattributed",
+    "orientation": "landscape",
+    "width": 6000,
+    "height": 4000,
+    "widths": [
+      640,
+      1280,
+      1920,
+      2560
+    ],
+    "lqip": "data:image/webp;base64,UklGRmQAAABXRUJQVlA4IFgAAADQAQCdASoQAAsAA4BaJQBdgBbCrCxyAAD8r8l/JKHR4qeLeqrFG3WbDEdXOrsaG/NArtn8uZA7TFynMdpPd3dprhykg1Eu6OdqPgJhVF3GYyCBII3wIAAA",
+    "source": "photos/landscape/GAM00033.jpg"
+  },
+  {
+    "slug": "unattributed-gam00069-l21",
+    "key": "unattributed",
+    "title": "Unattributed",
+    "orientation": "landscape",
+    "width": 6000,
+    "height": 4000,
+    "widths": [
+      640,
+      1280,
+      1920,
+      2560
+    ],
+    "lqip": "data:image/webp;base64,UklGRmAAAABXRUJQVlA4IFQAAAAwAgCdASoQAAsAA4BaJQBdgCKUmXW5TWiSAAD+uB/F8kPxqqHRD8Wx6pjZHSIbZZKazWzFtG7G82K9dqLa4QVGbN8Anhk1OEjdXao6Ebz7P5gAAAA=",
+    "source": "photos/landscape/GAM00069.jpg"
+  },
+  {
+    "slug": "unattributed-gam00094-l22",
+    "key": "unattributed",
+    "title": "Unattributed",
+    "orientation": "landscape",
+    "width": 6000,
+    "height": 4000,
+    "widths": [
+      640,
+      1280,
+      1920,
+      2560
+    ],
+    "lqip": "data:image/webp;base64,UklGRl4AAABXRUJQVlA4IFIAAADwAQCdASoQAAsAA4BaJZwAAl0DLlsZ8dAA/bRNqt4fBv1IXdecYdI86YrV9H0aNnwf0GWmHqEu3jaX+T2qt7PEKB8VH37LYVDzqS6nuwCz0QAA",
+    "source": "photos/landscape/GAM00094.jpg"
+  },
+  {
+    "slug": "unattributed-gam00115-l23",
+    "key": "unattributed",
+    "title": "Unattributed",
+    "orientation": "landscape",
+    "width": 6000,
+    "height": 4000,
+    "widths": [
+      640,
+      1280,
+      1920,
+      2560
+    ],
+    "lqip": "data:image/webp;base64,UklGRloAAABXRUJQVlA4IE4AAADQAQCdASoQAAsAA4BaJaQAAbKo4MZNAAD+6zbTsCcJfH8IwCxl8+nXx132qBtwSXYzA0RV+TNX424sjI8ZXzR/8FLlnCTb9S0qe/sQoAA=",
+    "source": "photos/landscape/GAM00115.jpg"
+  },
+  {
+    "slug": "unattributed-gam00116-l24",
+    "key": "unattributed",
+    "title": "Unattributed",
+    "orientation": "landscape",
+    "width": 3936,
+    "height": 2624,
+    "widths": [
+      640,
+      1280,
+      1920,
+      2560
+    ],
+    "lqip": "data:image/webp;base64,UklGRk4AAABXRUJQVlA4IEIAAADwAQCdASoQAAsAA4BaJZQAAxPGekzI8tAA/vcq3l0jv4V+neYKNa2RYH16zBV+H3Onwk40fJKkH1+xAYGAmruw/AA=",
+    "source": "photos/landscape/GAM00116.jpeg"
+  },
+  {
+    "slug": "unattributed-gam00134-l25",
+    "key": "unattributed",
+    "title": "Unattributed",
+    "orientation": "landscape",
+    "width": 6000,
+    "height": 4000,
+    "widths": [
+      640,
+      1280,
+      1920,
+      2560
+    ],
+    "lqip": "data:image/webp;base64,UklGRmQAAABXRUJQVlA4IFgAAABQAgCdASoQAAsAA4BaJYwC7AYsP2tlzQe63AAA/P/LPTS37/5np2QM9MztUZf9XKysKtCEZa81Cwl0x5tGYJ3Evi8UadNvkL4zptCcv37/rHgHpc49YAAA",
+    "source": "photos/landscape/GAM00134.jpg"
+  },
+  {
+    "slug": "unattributed-gam00151-l26",
+    "key": "unattributed",
+    "title": "Unattributed",
+    "orientation": "landscape",
+    "width": 6000,
+    "height": 4000,
+    "widths": [
+      640,
+      1280,
+      1920,
+      2560
+    ],
+    "lqip": "data:image/webp;base64,UklGRmoAAABXRUJQVlA4IF4AAAAwAgCdASoQAAsAA4BaJZQAD46uLzmKwKU4AAD+0cW45JMd4nVWvL+obqK4cZHLCfjyJzJqV3m3Is2qG/ZFJKkj3hn4gQBb07CQ1CPZhRrtvHGG6mT74QNRHDLTGQAA",
+    "source": "photos/landscape/GAM00151.jpg"
+  },
+  {
+    "slug": "unattributed-gam00161-l27",
+    "key": "unattributed",
+    "title": "Unattributed",
+    "orientation": "landscape",
+    "width": 6000,
+    "height": 4000,
+    "widths": [
+      640,
+      1280,
+      1920,
+      2560
+    ],
+    "lqip": "data:image/webp;base64,UklGRl4AAABXRUJQVlA4IFIAAAAQAgCdASoQAAsAA4BaJZwAAv+CXKy4hVAAAP4xhBpmvGlnGOpu/r7VaiOlN2zohhRgMagARHsntxVFSCDy2dzLNrj166YkgHCnLB+qJawCgAAA",
+    "source": "photos/landscape/GAM00161.jpg"
+  },
+  {
+    "slug": "unattributed-gam00208-l28",
+    "key": "unattributed",
+    "title": "Unattributed",
+    "orientation": "landscape",
+    "width": 6000,
+    "height": 4000,
+    "widths": [
+      640,
+      1280,
+      1920,
+      2560
+    ],
+    "lqip": "data:image/webp;base64,UklGRlIAAABXRUJQVlA4IEYAAADQAQCdASoQAAsAA4BaJZwAAel4+GalAAD+u/Iv+YW1Bki7hFAg5m0tSnH/IbUdeRyqGrtnhId0FNm2KFWODL358yBP8AAA",
+    "source": "photos/landscape/GAM00208.jpg"
+  },
+  {
+    "slug": "unattributed-gam00255-l29",
+    "key": "unattributed",
+    "title": "Unattributed",
+    "orientation": "landscape",
+    "width": 5063,
+    "height": 3307,
+    "widths": [
+      640,
+      1280,
+      1920,
+      2560
+    ],
+    "lqip": "data:image/webp;base64,UklGRl4AAABXRUJQVlA4IFIAAADQAQCdASoQAAoAA4BaJYwAAuuYXFDIgAD+8/E8cjrZTzUMzdF7RsiS3PipZuEBfWbpEGSmqjcDC2wKQSuiTr9ZAWLZEOdlLeNSQI6h4Ch/2OAA",
+    "source": "photos/landscape/GAM00255.jpg"
+  },
+  {
+    "slug": "unattributed-gam00272-l30",
+    "key": "unattributed",
+    "title": "Unattributed",
+    "orientation": "landscape",
+    "width": 6000,
+    "height": 4000,
+    "widths": [
+      640,
+      1280,
+      1920,
+      2560
+    ],
+    "lqip": "data:image/webp;base64,UklGRmIAAABXRUJQVlA4IFYAAADwAQCdASoQAAsAA4BaJYwCw7DxEL45BAAA/u5QLXiTADaefyMEH0p/8OtvTfWr82WR4BnxOn5P63DVpSbUlGa8UM12LCHuErXsK4zmgy29WDe8ASMAAA==",
+    "source": "photos/landscape/GAM00272.jpg"
+  },
+  {
+    "slug": "unattributed-gam00275-l31",
+    "key": "unattributed",
+    "title": "Unattributed",
+    "orientation": "landscape",
+    "width": 6000,
+    "height": 4000,
+    "widths": [
+      640,
+      1280,
+      1920,
+      2560
+    ],
+    "lqip": "data:image/webp;base64,UklGRmAAAABXRUJQVlA4IFQAAADQAQCdASoQAAsAA4BaJQBOgCFVmCrZ5AD+6HFvHoVU4fsmYmZ3IeZF4GJsJqDmBsn/PYCYP8kExxrB2n7VENRNYz1Jja7/vLsaqdnHf64nVhS6UAA=",
+    "source": "photos/landscape/GAM00275.jpg"
+  },
+  {
+    "slug": "unattributed-gam00283-l32",
+    "key": "unattributed",
+    "title": "Unattributed",
+    "orientation": "landscape",
+    "width": 4648,
+    "height": 3468,
+    "widths": [
+      640,
+      1280,
+      1920,
+      2560
+    ],
+    "lqip": "data:image/webp;base64,UklGRloAAABXRUJQVlA4IE4AAADQAQCdASoQAAwAA4BaJbACdACowWSTAAD+iUk8Lj/7icwcR6cQLwtBPAe02iUwGcSC4Hc/Y944zbJGPhJ4xGJfTwFBU61n19QIBAW+EAA=",
+    "source": "photos/landscape/GAM00283.jpg"
+  },
+  {
+    "slug": "unattributed-img-0204-l33",
+    "key": "unattributed",
+    "title": "Unattributed",
+    "orientation": "landscape",
+    "width": 6949,
+    "height": 4531,
+    "widths": [
+      640,
+      1280,
+      1920,
+      2560
+    ],
+    "lqip": "data:image/webp;base64,UklGRmgAAABXRUJQVlA4IFwAAABQAgCdASoQAAoAA4BaJZACdAEDZnJ/yLCg3AAA/p/lNhX4Xle2xHw/FqBUKNI50sRE5DvVqvtnK4qDHkqHhglLbBudCLZQ+mvAHrQQTMmtPZO2tJD66JbAAMmGAA==",
+    "source": "photos/landscape/IMG_0204.JPG"
+  },
+  {
+    "slug": "unattributed-img-0205-l34",
+    "key": "unattributed",
+    "title": "Unattributed",
+    "orientation": "landscape",
+    "width": 6783,
+    "height": 4338,
+    "widths": [
+      640,
+      1280,
+      1920,
+      2560
+    ],
+    "lqip": "data:image/webp;base64,UklGRmwAAABXRUJQVlA4IGAAAAAQAgCdASoQAAoAA4BaJQBWD+AC7O+ZueoAAP7g291VYRGOF4zh4xHCO/cBMvofkHiSdBb2VpB7IgcZfwgh/mSzozASCx7ErO/tDvrqcHwUszWqvjm47SAMCZs0XIk2IAA=",
+    "source": "photos/landscape/IMG_0205.JPG"
+  },
+  {
+    "slug": "unattributed-img-0207-l35",
+    "key": "unattributed",
+    "title": "Unattributed",
+    "orientation": "landscape",
+    "width": 7008,
+    "height": 4672,
+    "widths": [
+      640,
+      1280,
+      1920,
+      2560
+    ],
+    "lqip": "data:image/webp;base64,UklGRlgAAABXRUJQVlA4IEwAAADQAQCdASoQAAsAA4BaJQBOgBLs58jQAAD29upgnzt8Nh7h9fpfnm3gNjeSqFsmWu6V+oKfHhrRK6E031VZWC6pJYzw887bE0ke+wAA",
+    "source": "photos/landscape/IMG_0207.JPG"
+  },
+  {
+    "slug": "unattributed-img-0209-l36",
+    "key": "unattributed",
+    "title": "Unattributed",
+    "orientation": "landscape",
+    "width": 7008,
+    "height": 4672,
+    "widths": [
+      640,
+      1280,
+      1920,
+      2560
+    ],
+    "lqip": "data:image/webp;base64,UklGRl4AAABXRUJQVlA4IFIAAAAQAgCdASoQAAsAA4BaJZACdAD7AyPF2AWwAP2daky1ob1ivlXntdxDTgogAAiMeP02FvWGg7unfgr18XYHVuUSvHUtsMn5WuzARRJ2iK94AAAA",
+    "source": "photos/landscape/IMG_0209.JPG"
+  },
+  {
+    "slug": "unattributed-img-0229-l37",
+    "key": "unattributed",
+    "title": "Unattributed",
+    "orientation": "landscape",
+    "width": 7008,
+    "height": 4571,
+    "widths": [
+      640,
+      1280,
+      1920,
+      2560
+    ],
+    "lqip": "data:image/webp;base64,UklGRmIAAABXRUJQVlA4IFYAAADQAQCdASoQAAoAA4BaJZgCdAELLdN/cAD+76MDJml1DgPHaMrHnCEVi6YmkoLRTRA3HAgiXkRzfr+PN1jPXAekX8/nq2BMubHe4jaI9uaYRIKZprgAAA==",
+    "source": "photos/landscape/IMG_0229.JPG"
+  },
+  {
+    "slug": "unattributed-img-0260-l38",
+    "key": "unattributed",
+    "title": "Unattributed",
+    "orientation": "landscape",
+    "width": 7008,
+    "height": 4672,
+    "widths": [
+      640,
+      1280,
+      1920,
+      2560
+    ],
+    "lqip": "data:image/webp;base64,UklGRlgAAABXRUJQVlA4IEwAAADwAQCdASoQAAsAA4BaJZACdADdHA63tLAA/cegd+73lDKwSrF6u4XbpbWtQyAZrljixuLQEcOcULA1xkpcSANRUn7RMhxWs+YzEAAA",
+    "source": "photos/landscape/IMG_0260.JPG"
+  },
+  {
+    "slug": "unattributed-img-0263-l39",
+    "key": "unattributed",
+    "title": "Unattributed",
+    "orientation": "landscape",
+    "width": 7008,
+    "height": 4672,
+    "widths": [
+      640,
+      1280,
+      1920,
+      2560
+    ],
+    "lqip": "data:image/webp;base64,UklGRlIAAABXRUJQVlA4IEYAAAAQAgCdASoQAAsAA4BaJYgCdAD7ZMOTfTSAAP724NVu/H2uSavjer33REX30S6pnydZtCqNbZf86aGfzdkjUzBiSdIXQAAA",
+    "source": "photos/landscape/IMG_0263.JPG"
+  },
+  {
+    "slug": "unattributed-img-0264-l40",
+    "key": "unattributed",
+    "title": "Unattributed",
+    "orientation": "landscape",
+    "width": 7008,
+    "height": 4672,
+    "widths": [
+      640,
+      1280,
+      1920,
+      2560
+    ],
+    "lqip": "data:image/webp;base64,UklGRkwAAABXRUJQVlA4IEAAAADQAQCdASoQAAsAA4BaJQBOgCFEJSwgAAD+JLLCGhBKK38CnlHdAjsX4xM719nmZBBvRqQpHTL00tuH5isYUAAA",
+    "source": "photos/landscape/IMG_0264.JPG"
+  },
+  {
+    "slug": "unattributed-img-0267-l41",
+    "key": "unattributed",
+    "title": "Unattributed",
+    "orientation": "landscape",
+    "width": 7008,
+    "height": 4672,
+    "widths": [
+      640,
+      1280,
+      1920,
+      2560
+    ],
+    "lqip": "data:image/webp;base64,UklGRloAAABXRUJQVlA4IE4AAADwAQCdASoQAAsAA4BaJbACdAD8YupqI0AA/vWdevyqcPLWikA6z4g+tvDG5NB+7kLZJv/SscxpAJuz5OpEG6VLWHiTW7yXyNfHZ8yCuAA=",
+    "source": "photos/landscape/IMG_0267.JPG"
+  },
+  {
+    "slug": "unattributed-img-0276-l42",
+    "key": "unattributed",
+    "title": "Unattributed",
+    "orientation": "landscape",
+    "width": 7008,
+    "height": 4672,
+    "widths": [
+      640,
+      1280,
+      1920,
+      2560
+    ],
+    "lqip": "data:image/webp;base64,UklGRm4AAABXRUJQVlA4IGIAAADwAQCdASoQAAsAA4BaJZACdAEDeHfW+gAA/nIPKHn/D5aMhPvt7dxeu+LUecA6Hzqi2XukiwloTXj2RYbvILI1Ji+OalvRZTu8EtSb53xR/SPcuIBrO0kHCDpAMB3KSQAAAA==",
+    "source": "photos/landscape/IMG_0276.JPG"
+  },
+  {
+    "slug": "unattributed-img-0303-l43",
+    "key": "unattributed",
+    "title": "Unattributed",
+    "orientation": "landscape",
+    "width": 7008,
+    "height": 4672,
+    "widths": [
+      640,
+      1280,
+      1920,
+      2560
+    ],
+    "lqip": "data:image/webp;base64,UklGRnAAAABXRUJQVlA4IGQAAAAQAgCdASoQAAsAA4BaJQBOgCB/feFY4FgAAP7tKgC92vG+VOSiq7LnVXgqtQ4Usi3JzpdPeZ/YnGLJB008/AhYLq7/ngiTbown0vdLFjX5roUC4RKsXVJ436MS3yK8n3tN9gAA",
+    "source": "photos/landscape/IMG_0303.JPG"
+  },
+  {
+    "slug": "unattributed-img-0325-l44",
+    "key": "unattributed",
+    "title": "Unattributed",
+    "orientation": "landscape",
+    "width": 6124,
+    "height": 4082,
+    "widths": [
+      640,
+      1280,
+      1920,
+      2560
+    ],
+    "lqip": "data:image/webp;base64,UklGRnAAAABXRUJQVlA4IGQAAADwAQCdASoQAAsAA4BaJbACdADde5/lSmgA/ol+BTWGdSiKm04tSn5QhAWCjU2Te339PdhV5VytShixbqi8SrgZR2tU2Q2CTKb5Rup75/TxzR+IiwqFRrh6HYiWy4BQYWucAAAA",
+    "source": "photos/landscape/IMG_0325.JPG"
+  },
+  {
+    "slug": "unattributed-img-0361-l45",
+    "key": "unattributed",
+    "title": "Unattributed",
+    "orientation": "landscape",
+    "width": 6124,
+    "height": 4082,
+    "widths": [
+      640,
+      1280,
+      1920,
+      2560
+    ],
+    "lqip": "data:image/webp;base64,UklGRnoAAABXRUJQVlA4IG4AAAAwAgCdASoQAAsAA4BaJQBOgCPUDwZMJJvJoAD+grcdc5Txsexk8NEA+dcApgLKjTMFyKaCSDYO/1s8Jv+rG5nH0zom9GdYidqmIzW9LugYig2kkg8BCAfMgQ9QgcgK+GVYR6kQ73ZTMWsjNkAAAA==",
+    "source": "photos/landscape/IMG_0361.JPG"
+  },
+  {
+    "slug": "unattributed-img-0363-l46",
+    "key": "unattributed",
+    "title": "Unattributed",
+    "orientation": "landscape",
+    "width": 6124,
+    "height": 4082,
+    "widths": [
+      640,
+      1280,
+      1920,
+      2560
+    ],
+    "lqip": "data:image/webp;base64,UklGRmAAAABXRUJQVlA4IFQAAADwAQCdASoQAAsAA4BaJZgCdACwDeH84AAA/K/xPRPMISnnn8WH+Ywsj0XpDobz5u5hFTRcQJnL0xYDliVPD6ziZVVB1UGNLISf/rzv9IsPUNSAAAA=",
+    "source": "photos/landscape/IMG_0363.JPG"
+  },
+  {
+    "slug": "unattributed-img-1879-l47",
+    "key": "unattributed",
+    "title": "Unattributed",
+    "orientation": "landscape",
+    "width": 6000,
+    "height": 4000,
+    "widths": [
+      640,
+      1280,
+      1920,
+      2560
+    ],
+    "lqip": "data:image/webp;base64,UklGRngAAABXRUJQVlA4IGwAAABwAgCdASoQAAsAA4BaJZgCdIExgtyAS7PxpkAAAP7vj2MRLeggg2qXEMY50E2LesIfrm86rNpe1HWsMfv9BSwTu+wPb7GYOkDaxJaaL/EfWt/njgLRaRppbAuqisz34V6CDdvRUBEw/ZjzQAA=",
+    "source": "photos/landscape/IMG_1879.JPG"
+  },
+  {
+    "slug": "unattributed-img-1891-l48",
+    "key": "unattributed",
+    "title": "Unattributed",
+    "orientation": "landscape",
+    "width": 6000,
+    "height": 4000,
+    "widths": [
+      640,
+      1280,
+      1920,
+      2560
+    ],
+    "lqip": "data:image/webp;base64,UklGRnAAAABXRUJQVlA4IGQAAADwAQCdASoQAAsAA4BaJbACdAEN3bpPXAAA/k+Klaffw0qlJ+dpUKiE5+gCc2qncJCdynesPNPz70zVREF6pljPUE2aT/e/YOnxOMztavUZWllgojbXOY+Yk+V+Fu0jZQCSAAAA",
+    "source": "photos/landscape/IMG_1891.JPG"
+  },
+  {
+    "slug": "unattributed-img-2205-l49",
+    "key": "unattributed",
+    "title": "Unattributed",
+    "orientation": "landscape",
+    "width": 4608,
+    "height": 3072,
+    "widths": [
+      640,
+      1280,
+      1920,
+      2560
+    ],
+    "lqip": "data:image/webp;base64,UklGRmgAAABXRUJQVlA4IFwAAAAwAgCdASoQAAsAA4BaJZQAAn3LvjOEmNRAQAD+l/hgF7OgtQYfAfWGYEV9Z/Vb1kq6+51yj8ZIi0DndGgNjYZvkhqaC+4q1rQleNip5XpLR5lJdaujG2M4B4AAAA==",
+    "source": "photos/landscape/IMG_2205.JPG"
+  },
+  {
+    "slug": "unattributed-img-2469-l50",
+    "key": "unattributed",
+    "title": "Unattributed",
+    "orientation": "landscape",
+    "width": 6000,
+    "height": 4000,
+    "widths": [
+      640,
+      1280,
+      1920,
+      2560
+    ],
+    "lqip": "data:image/webp;base64,UklGRlwAAABXRUJQVlA4IFAAAADwAQCdASoQAAsAA4BaJYgCdADHXOxg6AAA4n4zrUnqTc6H/cwiMajPD5/1hFx3k3EIMJ5r1oU9+3Dpmoy0NnYNqiAV1VHnU78WqtOs5cAAAA==",
+    "source": "photos/landscape/IMG_2469.JPG"
+  },
+  {
+    "slug": "unattributed-img-2595-l51",
+    "key": "unattributed",
+    "title": "Unattributed",
+    "orientation": "landscape",
+    "width": 6124,
+    "height": 4082,
+    "widths": [
+      640,
+      1280,
+      1920,
+      2560
+    ],
+    "lqip": "data:image/webp;base64,UklGRm4AAABXRUJQVlA4IGIAAADQAQCdASoQAAsAA4BaJbACdACgxv69WAD+W/4tZ+LXa+GBWHsi1c9f7E+70pC/Uu0lOL7dJ4+zPf9F+lmBkCpAVxojeA0hUYrDe3E602AsDcwOCjVN96cClXpfBa19FwkAAA==",
+    "source": "photos/landscape/IMG_2595.JPG"
+  },
+  {
+    "slug": "unattributed-img-4095-l52",
+    "key": "unattributed",
+    "title": "Unattributed",
+    "orientation": "landscape",
+    "width": 6124,
+    "height": 4083,
+    "widths": [
+      640,
+      1280,
+      1920,
+      2560
+    ],
+    "lqip": "data:image/webp;base64,UklGRmgAAABXRUJQVlA4IFwAAAAwAgCdASoQAAsAA4BaJQBOgCPz9jS/0RJWgAD97Yreyg/ppTuL/znY+oUDVANX61A3yBL4ubz7sw6gsKrC0Ve1z3p50XNzqbk9PEntveWas4ebVtIaVg2II4AAAA==",
+    "source": "photos/landscape/IMG_4095.JPG"
+  },
+  {
+    "slug": "unattributed-img-4098-l53",
+    "key": "unattributed",
+    "title": "Unattributed",
+    "orientation": "landscape",
+    "width": 6124,
+    "height": 4082,
+    "widths": [
+      640,
+      1280,
+      1920,
+      2560
+    ],
+    "lqip": "data:image/webp;base64,UklGRm4AAABXRUJQVlA4IGIAAADQAQCdASoQAAsAA4BaJQBOgBjUQmzxwADOMiRQc/77ReCSL9P0eOFFpAqpS7lPCiWmK8skssq5j2lGJFpSwdvxsE8YnTr37V1IX4LMuKOCC3NP5aoxkKRlLeYpD3g9SJuAAA==",
+    "source": "photos/landscape/IMG_4098.JPG"
+  },
+  {
+    "slug": "unattributed-img-4155-l54",
+    "key": "unattributed",
+    "title": "Unattributed",
+    "orientation": "landscape",
+    "width": 6124,
+    "height": 4082,
+    "widths": [
+      640,
+      1280,
+      1920,
+      2560
+    ],
+    "lqip": "data:image/webp;base64,UklGRnIAAABXRUJQVlA4IGYAAABwAgCdASoQAAsAA4BaJYwCsAYs3y57F7bXP7WAAP73QFTJH3SqAf45ncU8KviUf7FB155d1DO2nLNILJm+mAT552/mAfk7l+eq1C0sxKK30OmEn01WE7D+o+Cubye33xy0nq2CcAA=",
+    "source": "photos/landscape/IMG_4155.JPG"
+  },
+  {
+    "slug": "unattributed-img-4159-l55",
+    "key": "unattributed",
+    "title": "Unattributed",
+    "orientation": "landscape",
+    "width": 6124,
+    "height": 4082,
+    "widths": [
+      640,
+      1280,
+      1920,
+      2560
+    ],
+    "lqip": "data:image/webp;base64,UklGRnIAAABXRUJQVlA4IGYAAABwAgCdASoQAAsAA4BaJYwCdIMggny/0042nhwAAPQNWNZ3OfrJUtAMtyqosj4SL/gHecf7pZ6qhilAq9Ymy+OfMMPZIAT8pZWVGUpHKV7CPUueTk3f3Vf7YTl8dkEdGcWv3kabQAA=",
+    "source": "photos/landscape/IMG_4159.JPG"
+  },
+  {
+    "slug": "unattributed-img-4163-l56",
+    "key": "unattributed",
+    "title": "Unattributed",
+    "orientation": "landscape",
+    "width": 5925,
+    "height": 4082,
+    "widths": [
+      640,
+      1280,
+      1920,
+      2560
+    ],
+    "lqip": "data:image/webp;base64,UklGRnAAAABXRUJQVlA4IGQAAADwAQCdASoQAAsAA4BaJQBOgBjMsbkNK0AA99/sgR70ZNPs0/8jywZnJ+PJGZGwaFv+yizltOirlBokt+5U54iIzn8Q8LR4U7xmuwuOZQ9Y4HU5ms31NUtYgu8f+S+F+LNG8AAA",
+    "source": "photos/landscape/IMG_4163.JPG"
+  },
+  {
+    "slug": "unattributed-img-4164-l57",
+    "key": "unattributed",
+    "title": "Unattributed",
+    "orientation": "landscape",
+    "width": 6124,
+    "height": 4082,
+    "widths": [
+      640,
+      1280,
+      1920,
+      2560
+    ],
+    "lqip": "data:image/webp;base64,UklGRnIAAABXRUJQVlA4IGYAAABQAgCdASoQAAsAA4BaJQBOkCYjGTzlvNjuHAAA4n+p3OuGMsmmSOztAZheb/Qn8tXJIxz1WMyFBRwXAADsvJz9e/BS3RbensnGsD8D96qIa/A8hs52cVdZlMtyZEXfEn6RsyAAAAA=",
+    "source": "photos/landscape/IMG_4164.JPG"
+  },
+  {
+    "slug": "unattributed-img-4193-l58",
+    "key": "unattributed",
+    "title": "Unattributed",
+    "orientation": "landscape",
+    "width": 6124,
+    "height": 4082,
+    "widths": [
+      640,
+      1280,
+      1920,
+      2560
+    ],
+    "lqip": "data:image/webp;base64,UklGRmwAAABXRUJQVlA4IGAAAAAQAgCdASoQAAsAA4BaJaACw7D8tXub/egAAPzIQwWCA+zyv9qru+TQrscsv914cNU3aCc7gZtxahQEqtZKgu5zG1asrrptPh6/9WFWVuRdXt0AO+AoTrH+qWbl7wAAAAA=",
+    "source": "photos/landscape/IMG_4193.JPG"
+  },
+  {
+    "slug": "unattributed-gam00048-p01",
+    "key": "unattributed",
+    "title": "Unattributed",
     "orientation": "portrait",
     "width": 4000,
     "height": 6000,
@@ -937,13 +974,13 @@ export const PORTFOLIO_IMAGES: PortfolioImage[] = [
       1920,
       2560
     ],
-    "lqip": "data:image/webp;base64,UklGRrAAAABXRUJQVlA4IKQAAACQBACdASoQABgAPu1iqU2ppaOiMAgBMB2JZwDImYwmxfpRgu2FDP7OVTVfeAAA/VLW/nnod6/YfB3hdYGsmuOYPfYiWtyqNRWbhQY452zJ3dRWF+uApxEyEa2AUbs2lXfO1jZzYF6+TWDcPOEFlqzed6IgI+Xbb4Zs2OBBKHPEP2wpwejXb6tulye2na0HGiD42uauqla22/RBsqdwtUfr1QSAAA==",
-    "source": "photos/portrait/001_bombay_cot78_Design.jpg"
+    "lqip": "data:image/webp;base64,UklGRpwAAABXRUJQVlA4IJAAAAAQBACdASoQABgAPu1iqU2ppaOiMAgBMB2JZQDE2B4kRTMaAeuyR5arkAD+jUaq2bh0anzC2TCy5w81ly7TNF8Ef76oDdocflAFKPubW5qSr/XQlpGbue6CCeMOw46e6R6xMP79oeP5LLkjzE/V3qzUhBgCp7Qnhj+qjhI9pZzi/ssAEPC+lW9P0iKbMWKAAAA=",
+    "source": "photos/portrait/GAM00048.jpg"
   },
   {
-    "slug": "design-hueshome-p02",
-    "key": "Design_HuesHome",
-    "title": "Design Hues Home",
+    "slug": "unattributed-gam00062-p02",
+    "key": "unattributed",
+    "title": "Unattributed",
     "orientation": "portrait",
     "width": 4000,
     "height": 6000,
@@ -953,13 +990,13 @@ export const PORTFOLIO_IMAGES: PortfolioImage[] = [
       1920,
       2560
     ],
-    "lqip": "data:image/webp;base64,UklGRn4AAABXRUJQVlA4IHIAAADwAwCdASoQABgAPu1iqU2ppaOiMAgBMB2JZwAAUm9Ito7r1Pwm5cegAP6NP246mzw1nDhc6KyJSPsy2x8jhcsKdbFvZsIKsCO8tn9mbD8cw0kJywgytXJLbB+wSZpOMQxgIZaZK9Ial5feYfH3d4uAAAA=",
-    "source": "photos/portrait/002_Design_HuesHome.jpg"
+    "lqip": "data:image/webp;base64,UklGRqoAAABXRUJQVlA4IJ4AAABwBACdASoQABgAPu1kqk4ppaQiMAgBMB2JYgAFgBF/iD/a/o7ZHfrdSWEBYAD8XV8bmJrAmuyOIecj6w3kZaJwwlpi2QOu3AA7HcGqayRC0VHNtywXMFcBT+9OtRmsQ95x3kXbL+gJQXR6c5unuyeW79jqpp2SdPqtzXwLCKG50NcBhN9abLb/9qlNALjy2WAaRkqAHqrHt1N3sHQAAA==",
+    "source": "photos/portrait/GAM00062.jpg"
   },
   {
-    "slug": "priyadahaus-p03",
-    "key": "PriyaDahaus",
-    "title": "Priya Dahaus",
+    "slug": "unattributed-gam00130-p03",
+    "key": "unattributed",
+    "title": "Unattributed",
     "orientation": "portrait",
     "width": 4000,
     "height": 6000,
@@ -969,13 +1006,13 @@ export const PORTFOLIO_IMAGES: PortfolioImage[] = [
       1920,
       2560
     ],
-    "lqip": "data:image/webp;base64,UklGRo4AAABXRUJQVlA4IIIAAADQAwCdASoQABgAPu1kqU2ppaOiMAgBMB2JYwDE2GleyoY7hmOhw+gA/vunKLg7IpJUe5f9T4zOc5a37XhnQNmKyietiDirwTM2pjtVYBfaexvykytIxz0GGiL0SUnKvOfFhMc2o5l9wQY6T0DvKRJ0/fqQ2t3WsJZte6kPSqZCWQAA",
-    "source": "photos/portrait/003_PriyaDahaus.jpg"
+    "lqip": "data:image/webp;base64,UklGRooAAABXRUJQVlA4IH4AAADwAwCdASoQABgAPu1iqU2ppaOiMAgBMB2JZQC7AB09Y+Vk7tVgLCAAAP7ib1oE5ieDrXZrdtOki8aySDSnEQSw3N2uON3szpWAz/PgXDk46wcVomSKQEZDNMM2NQb2htUCfhD7Kewm2OfN7a7J3QSnQrf4XIt8U+ZHcV8AAAA=",
+    "source": "photos/portrait/GAM00130.jpg"
   },
   {
-    "slug": "kea-design-labdahisar-p04",
-    "key": "KEA_Design_LabDahisar",
-    "title": "KEA Design Lab Dahisar",
+    "slug": "unattributed-gam00138-p04",
+    "key": "unattributed",
+    "title": "Unattributed",
     "orientation": "portrait",
     "width": 4000,
     "height": 6000,
@@ -985,13 +1022,29 @@ export const PORTFOLIO_IMAGES: PortfolioImage[] = [
       1920,
       2560
     ],
-    "lqip": "data:image/webp;base64,UklGRr4AAABXRUJQVlA4ILIAAADwAwCdASoQABgAPu1iqU2ppaOiMAgBMB2JQBOkDgAt235LYuwi8rqAAP7JcXiAN8U1J3eUaHNZP7PY/KohftZJeGe3jPaURTb7J5SQe8lAONk+tSIShfjlbA3R8bigDWF6K3xslmtcK444baDCO71k1f6e2qktlLp1lMRPjMMidAI9YfD3T2WKNexPvuPFlYVZfMd51RSsqa0yhrz35aYqtXVdk6hVV+WcOgoapha5IAAA",
-    "source": "photos/portrait/004_KEA_Design_LabDahisar.jpg"
+    "lqip": "data:image/webp;base64,UklGRpYAAABXRUJQVlA4IIoAAADQAwCdASoQABgAPu1kqk4ppaQiMAgBMB2JZwC/OCDiS/f7pNhoC4AA/mbV5XDbvekrSyRjEfyRSlK6wXxjAj4gfJdTFaocxrX1dFx/u7Ju+aYhN8R7lS70mD4fHVV1gHXxffxbd9stGUYwjfx3IicQkhiB7U90lIWjgT1wMU4rjwCGAXRPrtGgAAA=",
+    "source": "photos/portrait/GAM00138.jpg"
   },
   {
-    "slug": "omkar-beaumonte-p05",
-    "key": "Omkar_Beaumonte",
-    "title": "Omkar Beaumonte",
+    "slug": "unattributed-img-0100-p05",
+    "key": "unattributed",
+    "title": "Unattributed",
+    "orientation": "portrait",
+    "width": 3907,
+    "height": 5844,
+    "widths": [
+      640,
+      1280,
+      1920,
+      2560
+    ],
+    "lqip": "data:image/webp;base64,UklGRroAAABXRUJQVlA4IK4AAABQBACdASoQABgAPu1iqU2ppaOiMAgBMB2JYwC7ACPgnJ43wUj8yYhNaagAAPff0frhHBOVdK/JSpwKUXOruOGMnbQn0NMwe5tyM1OWwa1KBkK+vgV3xk4pmPQNTeQGFQcfeQfALSNxvXSlmeEWqWy/1zHbl6THyrur9AZe4jlLiD5B+ZJ6VpCM8L5AvsISYm1V+cHO0XsExUT/S4TpXmMPQBQG+WiJ3TIh3MQsAAA=",
+    "source": "photos/portrait/IMG_0100.JPG"
+  },
+  {
+    "slug": "unattributed-img-0102-p06",
+    "key": "unattributed",
+    "title": "Unattributed",
     "orientation": "portrait",
     "width": 4000,
     "height": 6000,
@@ -1001,13 +1054,13 @@ export const PORTFOLIO_IMAGES: PortfolioImage[] = [
       1920,
       2560
     ],
-    "lqip": "data:image/webp;base64,UklGRm4AAABXRUJQVlA4IGIAAADwAwCdASoQABgAPu1kqk4ppaQiMAgBMB2JYwCo9CHe72ILtsQ5owqAAP7jC5Sfx9xkuHGJEmhkdMU065+UZRB0ouLTVm+eJm5yX88nxi4+eb6DaDKTxfzIwTbBUhVsZMAAAA==",
-    "source": "photos/portrait/005_Omkar_Beaumonte.jpg"
+    "lqip": "data:image/webp;base64,UklGRrQAAABXRUJQVlA4IKgAAAAwBACdASoQABgAPu1iqU2ppaOiMAgBMB2JZgCdAB9xS4oheVNz55epxQAA/qLOumnUDJc3kfR7CL3G+ltL0DyH96QCSgPqHb98Khgf02u1EuBIEsk63D+T4wyXNgz+D4O0kMlEy+0xbxPcJvLknlajR/QSP6KzsX2kVOvOkTfBeN/WMzgP5R28b87EUdSq0X8LsuElGH+u/nZV++wJ3DqlDU14Xk8AAAA=",
+    "source": "photos/portrait/IMG_0102.JPG"
   },
   {
-    "slug": "arzoo-jain2bhk-p06",
-    "key": "Arzoo_Jain2bhk",
-    "title": "Arzoo Jain2bhk",
+    "slug": "unattributed-img-0111-p07",
+    "key": "unattributed",
+    "title": "Unattributed",
     "orientation": "portrait",
     "width": 4000,
     "height": 6000,
@@ -1017,13 +1070,61 @@ export const PORTFOLIO_IMAGES: PortfolioImage[] = [
       1920,
       2560
     ],
-    "lqip": "data:image/webp;base64,UklGRnQAAABXRUJQVlA4IGgAAADwAwCdASoQABgAPu1iqk4ppaQiMAgBMB2JZQC7ABret68b9mGNPmiAAP7D/ouqCMxIDIPhLLHekS1/rGe7puwNnjWJV++pCGRDX69rcjyt5hdvL2i+olFLg7XSUAvVjcFKtMhDaoAAAA==",
-    "source": "photos/portrait/006_Arzoo_Jain2bhk.jpg"
+    "lqip": "data:image/webp;base64,UklGRoAAAABXRUJQVlA4IHQAAADwAwCdASoQABgAPu1iqU2ppaOiMAgBMB2JQBWAAx3nh+TTPJYoDx6AAP65/nSdxuInkVBzTXAbn32koactgfrMbgYxzoVYlsKF8N/mE845DaWRQBG4AgCB3T6sIMGz74RI9/b3/zz2zqXcG6coBEhaCAAAAA==",
+    "source": "photos/portrait/IMG_0111.JPG"
   },
   {
-    "slug": "mahimdesign-hive-p07",
-    "key": "MahimDesign_Hive",
-    "title": "Mahim Design Hive",
+    "slug": "unattributed-img-0169-p08",
+    "key": "unattributed",
+    "title": "Unattributed",
+    "orientation": "portrait",
+    "width": 3083,
+    "height": 4000,
+    "widths": [
+      640,
+      1280,
+      1920,
+      2560
+    ],
+    "lqip": "data:image/webp;base64,UklGRp4AAABXRUJQVlA4IJIAAACQBACdASoQABUAPu1iqU2ppaOiMAgBMB2JQBdkBwj/FSAJTz9erJT2ckEgRgAA/k7pNGxOinlDEqRqITOggUtwaAnKwsJYth5LtL+TI1DZ+KzO9WxoCUu4ARe/LveqTYoE61lMkitGksqXnK+fs+Hslde/jX8vXpXfHN9i8yQG7o4e1TV4gQ1asbFJnGcMYGAAAA==",
+    "source": "photos/portrait/IMG_0169.JPG"
+  },
+  {
+    "slug": "unattributed-img-0174-p09",
+    "key": "unattributed",
+    "title": "Unattributed",
+    "orientation": "portrait",
+    "width": 3739,
+    "height": 5734,
+    "widths": [
+      640,
+      1280,
+      1920,
+      2560
+    ],
+    "lqip": "data:image/webp;base64,UklGRqAAAABXRUJQVlA4IJQAAAAwBACdASoQABkAPu1iqU2ppaOiMAgBMB2JQBOgO6MfLzd8aC3Jvbm6TlAA/Ef6wNY7Adc7YknJbq6ZRNL4umrAjfwGLGSgC4MDZx67Nheqoemddesm3Kg2KZhPAnju5wX1a9n1WAStc5GZ9QPrUYdBrQ9pND2vGSreFAnyYoqO/Kqykrg+fIWDhTUoYzLAvx1tgAAA",
+    "source": "photos/portrait/IMG_0174.JPG"
+  },
+  {
+    "slug": "unattributed-img-0181-p10",
+    "key": "unattributed",
+    "title": "Unattributed",
+    "orientation": "portrait",
+    "width": 3915,
+    "height": 6000,
+    "widths": [
+      640,
+      1280,
+      1920,
+      2560
+    ],
+    "lqip": "data:image/webp;base64,UklGRrYAAABXRUJQVlA4IKoAAABwBACdASoQABkAPu1oqk6ppiQiMAgBMB2JYgCdAYxYyTxTM0JMauYwQBZ70AD+w9jev+1fLH9rUEZbBAgL34rg2BmWIhMQ9FuqyocZuqw4IHmwptHMalKgSaIQeivjKz/SezqmZKAPUnOX16pXtdPbMKmmjqXMAyHa5BXyzMK4T3uzqqrrj7rZHHK1rsLSZoPCjOd3m8tPzm41GYfOzxR4Ev82vXX7pjQAAA==",
+    "source": "photos/portrait/IMG_0181.JPG"
+  },
+  {
+    "slug": "unattributed-img-0191-p11",
+    "key": "unattributed",
+    "title": "Unattributed",
     "orientation": "portrait",
     "width": 4000,
     "height": 6000,
@@ -1033,13 +1134,29 @@ export const PORTFOLIO_IMAGES: PortfolioImage[] = [
       1920,
       2560
     ],
-    "lqip": "data:image/webp;base64,UklGRqAAAABXRUJQVlA4IJQAAACwBACdASoQABgAPu1iqU2ppaOiMAgBMB2JYwC7BHAKYAW14HEdsLiBVESTaswAAP7hmEiw+L5j5cEm47BOcuCfRxORka80pypbyv2Aizqx1yhUzfehnUyGbYW3KXmFaIUyH0Y3msS6hRQxpgRI/iWPuaFMYpctO3fNCLiHJaYiihAJk2TM4v9tUWET3kQZ3s3LsPgA",
-    "source": "photos/portrait/008_MahimDesign_Hive.jpg"
+    "lqip": "data:image/webp;base64,UklGRpoAAABXRUJQVlA4II4AAADwAwCdASoQABgAPu1iqU2ppaOiMAgBMB2JbACdABpBykvaq9UrtnyAAPetDZrJYhcUayMtJxMIqNZFoQXRM9lvcf4w9j8Q7jqyg+4tj5Izfal8gWshrwu+vBahSj1mAmshHMwJPst2OIsgdIedjR90jlDtTAOfPnJaYrwQUSHIxIsrRTW1ryt0+2wMOAAA",
+    "source": "photos/portrait/IMG_0191.JPG"
   },
   {
-    "slug": "omkar2bhk-pune-p08",
-    "key": "Omkar2bhk_Pune",
-    "title": "Omkar2bhk Pune",
+    "slug": "unattributed-img-0192-p12",
+    "key": "unattributed",
+    "title": "Unattributed",
+    "orientation": "portrait",
+    "width": 3453,
+    "height": 5994,
+    "widths": [
+      640,
+      1280,
+      1920,
+      2560
+    ],
+    "lqip": "data:image/webp;base64,UklGRooAAABXRUJQVlA4IH4AAADwAwCdASoQABwAPu1kq04ppaQiMAgBMB2JQBUfbwA1V5FdN1SroYIAAPxdOqIbtmTi/J/YXrnAQGGCri4LZRTWACo1zvcMqZE+WEKLSku+TK584FV8SJUwqUc9ajjE+KWJgLo1zOuXDi3L3BBkJmZKTMZYxY4McJT6YTjcAAA=",
+    "source": "photos/portrait/IMG_0192.JPG"
+  },
+  {
+    "slug": "unattributed-img-0211-p13",
+    "key": "unattributed",
+    "title": "Unattributed",
     "orientation": "portrait",
     "width": 4672,
     "height": 7008,
@@ -1049,13 +1166,13 @@ export const PORTFOLIO_IMAGES: PortfolioImage[] = [
       1920,
       2560
     ],
-    "lqip": "data:image/webp;base64,UklGRpAAAABXRUJQVlA4IIQAAAAwBACdASoQABgAPu1iqU2ppaQiMAgBMB2JZQCdAB6W6ThbiAnFSSPqFIQA/u6gRVwYnEtbDn5F2Y3GQh6tRpVSOZVStLiXimFEF02y0q7aBel/s3GpuR0T3BwqOpLNUdopBcgf7DBWCdiRvGuJ4nY2M0Rm5+fxDIL1Bfnhnv2ZTRA4AAA=",
-    "source": "photos/portrait/009_Omkar2bhk_Pune.tif"
+    "lqip": "data:image/webp;base64,UklGRoYAAABXRUJQVlA4IHoAAABQBACdASoQABgAPu1iqU2ppaOiMAgBMB2JbACdL1G4ACZ2sUaCnSQPRq5AAO2pVLAUYroIUs/rGlkQJAUiSPpselKJuVIcU9ChOGQzlDsH6IXkMByUDU+GBeuNosQlAXMjvlgqqdPz/k9toVT2e0OQguBN9dsmAiRgAA==",
+    "source": "photos/portrait/IMG_0211.JPG"
   },
   {
-    "slug": "omkarpune-office-p09",
-    "key": "OmkarPune_Office",
-    "title": "Omkar Pune Office",
+    "slug": "unattributed-img-0241-p14",
+    "key": "unattributed",
+    "title": "Unattributed",
     "orientation": "portrait",
     "width": 4000,
     "height": 6000,
@@ -1065,157 +1182,29 @@ export const PORTFOLIO_IMAGES: PortfolioImage[] = [
       1920,
       2560
     ],
-    "lqip": "data:image/webp;base64,UklGRpoAAABXRUJQVlA4II4AAACQBACdASoQABgAPu1iqU2ppaOiMAgBMB2JZACdOUE4AAjaRFL9pTCCs8/7D0AAzeXk5affTOSNYeG0ws5YM8hEYO4buuGGekRbYHMC+zTAncSzlBjxe2tNzrddeRS0OtNPS2J575IpJm4Dsv7rvqqdLMWmiOPCvNnEUdM3SzpxVUqZ5bAxLTOXRCRFAAAA",
-    "source": "photos/portrait/010_OmkarPune_Office.tif"
+    "lqip": "data:image/webp;base64,UklGRmwAAABXRUJQVlA4IGAAAADwAwCdASoQABgAPu1kq04ppaQiMAgBMB2JZgCdMoADTrI8d/kMVQbAAP70J9Gf2aq7M++PdeUvpz5qd7WpHNU38xsnFKiWb7LMirUxQ4AgkERlBfgQKrR8svRxRiQAAAA=",
+    "source": "photos/portrait/IMG_0241.JPG"
   },
   {
-    "slug": "78-design-studiounicot-p10",
-    "key": "78_Design_StudioUnicot",
-    "title": "78 Design Studio Unicot",
+    "slug": "unattributed-img-0250-p15",
+    "key": "unattributed",
+    "title": "Unattributed",
     "orientation": "portrait",
-    "width": 4000,
-    "height": 6000,
+    "width": 3636,
+    "height": 5721,
     "widths": [
       640,
       1280,
       1920,
       2560
     ],
-    "lqip": "data:image/webp;base64,UklGRoYAAABXRUJQVlA4IHoAAAAwBACdASoQABgAPu1iqU2ppaQiMAgBMB2JQBOmUABElI7H5gUclkeyEAAA/dJYqT98ihWaqWDCaMA2hDuW4LyNgQTySQ2VET739JS0UYBrkMVi8Cb5FHfdAH/1GX4noyLoEyin698FjQSgl44QJvJC9IkxgAQs6gAAAA==",
-    "source": "photos/portrait/011_78_Design_StudioUnicot.jpg"
+    "lqip": "data:image/webp;base64,UklGRpgAAABXRUJQVlA4IIwAAACwBACdASoQABkAPu1iqU2ppaOiMAgBMB2JaACdMoR3Az6j02cJwMkrzpvG77dgAP7l9kjx/36poIWbQ9+gEgOA5+HNuuCgKmazrIGF2rYigh0qnBjaAYTITs5YjpcAx64T3k0B8bW81VFXaGmWikgJlQU37Oe/+L0Mpf0Q6+Ym+GNuNNRwOgCmTFSAAA==",
+    "source": "photos/portrait/IMG_0250.JPG"
   },
   {
-    "slug": "78-design-lodha-p11",
-    "key": "78_Design_Lodha",
-    "title": "78 Design Lodha",
-    "orientation": "portrait",
-    "width": 4000,
-    "height": 6000,
-    "widths": [
-      640,
-      1280,
-      1920,
-      2560
-    ],
-    "lqip": "data:image/webp;base64,UklGRnAAAABXRUJQVlA4IGQAAAAwBACdASoQABgAPu1kq04ppaQiMAgBMB2JZQC7ACHh9NMq/YUYXZ0oAgAA3idGvvEbKmhPaRavkJeZqmdvnPSTJyW8m7SqlNuxF0jvL2qKnHz8gIsjQYBRKyh9bZLK2f2jWAAA",
-    "source": "photos/portrait/012_78_Design_Lodha.jpg"
-  },
-  {
-    "slug": "dorityversova-p12",
-    "key": "DorityVersova",
-    "title": "Dority Versova",
-    "orientation": "portrait",
-    "width": 4000,
-    "height": 6000,
-    "widths": [
-      640,
-      1280,
-      1920,
-      2560
-    ],
-    "lqip": "data:image/webp;base64,UklGRmwAAABXRUJQVlA4IGAAAACwAwCdASoQABgAPu1krU2ppaSiMAgBMB2JZACdAB5NolaFs8ajAAD9H4PL49XC9Hq+t+w9bglZ5jPaREJHGsjWbiP6rIQk8RoDBZbKjCuJzNgUfwcM6zqcWGJr58tKgAA=",
-    "source": "photos/portrait/013_DorityVersova.jpeg"
-  },
-  {
-    "slug": "naitiklodha-bellisimo-p13",
-    "key": "NaitikLodha_Bellisimo",
-    "title": "Naitik Lodha Bellisimo",
-    "orientation": "portrait",
-    "width": 4000,
-    "height": 6000,
-    "widths": [
-      640,
-      1280,
-      1920,
-      2560
-    ],
-    "lqip": "data:image/webp;base64,UklGRp4AAABXRUJQVlA4IJIAAAAwBACdASoQABgAPu1iqU2ppaOiMAgBMB2JQBbZA0eX4sHlLnHvC25HSAAA4m0gxsXzNhL9tk/Ox6bc7IGof/iTgzAKk5+bbdhx5pQJrEY3Cu8/Bvg4W5STcXO16JHiSTwbBO/5JT5a3WM/PSeWUaordXKskhA9fsOU5n6JO0dshvd61fu/btJ9OwPztkgL3tIAAA==",
-    "source": "photos/portrait/014_NaitikLodha_Bellisimo.jpg"
-  },
-  {
-    "slug": "naitik-shahsky-forest-2-p14",
-    "key": "Naitik_ShahSky_Forest_[2]",
-    "title": "Naitik Shah Sky Forest",
-    "orientation": "portrait",
-    "width": 4000,
-    "height": 6000,
-    "widths": [
-      640,
-      1280,
-      1920,
-      2560
-    ],
-    "lqip": "data:image/webp;base64,UklGRoYAAABXRUJQVlA4IHoAAAAQBACdASoQABgAPu1mqk2ppaQiMAgBMB2JYgCdAGlwpBq+AyM1YMx8AAD+9qkoXMaF4qKh5rKy6w8J3vpUDDmsTMiX+kcduMmUNywxzaGbS77Ce1SQIzOjdflsoK7xaFtpjtOpRd6vEljqtjn6qd3bWoQvN8alYLfAAA==",
-    "source": "photos/portrait/015_Naitik_ShahSky_Forest_[2].jpeg"
-  },
-  {
-    "slug": "sky-forestnaitik-shah-p15",
-    "key": "Sky_ForestNaitik_Shah",
-    "title": "Sky Forest Naitik Shah",
-    "orientation": "portrait",
-    "width": 4000,
-    "height": 6000,
-    "widths": [
-      640,
-      1280,
-      1920,
-      2560
-    ],
-    "lqip": "data:image/webp;base64,UklGRmAAAABXRUJQVlA4IFQAAACQAwCdASoQABgAPu1iqk2ppaQiMAgBMB2JYwCdACG+tlKtkBNKAP7ZEUHTIKZRj1WGBkZBLVt4I0NsUHczUpEIxt+vNShWepgpYOkyTBo0BFCqeAA=",
-    "source": "photos/portrait/016_Sky_ForestNaitik_Shah.jpg"
-  },
-  {
-    "slug": "omkarakshar-p16",
-    "key": "OmkarAkshar",
-    "title": "Omkar Akshar",
-    "orientation": "portrait",
-    "width": 4651,
-    "height": 6976,
-    "widths": [
-      640,
-      1280,
-      1920,
-      2560
-    ],
-    "lqip": "data:image/webp;base64,UklGRrAAAABXRUJQVlA4IKQAAACQBACdASoQABgAPu1iqU2ppaOiMAgBMB2JQBYhiYwYYy+JHvnnNJBeZGa1RJAA/MhQmR3qjke5nCFdYAxliLx/zfrB4+gKKP57OkYWnE/qx4EgKUptCA1NvXluzrAltbxu3RY4UUHi+Wm7GXS87KomVUa9Rux57q8WjqX8YN0TruIUdejTh7NPKWP+Tm4FpqPuk69fbEGTFReHZg5MJVYdhwAAAA==",
-    "source": "photos/portrait/017_OmkarAkshar.jpg"
-  },
-  {
-    "slug": "shyam-nivas-monisha-mistry-p17",
-    "key": "Shyam_Nivas_Monisha_Mistry",
-    "title": "Shyam Nivas Monisha Mistry",
-    "orientation": "portrait",
-    "width": 4000,
-    "height": 6000,
-    "widths": [
-      640,
-      1280,
-      1920,
-      2560
-    ],
-    "lqip": "data:image/webp;base64,UklGRoAAAABXRUJQVlA4IHQAAADwAwCdASoQABgALrV2u12jqampiYC0SygF2AIeAmH06TQ/WxGsfyiAAP71cOeBEMlXUmo3C2sqiGdMmkEy1WAZ8jnbwqnVDrbUReuSLdjcIVETKmW9Yvn6pj3MUxUo0cXZXa+BJZKSLwTLm4fj2/nkS4/QAA==",
-    "source": "photos/portrait/018_Shyam_Nivas_Monisha_Mistry.jpg"
-  },
-  {
-    "slug": "3mindperspectivelodha-m-p18",
-    "key": "3mindperspectiveLodha_M",
-    "title": "3mindperspective Lodha M",
-    "orientation": "portrait",
-    "width": 4000,
-    "height": 6000,
-    "widths": [
-      640,
-      1280,
-      1920,
-      2560
-    ],
-    "lqip": "data:image/webp;base64,UklGRpQAAABXRUJQVlA4IIgAAADwAwCdASoQABgAPu1iqU2ppaOiMAgBMB2JQBOmUABNBaQPGQhoMMegAP6rgDxfMVn05XiLCawUBqeo3UY/2n6nazeAGjRUOggpv4YMhE6x/PxuYWev44khwWGAa5RtWL8kNX+FNMFhTwk+btvc4s+c/eAVIrsdSg8+dijsnJLURfm2AYbE5ZAA",
-    "source": "photos/portrait/019_3mindperspectiveLodha_M.jpg"
-  },
-  {
-    "slug": "78-designsmahim-p19",
-    "key": "78_DesignsMahim",
-    "title": "78 Designs Mahim",
+    "slug": "unattributed-img-0256-p16",
+    "key": "unattributed",
+    "title": "Unattributed",
     "orientation": "portrait",
     "width": 4672,
     "height": 7008,
@@ -1225,13 +1214,29 @@ export const PORTFOLIO_IMAGES: PortfolioImage[] = [
       1920,
       2560
     ],
-    "lqip": "data:image/webp;base64,UklGRpgAAABXRUJQVlA4IIwAAABQBACdASoQABgAPu1iqU2ppaQiMAgBMB2JYwCAAAk+blY3qjLfPU3O/LwAAP7U/nBKWNbJsrYxLPF9RWFyqZhtMHKVezvp6MGnPIotenNrDm5B94f3PgU+WFuGYZfmqKZn5p71MfkPkd3TZ3FBZoZ+ikpeLUNkR5MO+XPGwr3dPYphMjpLeSJ1pIAAAA==",
-    "source": "photos/portrait/020_78_DesignsMahim.jpg"
+    "lqip": "data:image/webp;base64,UklGRrQAAABXRUJQVlA4IKgAAADQBACdASoQABgAPu1iqU2ppaOiMAgBMB2JYgCdBaglAQh+sBQ54tDaPm05fadfEAD+oMTeRdUjv7EoanwS3jkIAFGRYSbSev9+c5meNX44fNQkuWFObsd5KuKh6ANQAJ5weuKQe7KCdjuI8iMNbkTdWnN7tAfSBi73QwD4JKKdLWCPSOSkeCraKMXN/xVEetUXs0zy5iiVffrBCknaKLkq/F4Pp/AyAAA=",
+    "source": "photos/portrait/IMG_0256.JPG"
   },
   {
-    "slug": "prachiborivali-p20",
-    "key": "PrachiBorivali",
-    "title": "Prachi Borivali",
+    "slug": "unattributed-img-0270-p17",
+    "key": "unattributed",
+    "title": "Unattributed",
+    "orientation": "portrait",
+    "width": 3893,
+    "height": 6000,
+    "widths": [
+      640,
+      1280,
+      1920,
+      2560
+    ],
+    "lqip": "data:image/webp;base64,UklGRpQAAABXRUJQVlA4IIgAAADQAwCdASoQABkAPu1iqU2ppaOiMAgBMB2JZACw7BIOYIRLfKp00AAA4SPqKETppW0/ZCp11YT46vDCylvUhGoR4t14qPnSp/AqePfmlWJkXgfmysU5tFn+ctmh4aN2czvkwPVFj3JbjlNRcygrv9J+OE0x1sbTUIvxGbuRnGWW3Yut/FUt9nAA",
+    "source": "photos/portrait/IMG_0270.JPG"
+  },
+  {
+    "slug": "unattributed-img-0272-p18",
+    "key": "unattributed",
+    "title": "Unattributed",
     "orientation": "portrait",
     "width": 4000,
     "height": 6000,
@@ -1241,13 +1246,29 @@ export const PORTFOLIO_IMAGES: PortfolioImage[] = [
       1920,
       2560
     ],
-    "lqip": "data:image/webp;base64,UklGRnYAAABXRUJQVlA4IGoAAADwAwCdASoQABgAPu1iqk2ppaQiMAgBMB2JZwDLLBuiLDsKB6NdvWOAAP3RQpOHTg6jxLI9ckC2I1som0r1/tvwiUcywSvGN0kD3vQ4hUlXgpE6T17H7GyEl/yceAgZk2KUCwcEhi3nz8AA",
-    "source": "photos/portrait/021_PrachiBorivali.jpg"
+    "lqip": "data:image/webp;base64,UklGRrIAAABXRUJQVlA4IKYAAABQBACdASoQABgAPu1iqU2ppaOiMAgBMB2JQBOmUABtUafv8IsQqZZkPLoAAP3jS2XU5zJFmqr7QAI6BANvN/QV5P+Jl3sqMlRxxO0hVQvkX2IMohFIFv+r7f+kefs+moBWGH7EXCrIxQ4mwht2iyu0Uru3f8HK2olxI/Xr+lzWpfgOURaCVPIm2fAQ1mCe0+iOoPad8IpeIUwwy4GEeG/AGkAzgAAA",
+    "source": "photos/portrait/IMG_0272.JPG"
   },
   {
-    "slug": "rahulthane-p21",
-    "key": "RahulThane",
-    "title": "Rahul Thane",
+    "slug": "unattributed-img-0277-p19",
+    "key": "unattributed",
+    "title": "Unattributed",
+    "orientation": "portrait",
+    "width": 4672,
+    "height": 7008,
+    "widths": [
+      640,
+      1280,
+      1920,
+      2560
+    ],
+    "lqip": "data:image/webp;base64,UklGRrAAAABXRUJQVlA4IKQAAABQBACdASoQABgAPu1iqU2ppaOiMAgBMB2JbACdMoACEVGC8qdlvkyY42kAAP5y9+DLULUffSwvKGN/i32bNx5+FhMVr9WIDTrfGYWe5Ay85b/xmQnnecKAyb3EF7EFCumdej2Fo9pX5CdTR860lXraNXk6nLGhWeoHcW/Rz9XNFWumplD0LutxXeMKguOP4fOeiQcD3l/rsPw3ZveRbyedvu2AAA==",
+    "source": "photos/portrait/IMG_0277.JPG"
+  },
+  {
+    "slug": "unattributed-img-0287-p20",
+    "key": "unattributed",
+    "title": "Unattributed",
     "orientation": "portrait",
     "width": 4000,
     "height": 6000,
@@ -1257,13 +1278,13 @@ export const PORTFOLIO_IMAGES: PortfolioImage[] = [
       1920,
       2560
     ],
-    "lqip": "data:image/webp;base64,UklGRqYAAABXRUJQVlA4IJoAAACwBACdASoQABgAPu1iqU2ppaOiMAgBMB2JbACdMoRwACxky238JIgm6iAeT0WAAPlCfSNIlPK8jAUbeu+ooH6BYk2h4xoS5yokAx/zdVLcVMzQlOi6gnhw8/dyBY7wS1c6v2U2tKJvt/d/pynQYsHhnPbT9nb8Mo8bA1Gc+xXc8PIRo7H24rxk1t3r4GCOaq/RmQwd20uUAAAA",
-    "source": "photos/portrait/022_RahulThane.jpg"
+    "lqip": "data:image/webp;base64,UklGRroAAABXRUJQVlA4IK4AAACQBACdASoQABgAPu1iqU2ppaOiMAgBMB2JQBOja/gLv9IV28mSXzQ1xmAeZgAA/Z0v2SuTy7EfsTzbZez0Y/wmcRGkFO9pU9iRMhHBdwuyY85aBsaomheZjX+FGxZ27ODQ0tuHJypF2ij1hGuluv6QJ0gnpU0vF/AMnKT9Purv5w/SFMEaVKCtlmaPBUa1WzqvB/bmEeC1lZXLekXeXPs1XI0jivFPnlTwNhJGrAA=",
+    "source": "photos/portrait/IMG_0287.JPG"
   },
   {
-    "slug": "tdhkitchen-mahim-p22",
-    "key": "TDHKitchen_Mahim",
-    "title": "TDHKitchen Mahim",
+    "slug": "unattributed-img-0332-p21",
+    "key": "unattributed",
+    "title": "Unattributed",
     "orientation": "portrait",
     "width": 4000,
     "height": 6000,
@@ -1273,13 +1294,29 @@ export const PORTFOLIO_IMAGES: PortfolioImage[] = [
       1920,
       2560
     ],
-    "lqip": "data:image/webp;base64,UklGRpoAAABXRUJQVlA4II4AAAAwBACdASoQABgAPu1iqU2ppaOiMAgBMB2JZQDE2CPM/NUS6i99SeouqoAAy08w90UIoMCrpEPlx5NJqIHqfo0WuE/dK/ySlg01dfnNStT6xVnla12rIWbZFXek1lMVoDQsn2ZhtUwNgIw7FGd154AQD80B5aFN2fmBvH3+NmL1Ry3aUrlDsKW7IDxpgwAA",
-    "source": "photos/portrait/023_TDHKitchen_Mahim.jpg"
+    "lqip": "data:image/webp;base64,UklGRp4AAABXRUJQVlA4IJIAAADQAwCdASoQABgAPu1iqU2ppaOiMAgBMB2JYgCdACGRyixD1aPUK7gA/tCiINmsszSFLBf4jNh7pQCrd4lqcBo1TCwwQzfGecA1GecF2roodEH5ebkJnVdZhmhZ+uy5Xqf8QnjAheAOjI1v2bxnmwNbrtWsih7n/auekVK6DtSgS0TClgS4Ww7ez4Wb6QII+IRIAA==",
+    "source": "photos/portrait/IMG_0332.JPG"
   },
   {
-    "slug": "zorkoborivali-p23",
-    "key": "ZorkoBorivali",
-    "title": "Zorko Borivali",
+    "slug": "unattributed-img-0336-p22",
+    "key": "unattributed",
+    "title": "Unattributed",
+    "orientation": "portrait",
+    "width": 4672,
+    "height": 7008,
+    "widths": [
+      640,
+      1280,
+      1920,
+      2560
+    ],
+    "lqip": "data:image/webp;base64,UklGRpoAAABXRUJQVlA4II4AAAAQBACdASoQABgAPu1iqU2ppaOiMAgBMB2JQBOmUABGuXKiUkpm7qVQgAD2cKb7ZhFZYGl+cvHkZF4WfVKrIepRxXnC7CUgx2zZTD9sxS5W9GgJCjWdf9m2L7H1IUy5zr//28SjZKB4hTK9IdJ6FW28XB6we1KqR6y2w7z318R+rnVKnYAxaJxkf1FM19gA",
+    "source": "photos/portrait/IMG_0336.JPG"
+  },
+  {
+    "slug": "unattributed-img-1068-p23",
+    "key": "unattributed",
+    "title": "Unattributed",
     "orientation": "portrait",
     "width": 4000,
     "height": 6000,
@@ -1289,13 +1326,45 @@ export const PORTFOLIO_IMAGES: PortfolioImage[] = [
       1920,
       2560
     ],
-    "lqip": "data:image/webp;base64,UklGRngAAABXRUJQVlA4IGwAAACwAwCdASoQABgAPu1iqU2ppaOiMAgBMB2JYgCdMoADT4wVDmk7UAD+j4Slx+SIH7i0wO7gKGt5BkrDm9xdXWlOxD6g6UmRstqmIzB+HV+gZdKtnJSv7zXT7hL+DYS7Lkw8A95Yi0pD/hMIAAA=",
-    "source": "photos/portrait/024_ZorkoBorivali.jpg"
+    "lqip": "data:image/webp;base64,UklGRqYAAABXRUJQVlA4IJoAAAAwBACdASoQABgAPu1iqU2ppaOiMAgBMB2JZACdMoADKREU6KyPJxn3mYwA/RM8ddc/NJGK+9H63F+37PM44fMz0FM+gJUJddv5wZUBxeclXZ+ZfI4hp5jhc3PhijDoC9RUyD5RDjePCpvqmMacRgTZ5Rn+eroxWv50c5AqiF1G9rM6fdXSgA6/E60ZLCoYpngtj+8ZaQonAAAA",
+    "source": "photos/portrait/IMG_1068.JPG"
   },
   {
-    "slug": "zrl-designs-p24",
-    "key": "ZRL_Designs",
-    "title": "ZRL Designs",
+    "slug": "unattributed-img-1300-p24",
+    "key": "unattributed",
+    "title": "Unattributed",
+    "orientation": "portrait",
+    "width": 3897,
+    "height": 6000,
+    "widths": [
+      640,
+      1280,
+      1920,
+      2560
+    ],
+    "lqip": "data:image/webp;base64,UklGRq4AAABXRUJQVlA4IKIAAABQBACdASoQABkAPu1iqU2ppaOiMAgBMB2JZACw7YwwzpXae260dhsgqLBAAPsF8IQhs2kT2WSRPJ7PZpiLnVbtdJ/1sFaKQAKzOEsS+6BX9BR4Gd26aXKBZL+4KLcq0LAZ1c1jg/ri8grcYNDyekfIPfXVndjc2sTJVV0qbh94q8c0ebLpObWBy9JbbV3+mQHedX+c8UyMB8BebKFKRB4AAAA=",
+    "source": "photos/portrait/IMG_1300.JPG"
+  },
+  {
+    "slug": "unattributed-img-1813-p25",
+    "key": "unattributed",
+    "title": "Unattributed",
+    "orientation": "portrait",
+    "width": 4000,
+    "height": 4628,
+    "widths": [
+      640,
+      1280,
+      1920,
+      2560
+    ],
+    "lqip": "data:image/webp;base64,UklGRp4AAABXRUJQVlA4IJIAAADwAwCdASoQABIAPu1iqU2ppaOiMAgBMB2JQBOmUGRthrOSGvYCdelUAP7kau/P6K20vP4hX9pBheAdns7iSa7chnuG0rhgaNHIrqP0VdK5y7LgnxQS5OFYjnqIlzBvcVikKsSK6b5/i8zWW4Hpz+345tAD8rVf9T+rF5ljWK5IRixCLAXI0+rOcpqMkko27GxQAA==",
+    "source": "photos/portrait/IMG_1813.JPG"
+  },
+  {
+    "slug": "unattributed-img-1814-p26",
+    "key": "unattributed",
+    "title": "Unattributed",
     "orientation": "portrait",
     "width": 4000,
     "height": 6000,
@@ -1305,13 +1374,13 @@ export const PORTFOLIO_IMAGES: PortfolioImage[] = [
       1920,
       2560
     ],
-    "lqip": "data:image/webp;base64,UklGRpAAAABXRUJQVlA4IIQAAABQBACdASoQABgAPu1krU6ppaSiMAgBMB2JZgCdMoADQMUZVxcl9ZuYRx3AAP0Poh9OTHWC7VqkZzcFonH8yfZBbEftePCDbeVynTFOFDmkWK49kHCQMVgDqot6RXK6fY9q3KxFlDZUVmiSbAXBKJ3t0zRnyvxDMOhdxJrMmbR8ivQAAAA=",
-    "source": "photos/portrait/025_ZRL_Designs.jpg"
+    "lqip": "data:image/webp;base64,UklGRpgAAABXRUJQVlA4IIwAAAAwBACdASoQABgAPu1iqU2ppaOiMAgBMB2JZACdABX+be17X5Bo3FGF3JAAziW4MHnwgxqpLGYRCcyXufxthWgplDkpxmBtJEEyDbtyRvNbw96lvy5bddnPxOtOXnqt5YQnBIR5vF2MfxvlE/W0MCBXixTQw965+CgTQ4/MSj9VFU9xdNWaByZZRVVAAA==",
+    "source": "photos/portrait/IMG_1814.JPG"
   },
   {
-    "slug": "hk-architectsparinee-11-west-p25",
-    "key": "HK_ArchitectsParinee_11_West",
-    "title": "HK Architects Parinee 11 West",
+    "slug": "unattributed-img-1815-p27",
+    "key": "unattributed",
+    "title": "Unattributed",
     "orientation": "portrait",
     "width": 4000,
     "height": 6000,
@@ -1321,13 +1390,13 @@ export const PORTFOLIO_IMAGES: PortfolioImage[] = [
       1920,
       2560
     ],
-    "lqip": "data:image/webp;base64,UklGRngAAABXRUJQVlA4IGwAAADQAwCdASoQABgAPu1iqk4ppaQiMAgBMB2JZQCsAB4WuiZomh1M2QAA/gmPIiG2sm1i3VGpwHaP99ToESdxJ5bXCd16urLGoef1C/HxFiONE71+X3NSs9nvaIjxPNzlbqqeHgpcoLShJZIAAAA=",
-    "source": "photos/portrait/026_HK_ArchitectsParinee_11_West.jpg"
+    "lqip": "data:image/webp;base64,UklGRo4AAABXRUJQVlA4IIIAAAAwBACdASoQABgAPu1iqU2ppaOiMAgBMB2JbACdLwAFp9xtX8IW77aqeaAA/ulfoIazEbnrh7gP9NoZ6Z59BHlB4Ey5fYInij6A+QMkzZ87OdxY13QJo+IfJFQcs914q+f7m4uwM9NAG2WXBFzdunNprCe4VK7Ji+Uk+cgWp6A14AAA",
+    "source": "photos/portrait/IMG_1815.JPG"
   },
   {
-    "slug": "rashikohinoor-altissimo-p26",
-    "key": "RashiKohinoor_Altissimo",
-    "title": "Rashi Kohinoor Altissimo",
+    "slug": "unattributed-img-1896-p28",
+    "key": "unattributed",
+    "title": "Unattributed",
     "orientation": "portrait",
     "width": 4000,
     "height": 6000,
@@ -1337,13 +1406,29 @@ export const PORTFOLIO_IMAGES: PortfolioImage[] = [
       1920,
       2560
     ],
-    "lqip": "data:image/webp;base64,UklGRowAAABXRUJQVlA4IIAAAADwAwCdASoQABgAPu1kqk4ppaQiMAgBMB2JQBOmUABOjeK4GbFXlrcgAPhZo1amvGWLeUE2Rf9Rys9j4L8+JhhXvkpL3l3S9fBTL2d8RpjBJ/fipFbXRdy7AOS0nX07Q+wn3PpLqHwnZOK9AnmcLBDsbVQ+CoHJbHMl2WDjJBpAAA==",
-    "source": "photos/portrait/027_RashiKohinoor_Altissimo.jpg"
+    "lqip": "data:image/webp;base64,UklGRpYAAABXRUJQVlA4IIoAAAAwBACdASoQABgAPu1iqU2ppaOiMAgBMB2JQBOgBFPPhJ/ba/QkJOKLB+AA/ie1KHwPpZkpMIurprctn7HEzSlcLU1psAn7UTkqC7VfXedyMneQ3soC74m52h1eV1q/ZsfT4stMpPnbbx4a21QS5uLw/XlJCbjkHPGnZt/MGntNkjSA60dBdmyQAAA=",
+    "source": "photos/portrait/IMG_1896.JPG"
   },
   {
-    "slug": "muktaclinic-p27",
-    "key": "MuktaClinic",
-    "title": "Mukta Clinic",
+    "slug": "unattributed-img-2144-p29",
+    "key": "unattributed",
+    "title": "Unattributed",
+    "orientation": "portrait",
+    "width": 3717,
+    "height": 5676,
+    "widths": [
+      640,
+      1280,
+      1920,
+      2560
+    ],
+    "lqip": "data:image/webp;base64,UklGRoQAAABXRUJQVlA4IHgAAABwBACdASoQABgAPu1iqU2ppaOiMAgBMB2JZQDCgCIAX8uwEnNpk7tM2FEgAADxLDtohOtK0hhYWhmLm5Kp856WaAL9TaNZ22b/VmPu1L12sAjO4+zQAfuFS01MX7Hr6xh+bBPwlO0PnrA9vQrU7y+BmbTXUoHEoAA=",
+    "source": "photos/portrait/IMG_2144.JPG"
+  },
+  {
+    "slug": "unattributed-img-2155-p30",
+    "key": "unattributed",
+    "title": "Unattributed",
     "orientation": "portrait",
     "width": 4000,
     "height": 6000,
@@ -1353,13 +1438,13 @@ export const PORTFOLIO_IMAGES: PortfolioImage[] = [
       1920,
       2560
     ],
-    "lqip": "data:image/webp;base64,UklGRnAAAABXRUJQVlA4IGQAAADQAwCdASoQABgAPu1iqU2ppaOiMAgBMB2JQBhQBDkJoqvFn020sMAA/otlXaJEu6Y/4TDAEeVIaF7X45zF+Ah1siSmTOYqiYI56+XvtTGkby874iFFJb0kkxv75HF7r56kbAAA",
-    "source": "photos/portrait/028_MuktaClinic.jpg"
+    "lqip": "data:image/webp;base64,UklGRpQAAABXRUJQVlA4IIgAAAAwBACdASoQABgAPu1oqk6ppiQiMAgBMB2JYgC7ACG7zfFJu3oXe9pp6ewA/vNyZT2rZ9JeQBo9l8m/dgCmkOKAoMfi4d0tOAmkd6Q0Wfi+0LGhPctqd0nSAf7Keuw3aa44GibJ5Nr/sXa9cKqyoLXXhL6Osm6VLHWY4LoRrHxWpU5wljzDpKAA",
+    "source": "photos/portrait/IMG_2155.JPG"
   },
   {
-    "slug": "omkarhema-waghle-p28",
-    "key": "OmkarHema_Waghle",
-    "title": "Omkar Hema Waghle",
+    "slug": "unattributed-img-2157-p31",
+    "key": "unattributed",
+    "title": "Unattributed",
     "orientation": "portrait",
     "width": 4000,
     "height": 6000,
@@ -1369,13 +1454,13 @@ export const PORTFOLIO_IMAGES: PortfolioImage[] = [
       1920,
       2560
     ],
-    "lqip": "data:image/webp;base64,UklGRnQAAABXRUJQVlA4IGgAAACwAwCdASoQABgAPu1kq04ppaQiMAgBMB2JYgAARLwXg18htSFcwAD5nLRPvY70/6gJ+pu/HaFfhMmMjAo4ENv5Bg+0mcuPQzKxABMufDk/fllsgYzUXZeEJtr8HY1QqQn86dQPzAAAAA==",
-    "source": "photos/portrait/029_OmkarHema_Waghle.jpg"
+    "lqip": "data:image/webp;base64,UklGRmwAAABXRUJQVlA4IGAAAACQAwCdASoQABgAPu1krU6ppaSiMAgBMB2JQBWADSv4AsrtkH7gAP78qQiOGKU0ffmXqIpfPxDf9RcvkH19RHzlw7QdoRvVX9/PbCcu2RdGbuRdotaf2raTsQZVPOBgAAA=",
+    "source": "photos/portrait/IMG_2157.JPG"
   },
   {
-    "slug": "dorityoberoi-p29",
-    "key": "DorityOberoi",
-    "title": "Dority Oberoi",
+    "slug": "unattributed-img-2175-p32",
+    "key": "unattributed",
+    "title": "Unattributed",
     "orientation": "portrait",
     "width": 4000,
     "height": 6000,
@@ -1385,13 +1470,45 @@ export const PORTFOLIO_IMAGES: PortfolioImage[] = [
       1920,
       2560
     ],
-    "lqip": "data:image/webp;base64,UklGRpYAAABXRUJQVlA4IIoAAADQAwCdASoQABgAPu1iqU2ppaQiMAgBMB2JZwAAWb8h48rxWuLNNpAA/rO8Tivnlq3z9nH+0257Fq7s7rSoKzsM+tTzrtiUl1EP29WW4FhO+Y+UtUUYbBN86kX0e0ul3jcJnjWtpZBYs7yA0m9XtDfs1uFnfffW6PuWkJFlzpXiugXwz/oeT/d6mAA=",
-    "source": "photos/portrait/030_DorityOberoi.jpg"
+    "lqip": "data:image/webp;base64,UklGRooAAABXRUJQVlA4IH4AAAAQBACdASoQABgAPu1kqk4ppaQiMAgBMB2JZQDA3CH/pT8Uo1l2oSL2AAD7h2bWZUCD3ZU9qpZ/ARMxDHXid+VIhNqtDb+W30RAQ9yqk7e0lX5kbbLeIslwasPkv7bXVb8/Mzo2QP2nU/ySXfEB83SRmc1xAskUggyyMwMDcAA=",
+    "source": "photos/portrait/IMG_2175.JPG"
   },
   {
-    "slug": "hk-architectsshreeji-tower-p30",
-    "key": "HK_ArchitectsShreeji_Tower",
-    "title": "HK Architects Shreeji Tower",
+    "slug": "unattributed-img-2212-p33",
+    "key": "unattributed",
+    "title": "Unattributed",
+    "orientation": "portrait",
+    "width": 3829,
+    "height": 6000,
+    "widths": [
+      640,
+      1280,
+      1920,
+      2560
+    ],
+    "lqip": "data:image/webp;base64,UklGRp4AAABXRUJQVlA4IJIAAADQAwCdASoQABkAPu1iqk2ppaQiMAgBMB2JQA7gAHQZmX9gE9ZbmwAA/lWxzorQnRpYLfo+oBLjUEzTwvOntzlC2Oji1rd00vPN5muPZerrxYJlCw8hmV3tm8S5sTjiPLi+rBdN5rdBCKcIlvDzZtW0PUpIdvGqFfoQ0FmrV1COWDoiNRnTB7J1Vxoix0L76IAAAA==",
+    "source": "photos/portrait/IMG_2212.JPG"
+  },
+  {
+    "slug": "unattributed-img-2251-p34",
+    "key": "unattributed",
+    "title": "Unattributed",
+    "orientation": "portrait",
+    "width": 2746,
+    "height": 3072,
+    "widths": [
+      640,
+      1280,
+      1920,
+      2560
+    ],
+    "lqip": "data:image/webp;base64,UklGRnIAAABXRUJQVlA4IGYAAACwAwCdASoQABIAPu1iqU2ppaQiMAgBMB2JaQAAW7jBfvSh1TIjAAD+8dpWPZmE6m13M5Q1fIJEjVFjbqn8eBF5gXiTa/rJzIDXetge1N7Mp5Px7t8vzpdPHQwNRGxkeInpNHcHAAA=",
+    "source": "photos/portrait/IMG_2251.JPG"
+  },
+  {
+    "slug": "unattributed-img-2257-p35",
+    "key": "unattributed",
+    "title": "Unattributed",
     "orientation": "portrait",
     "width": 4000,
     "height": 6000,
@@ -1401,13 +1518,13 @@ export const PORTFOLIO_IMAGES: PortfolioImage[] = [
       1920,
       2560
     ],
-    "lqip": "data:image/webp;base64,UklGRooAAABXRUJQVlA4IH4AAAAwBACdASoQABgAPu1iqU2ppaOiMAgBMB2JYwC7ACIeXee/JkpvGzM8bgAA/tJLDNjs/frcFRGkUMAHt4/X4F1SxT7JFEMfUYNncdb9EV7LAFb9aqIp3BV2DdawvQ4qqdiC7f4ddasnwsf9YtrWSmqKmOSMVSvwEVwbPLhl8AA=",
-    "source": "photos/portrait/031_HK_ArchitectsShreeji_Tower.jpg"
+    "lqip": "data:image/webp;base64,UklGRpAAAABXRUJQVlA4IIQAAADwAwCdASoQABgALrV2u12jqampiYC0SgAD5ewiD/O/EjTiEzRp3ssAAP610LrAfi0KBYtvZrGy2FDEI6oMuUiuarZA3V0/9gh/qm2HJwStNEO/6gBKwgBjBFx4nblSmRqc1rJSfLn3zm5J/bleBPetQ7v19V7P5hOJro23h7c8ZyojAAA=",
+    "source": "photos/portrait/IMG_2257.JPG"
   },
   {
-    "slug": "anupam-studiotdh-p31",
-    "key": "Anupam_StudioTDH",
-    "title": "Anupam Studio TDH",
+    "slug": "unattributed-img-2258-p36",
+    "key": "unattributed",
+    "title": "Unattributed",
     "orientation": "portrait",
     "width": 4000,
     "height": 6000,
@@ -1417,13 +1534,13 @@ export const PORTFOLIO_IMAGES: PortfolioImage[] = [
       1920,
       2560
     ],
-    "lqip": "data:image/webp;base64,UklGRn4AAABXRUJQVlA4IHIAAABwBACdASoQABgAPu1kqU4ppaOiMAgBMB2JYgCdLwABz6xWw1++jdl852lqiAD+8qjYv1kOgbb5BU7KHLQDlg+TN5GKe20dWWa9lA9BpNe1SI9PkPGJ+O43j7Vjt1all7fvNFoWej10k0jdYZgvihFp4AA=",
-    "source": "photos/portrait/032_Anupam_StudioTDH.jpg"
+    "lqip": "data:image/webp;base64,UklGRnwAAABXRUJQVlA4IHAAAADwAwCdASoQABgAPu1iqU2ppaOiMAgBMB2JZwAAW+thH9+YDCV5aTOAAPyP4L/hk/OHHARrPvqc3pMbNkv2f+y1DLNfo6dSkR3tuJrq3bU+y1l7hCp10jpWfreRT/fVFQQ9vj35GnvOvP6q+8eKqAAA",
+    "source": "photos/portrait/IMG_2258.JPG"
   },
   {
-    "slug": "aura-ids-p32",
-    "key": "Aura_IDS",
-    "title": "Aura IDS",
+    "slug": "unattributed-img-2259-p37",
+    "key": "unattributed",
+    "title": "Unattributed",
     "orientation": "portrait",
     "width": 4000,
     "height": 6000,
@@ -1433,13 +1550,13 @@ export const PORTFOLIO_IMAGES: PortfolioImage[] = [
       1920,
       2560
     ],
-    "lqip": "data:image/webp;base64,UklGRogAAABXRUJQVlA4IHwAAADwAwCdASoQABgAPu1iqU2ppaOiMAgBMB2JQBOgA4L7WghRJadZOI0gAP4ZoLPEctHfyEerWbZucpGOUWdrSvoQvonzdBfbndUp+LEO4LGSYlkaj92f3J5/2Fkz7VQ8y6rkuleoaGNsYPBdBhZHPRwg1rdBp538FntW8AAA",
-    "source": "photos/portrait/033_Aura_IDS.jpg"
+    "lqip": "data:image/webp;base64,UklGRoIAAABXRUJQVlA4IHYAAADwAwCdASoQABgAPu1mq04ppaQiMAgBMB2JZwAAW+zo/LikxYq+VAbwAP7uelpebV/I+DQZL6uXauwn4tRLEx6tuIki+f0D5hfLdsySHcht8pnme5FE6ezfZT+T7g5P6iXf/SGWEp79KBZX+15IoiE56VgPAAAA",
+    "source": "photos/portrait/IMG_2259.JPG"
   },
   {
-    "slug": "naksh-design-studio-p33",
-    "key": "Naksh_Design_Studio",
-    "title": "Naksh Design Studio",
+    "slug": "unattributed-img-2260-p38",
+    "key": "unattributed",
+    "title": "Unattributed",
     "orientation": "portrait",
     "width": 4000,
     "height": 6000,
@@ -1449,13 +1566,29 @@ export const PORTFOLIO_IMAGES: PortfolioImage[] = [
       1920,
       2560
     ],
-    "lqip": "data:image/webp;base64,UklGRpIAAABXRUJQVlA4IIYAAABQBACdASoQABgAPu1iqU2ppaOiMAgBMB2JaACdMoAKbt+AurPjZAK4D7IAAP79R3v/e6ksn9nV3FAph30Y7kkrWfqiYczJqNOrfoy7J3do60Ql/BA0cN9u1osqnRjWkSF4KYen0wF9tQdnFdfigpuECQDdUa85D9yOI4Ah4oDeY1aI7gAAAA==",
-    "source": "photos/portrait/034_Naksh_Design_Studio.jpg"
+    "lqip": "data:image/webp;base64,UklGRowAAABXRUJQVlA4IIAAAADQAwCdASoQABgAPu1mqk2ppaQiMAgBMB2JaQAAO7LkkbnC9/zsiAAA2zdLczzfGvKhg7kEJAINC2OXvymJWXfGLiXLjLYO/HfkKfvajpduXpXX1FTfEEYh+/A6LfGCND8oih6VjMsWHW48VgCYrm2Re7dNdXH35DS5LH2F1x+AAA==",
+    "source": "photos/portrait/IMG_2260.JPG"
   },
   {
-    "slug": "adndkalpatru-p34",
-    "key": "ADNDKalpatru",
-    "title": "ADNDKalpatru",
+    "slug": "unattributed-img-2666-p39",
+    "key": "unattributed",
+    "title": "Unattributed",
+    "orientation": "portrait",
+    "width": 3764,
+    "height": 5994,
+    "widths": [
+      640,
+      1280,
+      1920,
+      2560
+    ],
+    "lqip": "data:image/webp;base64,UklGRooAAABXRUJQVlA4IH4AAADQAwCdASoQABkAPu1iqU2ppaOiMAgBMB2JZwDImCFN7hV3/YVaGIAA/u/VVUBOf1F2vI53ALUVszjvyhIGIUeXjYJcnvZ3GipFhOd9jB35JV/0xQLcrianV3P0ptGDKlmFz/WLonGyPVa+ZFx8l5RabmOqqHKiSN/70t9pAAA=",
+    "source": "photos/portrait/IMG_2666.jpg"
+  },
+  {
+    "slug": "unattributed-img-2669-p40",
+    "key": "unattributed",
+    "title": "Unattributed",
     "orientation": "portrait",
     "width": 4000,
     "height": 6000,
@@ -1465,13 +1598,13 @@ export const PORTFOLIO_IMAGES: PortfolioImage[] = [
       1920,
       2560
     ],
-    "lqip": "data:image/webp;base64,UklGRlgAAABXRUJQVlA4IEwAAACwAwCdASoQABgAPu1kq04ppaQiMAgBMB2JZwDDNBk15efTASrAAAD+w/NAH9blNxjtSEVEH4XGK4/jq29lKfknNRmorlqvXDafIAAA",
-    "source": "photos/portrait/035_ADNDKalpatru.jpg"
+    "lqip": "data:image/webp;base64,UklGRogAAABXRUJQVlA4IHwAAAAQBACdASoQABgAPu1iqk2ppaQiMAgBMB2JZwDDNGlfxH8ryp536g+AAAD+/i7H2COV73uyn469Um7dNf4V82ct/CIHKR9yezwbD9Lp1VrFHyp45ZkKW0WOVmtSisbToUXie+1CJTtPzGABQULCyt9yAr855FtvB60PmgAA",
+    "source": "photos/portrait/IMG_2669.jpg"
   },
   {
-    "slug": "sumangalnaksh-ds-p35",
-    "key": "SumangalNaksh_DS",
-    "title": "Sumangal Naksh DS",
+    "slug": "unattributed-img-3068-p41",
+    "key": "unattributed",
+    "title": "Unattributed",
     "orientation": "portrait",
     "width": 4000,
     "height": 6000,
@@ -1481,13 +1614,13 @@ export const PORTFOLIO_IMAGES: PortfolioImage[] = [
       1920,
       2560
     ],
-    "lqip": "data:image/webp;base64,UklGRqQAAABXRUJQVlA4IJgAAAAwBACdASoQABgAPu1iqU2ppaOiMAgBMB2JYwCdAB9fRa9WI75NPyNyoEAA/qnl9KuXZeX2zdJ05iGvA1gMTrhPPCIIsRMD8/1OJ24KgUuSsMEVayHPVYVTGqm8DGacSWCdoZ+txeHvlkG4Ted48r3cM5uGPxFcP0uaz1bnXj9B8Kf14OalX9SRVUal+MTdi+cKcefmLAAAAA==",
-    "source": "photos/portrait/036_SumangalNaksh_DS.jpg"
+    "lqip": "data:image/webp;base64,UklGRqgAAABXRUJQVlA4IJwAAAAwBACdASoQABgAPu1iqU2ppaQiMAgBMB2JZQDE2B6V6hdEQPlsM+wovAAA/ktVrTSLwl205dweLpDEvNypKLJdXfJ/LaNXPaQYpmlQvy7vBsWEIWOTO1QMlzqlGLpCDbpXpdUImYIEYvCcpWXBLPNx7NmD6+sNlE3P2dk3j9fY/qtIr66NfsKUiIPY1cOePu6dwHW0HeEAC0iJwAA=",
+    "source": "photos/portrait/IMG_3068.JPG"
   },
   {
-    "slug": "govindhamvinay-p36",
-    "key": "GovindhamVinay",
-    "title": "Govindham Vinay",
+    "slug": "unattributed-img-4195-p42",
+    "key": "unattributed",
+    "title": "Unattributed",
     "orientation": "portrait",
     "width": 4000,
     "height": 6000,
@@ -1497,13 +1630,13 @@ export const PORTFOLIO_IMAGES: PortfolioImage[] = [
       1920,
       2560
     ],
-    "lqip": "data:image/webp;base64,UklGRnwAAABXRUJQVlA4IHAAAAAQBACdASoQABgAPu1kq04ppaQiMAgBMB2JYwCdMoACKM41tYb0zBfTwADImlGTKvuZU+d958bObhFHRRHQ8BdmzazzrB2t8xbLrwvkz4R858oqAfYjMfTGsLAXu//Cbb/O305EvMeR7xCo1fpnXCAA",
-    "source": "photos/portrait/037_GovindhamVinay.jpg"
+    "lqip": "data:image/webp;base64,UklGRrwAAABXRUJQVlA4ILAAAABwBACdASoQABgAPu1iqU2ppaOiMAgBMB2JQBOmUAS2AxQMwDmsnJLv4/u/AAD+14FGWjoPseaioGEorwtQGg6/ffBpVRC4970LEF6AIpJ3jDTOVIAxuMmnA5sQOi4BrvK6Td+sz/HUtP3+Ad7h53EKQOMLiTRJQ2Q7337o8ie8TMvV2QyV0toZ3lqWbumBzulGD0dD1a+en9l8JL6QN13pRySTgBEd9N5nM3IYnAAAAA==",
+    "source": "photos/portrait/IMG_4195.JPG"
   },
   {
-    "slug": "oberoidesign-hue-p37",
-    "key": "OberoiDesign_Hue",
-    "title": "Oberoi Design Hue",
+    "slug": "unattributed-img-4518-p43",
+    "key": "unattributed",
+    "title": "Unattributed",
     "orientation": "portrait",
     "width": 4000,
     "height": 6000,
@@ -1513,13 +1646,13 @@ export const PORTFOLIO_IMAGES: PortfolioImage[] = [
       1920,
       2560
     ],
-    "lqip": "data:image/webp;base64,UklGRjoAAABXRUJQVlA4IC4AAAAQAwCdASoQABgAPu1kqU4ppaOiMAgBMB2JaQAASn12JAAA/f3+qYOCadcR4cAA",
-    "source": "photos/portrait/038_OberoiDesign_Hue.jpg"
+    "lqip": "data:image/webp;base64,UklGRn4AAABXRUJQVlA4IHIAAABQBACdASoQABgAPu1iqk4ppaQiMAgBMB2JYgCdMoRwAB7x0uaK7fiktI80APimNmNemKlgoXi7GtEkERWwVPTTlOIngoL+S1Ky+nt5EK1bsIRgrrspIXccZXjDfrm1MufXeLQk/N4vyCTCk0dQwMYAAAA=",
+    "source": "photos/portrait/IMG_4518.JPG"
   },
   {
-    "slug": "crescent-baytdh-p38",
-    "key": "Crescent_BayTDH",
-    "title": "Crescent Bay TDH",
+    "slug": "unattributed-img-6167-p44",
+    "key": "unattributed",
+    "title": "Unattributed",
     "orientation": "portrait",
     "width": 4000,
     "height": 6000,
@@ -1529,13 +1662,13 @@ export const PORTFOLIO_IMAGES: PortfolioImage[] = [
       1920,
       2560
     ],
-    "lqip": "data:image/webp;base64,UklGRmYAAABXRUJQVlA4IFoAAAAQBACdASoQABgAPu1yrU+pp6QiMAgBMB2JZABTAAeiIbhhOU1jGDUPQAD+7UNRSecu2mvPcz2yHF2av1t6/HtaS7+i6h58Gk3B5JNvCDa/XzuNKKLTb870AAA=",
-    "source": "photos/portrait/039_Crescent_BayTDH.jpg"
+    "lqip": "data:image/webp;base64,UklGRrIAAABXRUJQVlA4IKYAAAAQBACdASoQABgAPu1orU2ppqSiMAgBMB2JZAAD5DoEwtR2Hdx0Xh2AYAD+6n+HC8WDSc0503YEre5XZlMj5bvJHzBp58d7DSv45rzLL/iDwIaTr+17zyEEC+6Sz698UUOfZR1lj/1ZkoyGhl2V8DiWZADeIZlgz1e1P941GY6guDDAKSZ81NyCHuPjubKI3/Y+Y0WE8W5Tj5B5hVgFr7F5ha7kWAAA",
+    "source": "photos/portrait/IMG_6167.jpg"
   },
   {
-    "slug": "oberoi-esquire78-design-studio-p39",
-    "key": "Oberoi_Esquire78_Design_Studio",
-    "title": "Oberoi Esquire78 Design Studio",
+    "slug": "unattributed-img-6174-p45",
+    "key": "unattributed",
+    "title": "Unattributed",
     "orientation": "portrait",
     "width": 4000,
     "height": 6000,
@@ -1545,13 +1678,13 @@ export const PORTFOLIO_IMAGES: PortfolioImage[] = [
       1920,
       2560
     ],
-    "lqip": "data:image/webp;base64,UklGRpgAAABXRUJQVlA4IIwAAAAwBACdASoQABgAPu1iqU2ppaOiMAgBMB2JZgCdMoADZS8+bZQRnCqQmpAA+5qGYMbGLa9K2GhAfExT1F+xm302ZEcLJS4JzgKsRQN4DP5K3MNGSqOd4aZgICqpyReH0w+X5gFsIPE5UZyGwHWFe+ap20B5W0pHEWdBro86UoOU+0ECH5gaD1kxRnOgAA==",
-    "source": "photos/portrait/040_Oberoi_Esquire78_Design_Studio.jpg"
+    "lqip": "data:image/webp;base64,UklGRqwAAABXRUJQVlA4IKAAAAAQBACdASoQABgAPu1iqU2ppaQiMAgBMB2JZQDCgYu4yZ5JPA5dOePoIgD+55NCrohyc8zLS2z+L8Je5pTHjNTI+iLsG/m5fVKNgccxnBimlIvPjwK7UWEqbocd9jSi998t0lzJYZjWgyy0p9aCko9JANbfn8K10ttIhYloBImIJGnsRV/fJTGXtObqqHG0hbFRtbB3Yegc+AK/UxZacAAA",
+    "source": "photos/portrait/IMG_6174.jpg"
   },
   {
-    "slug": "elysian-dsgodrej-p40",
-    "key": "Elysian_DSGodrej",
-    "title": "Elysian DSGodrej",
+    "slug": "unattributed-img-6187-p46",
+    "key": "unattributed",
+    "title": "Unattributed",
     "orientation": "portrait",
     "width": 4000,
     "height": 6000,
@@ -1561,13 +1694,13 @@ export const PORTFOLIO_IMAGES: PortfolioImage[] = [
       1920,
       2560
     ],
-    "lqip": "data:image/webp;base64,UklGRrgAAABXRUJQVlA4IKwAAABwBACdASoQABgAPu1iqU2ppaOiMAgBMB2JZACdMoADZAee2WVHusy4Rp0/mAD96lKYYMUtElVHU7pGm+9SZLo7Esu5+nVQeVkSCb/gD12JmMaAGIjU6iUGJcZHBHfoqj92JwkZ+IZCs+dQl4SP4O5RfZ2dBVWQE0bGkH4DurdZlKZaXHj6gyveUiyVwzhgQESRnAa7d7A6azyBIUXxiecL7bT7B9c2aB8mSAAA",
-    "source": "photos/portrait/041_Elysian_DSGodrej.jpg"
+    "lqip": "data:image/webp;base64,UklGRroAAABXRUJQVlA4IK4AAACwBACdASoQABgAPu1iqU2ppaOiMAgBMB2JZwC2yywTmotwemZaqeY34moDumwAAP7UvtonPt1V2aNVlddeg5C8ohc8ZLnAYcse17KIUUKLjvfgN9xXPhf6rZs7BhTMofqCAjokE5n0ulHefx22iO+doyp0L6VCn9SdxTy/gAec49nm7kD39Hjzj1OmBNoXvK4aSUN2l2OFVn00z9trzYiYFrmmYchZASRz4CHgAAA=",
+    "source": "photos/portrait/IMG_6187.jpg"
   },
   {
-    "slug": "dority-savana-p41",
-    "key": "Dority_Savana",
-    "title": "Dority Savana",
+    "slug": "unattributed-img-6209-p47",
+    "key": "unattributed",
+    "title": "Unattributed",
     "orientation": "portrait",
     "width": 4000,
     "height": 6000,
@@ -1577,13 +1710,77 @@ export const PORTFOLIO_IMAGES: PortfolioImage[] = [
       1920,
       2560
     ],
-    "lqip": "data:image/webp;base64,UklGRoIAAABXRUJQVlA4IHYAAABQBACdASoQABgAPu1iqU2ppaOiMAgBMB2JYwC3uCP6ELPJ83QZfy2yATCAAP6JkRc2u2MfcbrVT8L5+VEwDufXPrjAI6r+bUcmsvYBaExQF5nwa3yN0S+U+9PxBZtoFbWja7Sl9oiOsUxkFkMJ47a+xJjI1TAA",
-    "source": "photos/portrait/042_Dority_Savana.jpg"
+    "lqip": "data:image/webp;base64,UklGRnoAAABXRUJQVlA4IG4AAAAwBACdASoQABgAPu1iqU2ppaQiMAgBMB2JZQDE2CHfwadYGBD8pkb/MAAA/e8czfjWSD1+yV0zmFu0pI1X58YB1RN9ILfss/MzHHDn/L6vA9Ck+e8R+NgtbH3vvpc09GRnN4ZHhyMkkYA3gAAAAA==",
+    "source": "photos/portrait/IMG_6209.jpg"
   },
   {
-    "slug": "grahamwestar-p42",
-    "key": "GrahamWestar",
-    "title": "Graham Westar",
+    "slug": "unattributed-img-6255-p48",
+    "key": "unattributed",
+    "title": "Unattributed",
+    "orientation": "portrait",
+    "width": 4000,
+    "height": 6000,
+    "widths": [
+      640,
+      1280,
+      1920,
+      2560
+    ],
+    "lqip": "data:image/webp;base64,UklGRpYAAABXRUJQVlA4IIoAAABQAwCdASoQABgAPu1kq04ppaQiMAgBMB2JZQAAW5ayjexTYAD+7U54a2I0ExBuiUzzb2Qg4oWnOFfC9XghFmnfUOU7s5ISj5fOC4XwjoA83P3kGmAnmb8/WegFXUvEouH/4xCAfJD19jaDoByEn9bHIF9ORbkObfFUeygYElw3sDLaP4n/OA7AAAA=",
+    "source": "photos/portrait/IMG_6255.jpg"
+  },
+  {
+    "slug": "unattributed-img-6262-p49",
+    "key": "unattributed",
+    "title": "Unattributed",
+    "orientation": "portrait",
+    "width": 4000,
+    "height": 6000,
+    "widths": [
+      640,
+      1280,
+      1920,
+      2560
+    ],
+    "lqip": "data:image/webp;base64,UklGRqQAAABXRUJQVlA4IJgAAADwAwCdASoQABgAPu1iqU2ppaQiMAgBMB2JZQAAQdWwvtnHslR3sBGIAP7YKf5OVMv6A5/vn3a8FZycmdTyaajx9I8cnjxO/KizCdfQt9sNG2pEp/xSlvka+539q4duu/heLdT7yXvER+W6PR3sWLyqy7V32DaTNgIHJOndojdI6Q+I/+zwH2C79XI0FpK/vCbqud4+FwAAAA==",
+    "source": "photos/portrait/IMG_6262.jpg"
+  },
+  {
+    "slug": "unattributed-img-6286-p50",
+    "key": "unattributed",
+    "title": "Unattributed",
+    "orientation": "portrait",
+    "width": 4000,
+    "height": 6000,
+    "widths": [
+      640,
+      1280,
+      1920,
+      2560
+    ],
+    "lqip": "data:image/webp;base64,UklGRogAAABXRUJQVlA4IHwAAAAQBACdASoQABgAPu1kqU4ppaOiMAgBMB2JQBOgBC2Awu+XL9E1bgjmsAD+yCmpWTUv2fZlIXL8/FZ4etkxgAW7mER4e7p7auqPasLsfUWRU049cXeNa6CF9pGUDUlJ+cOUHdhl4Hhj81zluHrN5sp8cWxdiSA61LFyAAAA",
+    "source": "photos/portrait/IMG_6286.jpg"
+  },
+  {
+    "slug": "unattributed-img-6295-p51",
+    "key": "unattributed",
+    "title": "Unattributed",
+    "orientation": "portrait",
+    "width": 3842,
+    "height": 5763,
+    "widths": [
+      640,
+      1280,
+      1920,
+      2560
+    ],
+    "lqip": "data:image/webp;base64,UklGRowAAABXRUJQVlA4IIAAAADQAwCdASoQABgAPu1iqk2ppaQiMAgBMB2JQBgbg0XqQZDQ3R1ctEAA/pQ2dPCplybbjQ2/HYnSDEgAmwkjfUif8JnlIlUvllAOQV8qMf/J06AQ/YoMB6a6qI8RPT9paxCMYzM1diGe9VMyfWeAgrQOlGK8+No3SmTzldLh9GXgAA==",
+    "source": "photos/portrait/IMG_6295.jpg"
+  },
+  {
+    "slug": "unattributed-img-6301-p52",
+    "key": "unattributed",
+    "title": "Unattributed",
     "orientation": "portrait",
     "width": 4000,
     "height": 6000,
@@ -1594,202 +1791,26 @@ export const PORTFOLIO_IMAGES: PortfolioImage[] = [
       2560
     ],
     "lqip": "data:image/webp;base64,UklGRsgAAABXRUJQVlA4ILwAAACwBACdASoQABgAPu1iqU2ppaOiMAgBMB2JZAC07aglANo4VxsX9mjAecE9KPSgAP7pImbI8QPldAvhTle/oOnj2/Hj35+d/S5OdPHZdPnadbLMxyKs7jhLzXzFxSWeMKNHkZ1KrlPIp6ED2JxKS/lCne5fbdc7PvTYMYngu53D55bvu8/nj2IXhb6jx+FwyukJj/wchkkvdlmIjBe8HP+lloC9hUJtQc14GdB0L9OPCVblF1EJ98rpu+fgAA==",
-    "source": "photos/portrait/043_GrahamWestar.jpg"
+    "source": "photos/portrait/IMG_6301.jpg"
   },
   {
-    "slug": "vinayallure-p43",
-    "key": "VinayAllure",
-    "title": "Vinay Allure",
+    "slug": "unattributed-img-6316-p53",
+    "key": "unattributed",
+    "title": "Unattributed",
     "orientation": "portrait",
-    "width": 4000,
-    "height": 6000,
+    "width": 3584,
+    "height": 5376,
     "widths": [
       640,
       1280,
       1920,
       2560
     ],
-    "lqip": "data:image/webp;base64,UklGRowAAABXRUJQVlA4IIAAAAAQBACdASoQABgAPu1iqU2ppaOiMAgBMB2JYgCw7BCS68TjJ6h3tcCOAAD7cldQfxPLjH/Up6V1Alnzk2NLBJ+fHnpbkJqiQAS0JgyurRlhR09brZ481BRfGm5ZVfViUjlBaqWV0eQFH2g/pdCwBXbjHfBzELrIyabVtjHStvAAAA==",
-    "source": "photos/portrait/044_VinayAllure.jpg"
+    "lqip": "data:image/webp;base64,UklGRnwAAABXRUJQVlA4IHAAAAAwBACdASoQABgAPu1iqU2ppaOiMAgBMB2JbACdMoRwACm5SHFIn6icvYAA/nDbzL4FMrB1N3O8Zu4XeSUlRJbhC+3XIYVvyODqd3fD2Ns7OhWWxJHp+TOY5fmmLCvmlcrNnvuXBQ0LLTGB83K3gAAA",
+    "source": "photos/portrait/IMG_6316.jpg"
   },
   {
-    "slug": "prachi-shahbellevue-p44",
-    "key": "Prachi_ShahBellevue",
-    "title": "Prachi Shah Bellevue",
-    "orientation": "portrait",
-    "width": 4000,
-    "height": 6000,
-    "widths": [
-      640,
-      1280,
-      1920,
-      2560
-    ],
-    "lqip": "data:image/webp;base64,UklGRqwAAABXRUJQVlA4IKAAAACwBACdASoQABgAPu1iqU2ppaOiMAgBMB2JagCdMoRwAdAQ9Lt/wtBoFtZh2AyAAM0QDACCOfAx8+RZs+gongjcPUAuNTk9rr702iFp11I1RIDrWg2R6AJIynINL9Je0OPJLBevToIUB+/XaMxxTvWFsZO+bN+rY8kA1T/SV8m/nPz7su9h52sEIB1RFXZM1mB2ie3l9FuDUTWcidcjZAAA",
-    "source": "photos/portrait/045_Prachi_ShahBellevue.jpg"
-  },
-  {
-    "slug": "shrutiandheri-p45",
-    "key": "ShrutiAndheri",
-    "title": "Shruti Andheri",
-    "orientation": "portrait",
-    "width": 4000,
-    "height": 6000,
-    "widths": [
-      640,
-      1280,
-      1920,
-      2560
-    ],
-    "lqip": "data:image/webp;base64,UklGRpgAAABXRUJQVlA4IIwAAADwAwCdASoQABgAPu1iqU2ppaOiMAgBMB2JQBOgBDbYzepatSPcjlAwAP7I5iDIqOnCPPHJ2o+t9ajUnRadYIbDt3vQYBsi/8dxfpfiu7bgj4rMdL9wUlWL7bGwdC+p6cbXiZYqbIWr8tz3rz/E47zwn2iNpKsiIO9IQrdzVfmOKdkepVP7AqjIGAAAAA==",
-    "source": "photos/portrait/046_ShrutiAndheri.jpg"
-  },
-  {
-    "slug": "zrldadar-p46",
-    "key": "ZRLDadar",
-    "title": "ZRLDadar",
-    "orientation": "portrait",
-    "width": 4000,
-    "height": 6000,
-    "widths": [
-      640,
-      1280,
-      1920,
-      2560
-    ],
-    "lqip": "data:image/webp;base64,UklGRoIAAABXRUJQVlA4IHYAAAAQBACdASoQABgAPu1mq04ppaQiMAgBMB2JQBYdgxjyNfDtF5abNHl1YAD+w+GJJwrOBnbE5smFRyr7edHheM+l6yKqD58I92kRH2tDQnp1GEfxRufrP/nHhJwDGhwYb0TnRAbSlyJI0WsMCeNCqniWy25xgAAA",
-    "source": "photos/portrait/047_ZRLDadar.jpg"
-  },
-  {
-    "slug": "zaradadar-2-p47",
-    "key": "ZaraDadar_2",
-    "title": "Zara Dadar 2",
-    "orientation": "portrait",
-    "width": 4000,
-    "height": 6000,
-    "widths": [
-      640,
-      1280,
-      1920,
-      2560
-    ],
-    "lqip": "data:image/webp;base64,UklGRqwAAABXRUJQVlA4IKAAAABQBACdASoQABgAPu1kqU2ppaOiMAgBMB2JYwC/OBR9ZzKQOwF2ZlB4YCIAAP5KdVyRlxciuUHNSj+FIeE56VMxXEqQTi+DHYed1djOVbbhDXvL4kOA8Phn1XMDzj+1R8PynC+5TRFyWRCp7wE3ooUj+5ErSUvmeuwkhb4Ma7klK3yGr2Qe6EQRtESOQIzL67iZf6J3zjKMh3pQlCEviqAA",
-    "source": "photos/portrait/048_ZaraDadar_2.jpg"
-  },
-  {
-    "slug": "maneka-lodha-world-view-p48",
-    "key": "Maneka_Lodha_World_View",
-    "title": "Maneka Lodha World View",
-    "orientation": "portrait",
-    "width": 4672,
-    "height": 7008,
-    "widths": [
-      640,
-      1280,
-      1920,
-      2560
-    ],
-    "lqip": "data:image/webp;base64,UklGRmwAAABXRUJQVlA4IGAAAAAQBACdASoQABgAPu1kqU2ppaOiMAgBMB2JbAC7LwABo+okaeYZlzrcAAD+8TvbwbLkehICxk4fgHpuhuzEXkuK87ZW0qs8im9qIflPe9IrVgUcyJr+C2h1gIzAxJVAAAA=",
-    "source": "photos/portrait/049_Maneka_Lodha_World_View.jpg"
-  },
-  {
-    "slug": "smridhioberoi-spelnder-p49",
-    "key": "SmridhiOberoi_Spelnder",
-    "title": "Smridhi Oberoi Spelnder",
-    "orientation": "portrait",
-    "width": 4082,
-    "height": 6124,
-    "widths": [
-      640,
-      1280,
-      1920,
-      2560
-    ],
-    "lqip": "data:image/webp;base64,UklGRpQAAABXRUJQVlA4IIgAAAAQBACdASoQABgAPu1iqU2ppaQiMAgBMB2JQBOgAx7LdM9faqc1pXOXAAD+yqmrxE6FTvNXT6MzFg55WSqoE2fHVQgP4ojmocmfaDUi8DHKd2jmEnvlyrI18pXL9jblt4urpEgcEHNtgW4mWwZ3xFnmZkKbC+6MgSc1fyLNTlfQA1Clkggv3WAA",
-    "source": "photos/portrait/050_SmridhiOberoi_Spelnder.jpg"
-  },
-  {
-    "slug": "dority-designs-the-urban-home-p50",
-    "key": "Dority_Designs_The_Urban_Home",
-    "title": "Dority Designs The Urban Home",
-    "orientation": "portrait",
-    "width": 4082,
-    "height": 6124,
-    "widths": [
-      640,
-      1280,
-      1920,
-      2560
-    ],
-    "lqip": "data:image/webp;base64,UklGRmAAAABXRUJQVlA4IFQAAAAQBACdASoQABgAPu1iqU2ppaQiMAgBMB2JZQC7ACGbKdg6KNY8Rs2YAAD+tNN56hXHJoY1BcQC0m2lxwwks5/kssmEhgOXqSg4n4RAWz4YdJQAAAA=",
-    "source": "photos/portrait/051_Dority_Designs_The_Urban_Home.jpg"
-  },
-  {
-    "slug": "design-hueslodha-sterling-p51",
-    "key": "Design_huesLodha_Sterling",
-    "title": "Design Hues Lodha Sterling",
-    "orientation": "portrait",
-    "width": 4082,
-    "height": 6124,
-    "widths": [
-      640,
-      1280,
-      1920,
-      2560
-    ],
-    "lqip": "data:image/webp;base64,UklGRqwAAABXRUJQVlA4IKAAAABQBACdASoQABgAPu1iqU2ppaOiMAgBMB2JQAECAFp7UR/PFHfnDeT8GtrAAP7TiHbySoro66CwZov7jC1G1OHzXbD1j6E+TLHHMU0dEa/EbU/BQIsqp1g/N2w4k9xZWzOy68xV5agqntzW6vNLuz7/1smG/VDriqRU9wMkZFpfJP2v1U3JlwymBZ/bf4Xb7ai5brj+njbHnuAUFtMjegAA",
-    "source": "photos/portrait/052_Design_huesLodha_Sterling.jpg"
-  },
-  {
-    "slug": "aarshyaatelier-bunglow-lonavla-p52",
-    "key": "Aarshyaatelier_Bunglow_Lonavla",
-    "title": "Aarshyaatelier Bunglow Lonavla",
-    "orientation": "portrait",
-    "width": 4000,
-    "height": 6000,
-    "widths": [
-      640,
-      1280,
-      1920,
-      2560
-    ],
-    "lqip": "data:image/webp;base64,UklGRrQAAABXRUJQVlA4IKgAAACQBACdASoQABgAPu1orU2ppqSiMAgBMB2JQAB8q0HCbBM7d9I+Q7X89Baf6fAA/vJNDUBBqH+yeWiMDrZ4mnngtrM93LZ35F0YeA8DWrEDABOxP4d2D/gR6xuPgsNPvNrmV7lITIMn8o1PhlG7z2OeJi6wjA+A62dmzprNg5ekZ/RVfgnP4jia17RskOCecKZENLTxUdpDB8Yovsn9HsI2u+sS2k4VqAA=",
-    "source": "photos/portrait/053_Aarshyaatelier_Bunglow_Lonavla.jpg"
-  },
-  {
-    "slug": "sagar-gala-designsghatkopar-2bhk-p53",
-    "key": "Sagar_Gala_DesignsGhatkopar_2bhk",
-    "title": "Sagar Gala Designs Ghatkopar 2bhk",
-    "orientation": "portrait",
-    "width": 4000,
-    "height": 6000,
-    "widths": [
-      640,
-      1280,
-      1920,
-      2560
-    ],
-    "lqip": "data:image/webp;base64,UklGRqQAAABXRUJQVlA4IJgAAAAwBACdASoQABgAPu1iqk2ppaQiMAgBMB2JYgCw7CFmMI3oPKGA6YFAC4AA/vN1Ic4X1HykoNGVUwM0rD1hNmojDOz1DoxasX8lp2pQh8JmYb8/0emJNR5f0yOW7LWNq15B+7DO44ZMR+WOwu5Bl8h0boi2LAWzDN9+fxL/gEdUmp+YI8AP0gmjHQpYpPsLuoBmcFqVUMAAAA==",
-    "source": "photos/portrait/054_Sagar_Gala_DesignsGhatkopar_2bhk.jpg"
-  },
-  {
-    "slug": "clay-house-design2bhk-residential-p54",
-    "key": "Clay_House_Design2BHK_residential",
-    "title": "Clay House Design2 BHK Residential",
-    "orientation": "portrait",
-    "width": 4000,
-    "height": 6000,
-    "widths": [
-      640,
-      1280,
-      1920,
-      2560
-    ],
-    "lqip": "data:image/webp;base64,UklGRooAAABXRUJQVlA4IH4AAAAwBACdASoQABgAPu1iqU2ppaOiMAgBMB2JbACdACKGpVlkd+jNbealGTgA/vHROWKoGUVasQlHk0j3MdQ+msmsCZ0bf0PSqoearvpVsJtRFu2cEb97QuG2ductWLELHNqkASoc9Y3NHx4wm47+IPSPZgxo2m98/ighalF7AAA=",
-    "source": "photos/portrait/055_Clay_House_Design2BHK_residential.jpg"
-  },
-  {
-    "slug": "unattributed-img-2629-p55",
+    "slug": "unattributed-img-7493-p54",
     "key": "unattributed",
     "title": "Unattributed",
     "orientation": "portrait",
@@ -1801,505 +1822,204 @@ export const PORTFOLIO_IMAGES: PortfolioImage[] = [
       1920,
       2560
     ],
-    "lqip": "data:image/webp;base64,UklGRnIAAABXRUJQVlA4IGYAAABQBACdASoQABgAPu1iqU2ppaOiMAgBMB2JagCdMoRwABwAonmiIM6jhVtAAPwBGs4UFtIGO3tAl5ZFnIP/2u3CkjM9zTVcv1zCHrhTU8oRRqn8waGiOkdpSHQgqDbX+n+9wPN8AAA=",
-    "source": "photos/portrait/IMG_2629.JPG"
+    "lqip": "data:image/webp;base64,UklGRoQAAABXRUJQVlA4IHgAAAAQBACdASoQABgAPu1oqk6ppiQiMAgBMB2JZwDKABjTGnFIBEefsjUVIAD+542eCVe+i1dN8WwD+O6CYcafZsgeLzrjG6TyO66iH5w+EsBtXQms02ojmzjz7pqUfR3jAOHbmnqbX+xe2KVN9cgBG4GhsmDhuwwUAAA=",
+    "source": "photos/portrait/IMG_7493.JPG"
+  },
+  {
+    "slug": "unattributed-img-7530-p55",
+    "key": "unattributed",
+    "title": "Unattributed",
+    "orientation": "portrait",
+    "width": 4000,
+    "height": 6000,
+    "widths": [
+      640,
+      1280,
+      1920,
+      2560
+    ],
+    "lqip": "data:image/webp;base64,UklGRqIAAABXRUJQVlA4IJYAAAAQBACdASoQABgAPu1kqk2ppaQiMAgBMB2JZQAAW+u3F3F/Mp+2j7w+YAD+8dyJhtwGa9lKJrkpkl0cT67nFYmlLCA1auWdUHDDzzKQd+dUA/cBvY+dd1ot9VaByEVo24eaxlbj5nnvCFmeTG5JwZTGmRK3r/P+x/MNVZt125ft0g6C9xiMPpd5Y7KBUQKORLv98p9AAAA=",
+    "source": "photos/portrait/IMG_7530.JPG"
+  },
+  {
+    "slug": "unattributed-img-7540-p56",
+    "key": "unattributed",
+    "title": "Unattributed",
+    "orientation": "portrait",
+    "width": 4000,
+    "height": 6000,
+    "widths": [
+      640,
+      1280,
+      1920,
+      2560
+    ],
+    "lqip": "data:image/webp;base64,UklGRpgAAABXRUJQVlA4IIwAAABQBACdASoQABgAPu1kqk2ppaQiMAgBMB2JZwDG9Yua36zpuIREu7HKTN1gAP6vCckdNRKI7yhOpKXA9jwftp0GZ2V4qR/ANsFOoi/Pxb16OkFmh6jtPWBU57DAVZXSTtr+O+7EGitdQRlI51QKbndY76mqXdSgXEO1pRsYJjwBEp7Nm3zpezi3rAAAAA==",
+    "source": "photos/portrait/IMG_7540.JPG"
   }
 ];
 
 export const PORTFOLIO_PROJECTS: PortfolioProject[] = [
   {
-    "key": "Maneka_Lodha_World_View",
-    "title": "Maneka Lodha World View",
-    "slugs": [
-      "maneka-lodha-world-view-l01",
-      "maneka-lodha-world-view-p48"
-    ]
-  },
-  {
-    "key": "SmridhiOberoi_Spelnder",
-    "title": "Smridhi Oberoi Spelnder",
-    "slugs": [
-      "smridhioberoi-spelnder-l02",
-      "smridhioberoi-spelnder-p49"
-    ]
-  },
-  {
-    "key": "Aarshyaatelier_Bunglow_Lonavla",
-    "title": "Aarshyaatelier Bunglow Lonavla",
-    "slugs": [
-      "aarshyaatelier-bunglow-lonavla-l03",
-      "aarshyaatelier-bunglow-lonavla-p52"
-    ]
-  },
-  {
-    "key": "Sagar_Gala_DesignsGhatkopar_2bhk",
-    "title": "Sagar Gala Designs Ghatkopar 2bhk",
-    "slugs": [
-      "sagar-gala-designsghatkopar-2bhk-l04",
-      "sagar-gala-designsghatkopar-2bhk-p53"
-    ]
-  },
-  {
-    "key": "Clay_House_Design2BHK_residential",
-    "title": "Clay House Design2 BHK Residential",
-    "slugs": [
-      "clay-house-design2bhk-residential-l05",
-      "clay-house-design2bhk-residential-p54"
-    ]
-  },
-  {
-    "key": "Design_hues3bhkThane",
-    "title": "Design Hues3bhk Thane",
-    "slugs": [
-      "design-hues3bhkthane-l06"
-    ]
-  },
-  {
-    "key": "78_DesignsGirgaon3bhk",
-    "title": "78 Designs Girgaon3bhk",
-    "slugs": [
-      "78-designsgirgaon3bhk-l07"
-    ]
-  },
-  {
-    "key": "KinjalLonavla",
-    "title": "Kinjal Lonavla",
-    "slugs": [
-      "kinjallonavla-l08"
-    ]
-  },
-  {
-    "key": "Home_Maneka_Thapar_Designs",
-    "title": "Home Maneka Thapar Designs",
-    "slugs": [
-      "home-maneka-thapar-designs-l09"
-    ]
-  },
-  {
-    "key": "KrishikaUrvashi",
-    "title": "Krishika Urvashi",
-    "slugs": [
-      "krishikaurvashi-l10"
-    ]
-  },
-  {
-    "key": "SakshiPepperMoney",
-    "title": "Sakshi Pepper Money",
-    "slugs": [
-      "sakshipeppermoney-l11"
-    ]
-  },
-  {
-    "key": "omkarsalon",
-    "title": "Omkarsalon",
-    "slugs": [
-      "omkarsalon-l12"
-    ]
-  },
-  {
-    "key": "claydeepak_jyoti",
-    "title": "Claydeepak Jyoti",
-    "slugs": [
-      "claydeepak-jyoti-l13"
-    ]
-  },
-  {
-    "key": "bombay_cot78_Design",
-    "title": "Bombay Cot78 Design",
-    "slugs": [
-      "bombay-cot78-design-l14",
-      "bombay-cot78-design-p01"
-    ]
-  },
-  {
-    "key": "Design_HuesHome",
-    "title": "Design Hues Home",
-    "slugs": [
-      "design-hueshome-l15",
-      "design-hueshome-p02"
-    ]
-  },
-  {
-    "key": "PriyaDahaus",
-    "title": "Priya Dahaus",
-    "slugs": [
-      "priyadahaus-l16",
-      "priyadahaus-p03"
-    ]
-  },
-  {
-    "key": "KEA_Design_LabDahisar",
-    "title": "KEA Design Lab Dahisar",
-    "slugs": [
-      "kea-design-labdahisar-l17",
-      "kea-design-labdahisar-p04"
-    ]
-  },
-  {
-    "key": "Omkar_Beaumonte",
-    "title": "Omkar Beaumonte",
-    "slugs": [
-      "omkar-beaumonte-l18",
-      "omkar-beaumonte-p05"
-    ]
-  },
-  {
-    "key": "Arzoo_Jain2bhk",
-    "title": "Arzoo Jain2bhk",
-    "slugs": [
-      "arzoo-jain2bhk-l19",
-      "arzoo-jain2bhk-p06"
-    ]
-  },
-  {
-    "key": "MahimDesign_Hive",
-    "title": "Mahim Design Hive",
-    "slugs": [
-      "mahimdesign-hive-l20",
-      "mahimdesign-hive-p07"
-    ]
-  },
-  {
-    "key": "Omkar2bhk_Pune",
-    "title": "Omkar2bhk Pune",
-    "slugs": [
-      "omkar2bhk-pune-l21",
-      "omkar2bhk-pune-p08"
-    ]
-  },
-  {
-    "key": "OmkarPune_Office",
-    "title": "Omkar Pune Office",
-    "slugs": [
-      "omkarpune-office-l22",
-      "omkarpune-office-p09"
-    ]
-  },
-  {
-    "key": "78_Design_StudioUnicot",
-    "title": "78 Design Studio Unicot",
-    "slugs": [
-      "78-design-studiounicot-l23",
-      "78-design-studiounicot-p10"
-    ]
-  },
-  {
-    "key": "78_Design_Lodha",
-    "title": "78 Design Lodha",
-    "slugs": [
-      "78-design-lodha-l24",
-      "78-design-lodha-p11"
-    ]
-  },
-  {
-    "key": "DorityVersova",
-    "title": "Dority Versova",
-    "slugs": [
-      "dorityversova-l25",
-      "dorityversova-p12"
-    ]
-  },
-  {
-    "key": "NaitikLodha_Bellisimo",
-    "title": "Naitik Lodha Bellisimo",
-    "slugs": [
-      "naitiklodha-bellisimo-l26",
-      "naitiklodha-bellisimo-p13"
-    ]
-  },
-  {
-    "key": "Naitik_ShahSky_Forest_[2]",
-    "title": "Naitik Shah Sky Forest",
-    "slugs": [
-      "naitik-shahsky-forest-2-l27",
-      "naitik-shahsky-forest-2-p14"
-    ]
-  },
-  {
-    "key": "OmkarAkshar",
-    "title": "Omkar Akshar",
-    "slugs": [
-      "omkarakshar-l28",
-      "omkarakshar-p16"
-    ]
-  },
-  {
-    "key": "Shyam_Nivas_Monisha_Mistry",
-    "title": "Shyam Nivas Monisha Mistry",
-    "slugs": [
-      "shyam-nivas-monisha-mistry-l29",
-      "shyam-nivas-monisha-mistry-p17"
-    ]
-  },
-  {
-    "key": "3mindperspectiveLodha_M",
-    "title": "3mindperspective Lodha M",
-    "slugs": [
-      "3mindperspectivelodha-m-l30",
-      "3mindperspectivelodha-m-p18"
-    ]
-  },
-  {
-    "key": "78_DesignsMahim",
-    "title": "78 Designs Mahim",
-    "slugs": [
-      "78-designsmahim-l31",
-      "78-designsmahim-p19"
-    ]
-  },
-  {
-    "key": "PrachiBorivali",
-    "title": "Prachi Borivali",
-    "slugs": [
-      "prachiborivali-l32",
-      "prachiborivali-p20"
-    ]
-  },
-  {
-    "key": "RahulThane",
-    "title": "Rahul Thane",
-    "slugs": [
-      "rahulthane-l33",
-      "rahulthane-p21"
-    ]
-  },
-  {
-    "key": "ZorkoBorivali",
-    "title": "Zorko Borivali",
-    "slugs": [
-      "zorkoborivali-l34",
-      "zorkoborivali-p23"
-    ]
-  },
-  {
-    "key": "ZRL_Designs",
-    "title": "ZRL Designs",
-    "slugs": [
-      "zrl-designs-l35",
-      "zrl-designs-p24"
-    ]
-  },
-  {
-    "key": "HK_ArchitectsParinee_11_West",
-    "title": "HK Architects Parinee 11 West",
-    "slugs": [
-      "hk-architectsparinee-11-west-l36",
-      "hk-architectsparinee-11-west-p25"
-    ]
-  },
-  {
-    "key": "RashiKohinoor_Altissimo",
-    "title": "Rashi Kohinoor Altissimo",
-    "slugs": [
-      "rashikohinoor-altissimo-l37",
-      "rashikohinoor-altissimo-p26"
-    ]
-  },
-  {
-    "key": "MuktaClinic",
-    "title": "Mukta Clinic",
-    "slugs": [
-      "muktaclinic-l38",
-      "muktaclinic-p27"
-    ]
-  },
-  {
-    "key": "OmkarHema_Waghle",
-    "title": "Omkar Hema Waghle",
-    "slugs": [
-      "omkarhema-waghle-l39",
-      "omkarhema-waghle-p28"
-    ]
-  },
-  {
-    "key": "DorityOberoi",
-    "title": "Dority Oberoi",
-    "slugs": [
-      "dorityoberoi-l40",
-      "dorityoberoi-p29"
-    ]
-  },
-  {
-    "key": "HK_ArchitectsShreeji_Tower",
-    "title": "HK Architects Shreeji Tower",
-    "slugs": [
-      "hk-architectsshreeji-tower-l41",
-      "hk-architectsshreeji-tower-p30"
-    ]
-  },
-  {
-    "key": "Anupam_StudioTDH",
-    "title": "Anupam Studio TDH",
-    "slugs": [
-      "anupam-studiotdh-l42",
-      "anupam-studiotdh-p31"
-    ]
-  },
-  {
-    "key": "Aura_IDS",
-    "title": "Aura IDS",
-    "slugs": [
-      "aura-ids-l43",
-      "aura-ids-p32"
-    ]
-  },
-  {
-    "key": "Naksh_Design_Studio",
-    "title": "Naksh Design Studio",
-    "slugs": [
-      "naksh-design-studio-l44",
-      "naksh-design-studio-p33"
-    ]
-  },
-  {
-    "key": "ADNDKalpatru",
-    "title": "ADNDKalpatru",
-    "slugs": [
-      "adndkalpatru-l45",
-      "adndkalpatru-p34"
-    ]
-  },
-  {
-    "key": "GovindhamVinay",
-    "title": "Govindham Vinay",
-    "slugs": [
-      "govindhamvinay-l46",
-      "govindhamvinay-p36"
-    ]
-  },
-  {
-    "key": "OberoiDesign_Hue",
-    "title": "Oberoi Design Hue",
-    "slugs": [
-      "oberoidesign-hue-l47",
-      "oberoidesign-hue-p37"
-    ]
-  },
-  {
-    "key": "Crescent_BayTDH",
-    "title": "Crescent Bay TDH",
-    "slugs": [
-      "crescent-baytdh-l48",
-      "crescent-baytdh-p38"
-    ]
-  },
-  {
-    "key": "Oberoi_Esquire78_Design_Studio",
-    "title": "Oberoi Esquire78 Design Studio",
-    "slugs": [
-      "oberoi-esquire78-design-studio-l49",
-      "oberoi-esquire78-design-studio-p39"
-    ]
-  },
-  {
-    "key": "Yaffa'sKhargar_Office",
-    "title": "Yaffa's Khargar Office",
-    "slugs": [
-      "yaffa-skhargar-office-l50"
-    ]
-  },
-  {
-    "key": "Elysian_DSGodrej",
-    "title": "Elysian DSGodrej",
-    "slugs": [
-      "elysian-dsgodrej-l51",
-      "elysian-dsgodrej-p40"
-    ]
-  },
-  {
-    "key": "Dority_Savana",
-    "title": "Dority Savana",
-    "slugs": [
-      "dority-savana-l52",
-      "dority-savana-p41"
-    ]
-  },
-  {
     "key": "unattributed",
     "title": "Unattributed",
     "slugs": [
-      "unattributed-1-l53",
-      "unattributed-12-l54",
-      "unattributed-gam00244-l55",
-      "unattributed-img-2626-l56",
-      "unattributed-img-2629-p55"
+      "unattributed-15-l01",
+      "unattributed-26-l02",
+      "unattributed-4-l03",
+      "unattributed-dsc00360-l09",
+      "unattributed-dsc00414-l10",
+      "unattributed-dsc01293-l13",
+      "unattributed-dsc03519-l14",
+      "unattributed-dsc05342-l15",
+      "unattributed-dsc05363-l16",
+      "unattributed-gam00001-l17",
+      "unattributed-gam00019-l18",
+      "unattributed-gam00025-l19",
+      "unattributed-gam00033-l20",
+      "unattributed-gam00069-l21",
+      "unattributed-gam00094-l22",
+      "unattributed-gam00115-l23",
+      "unattributed-gam00116-l24",
+      "unattributed-gam00134-l25",
+      "unattributed-gam00151-l26",
+      "unattributed-gam00161-l27",
+      "unattributed-gam00208-l28",
+      "unattributed-gam00255-l29",
+      "unattributed-gam00272-l30",
+      "unattributed-gam00275-l31",
+      "unattributed-gam00283-l32",
+      "unattributed-img-0204-l33",
+      "unattributed-img-0205-l34",
+      "unattributed-img-0207-l35",
+      "unattributed-img-0209-l36",
+      "unattributed-img-0229-l37",
+      "unattributed-img-0260-l38",
+      "unattributed-img-0263-l39",
+      "unattributed-img-0264-l40",
+      "unattributed-img-0267-l41",
+      "unattributed-img-0276-l42",
+      "unattributed-img-0303-l43",
+      "unattributed-img-0325-l44",
+      "unattributed-img-0361-l45",
+      "unattributed-img-0363-l46",
+      "unattributed-img-1879-l47",
+      "unattributed-img-1891-l48",
+      "unattributed-img-2205-l49",
+      "unattributed-img-2469-l50",
+      "unattributed-img-2595-l51",
+      "unattributed-img-4095-l52",
+      "unattributed-img-4098-l53",
+      "unattributed-img-4155-l54",
+      "unattributed-img-4159-l55",
+      "unattributed-img-4163-l56",
+      "unattributed-img-4164-l57",
+      "unattributed-img-4193-l58",
+      "unattributed-gam00048-p01",
+      "unattributed-gam00062-p02",
+      "unattributed-gam00130-p03",
+      "unattributed-gam00138-p04",
+      "unattributed-img-0100-p05",
+      "unattributed-img-0102-p06",
+      "unattributed-img-0111-p07",
+      "unattributed-img-0169-p08",
+      "unattributed-img-0174-p09",
+      "unattributed-img-0181-p10",
+      "unattributed-img-0191-p11",
+      "unattributed-img-0192-p12",
+      "unattributed-img-0211-p13",
+      "unattributed-img-0241-p14",
+      "unattributed-img-0250-p15",
+      "unattributed-img-0256-p16",
+      "unattributed-img-0270-p17",
+      "unattributed-img-0272-p18",
+      "unattributed-img-0277-p19",
+      "unattributed-img-0287-p20",
+      "unattributed-img-0332-p21",
+      "unattributed-img-0336-p22",
+      "unattributed-img-1068-p23",
+      "unattributed-img-1300-p24",
+      "unattributed-img-1813-p25",
+      "unattributed-img-1814-p26",
+      "unattributed-img-1815-p27",
+      "unattributed-img-1896-p28",
+      "unattributed-img-2144-p29",
+      "unattributed-img-2155-p30",
+      "unattributed-img-2157-p31",
+      "unattributed-img-2175-p32",
+      "unattributed-img-2212-p33",
+      "unattributed-img-2251-p34",
+      "unattributed-img-2257-p35",
+      "unattributed-img-2258-p36",
+      "unattributed-img-2259-p37",
+      "unattributed-img-2260-p38",
+      "unattributed-img-2666-p39",
+      "unattributed-img-2669-p40",
+      "unattributed-img-3068-p41",
+      "unattributed-img-4195-p42",
+      "unattributed-img-4518-p43",
+      "unattributed-img-6167-p44",
+      "unattributed-img-6174-p45",
+      "unattributed-img-6187-p46",
+      "unattributed-img-6209-p47",
+      "unattributed-img-6255-p48",
+      "unattributed-img-6262-p49",
+      "unattributed-img-6286-p50",
+      "unattributed-img-6295-p51",
+      "unattributed-img-6301-p52",
+      "unattributed-img-6316-p53",
+      "unattributed-img-7493-p54",
+      "unattributed-img-7530-p55",
+      "unattributed-img-7540-p56"
     ]
   },
   {
-    "key": "Sky_ForestNaitik_Shah",
-    "title": "Sky Forest Naitik Shah",
+    "key": "DSC00155-HDR",
+    "title": "DSC00155 HDR",
     "slugs": [
-      "sky-forestnaitik-shah-p15"
+      "dsc00155-hdr-l04"
     ]
   },
   {
-    "key": "TDHKitchen_Mahim",
-    "title": "TDHKitchen Mahim",
+    "key": "DSC00180-HDR",
+    "title": "DSC00180 HDR",
     "slugs": [
-      "tdhkitchen-mahim-p22"
+      "dsc00180-hdr-l05"
     ]
   },
   {
-    "key": "SumangalNaksh_DS",
-    "title": "Sumangal Naksh DS",
+    "key": "DSC00233-HDR-2-Enhanced-SR",
+    "title": "DSC00233 HDR 2 Enhanced SR",
     "slugs": [
-      "sumangalnaksh-ds-p35"
+      "dsc00233-hdr-2-enhanced-sr-l06"
     ]
   },
   {
-    "key": "GrahamWestar",
-    "title": "Graham Westar",
+    "key": "DSC00240-Enhanced-NR",
+    "title": "DSC00240 Enhanced NR",
     "slugs": [
-      "grahamwestar-p42"
+      "dsc00240-enhanced-nr-l07"
     ]
   },
   {
-    "key": "VinayAllure",
-    "title": "Vinay Allure",
+    "key": "DSC00243-Enhanced-NR",
+    "title": "DSC00243 Enhanced NR",
     "slugs": [
-      "vinayallure-p43"
+      "dsc00243-enhanced-nr-l08"
     ]
   },
   {
-    "key": "Prachi_ShahBellevue",
-    "title": "Prachi Shah Bellevue",
+    "key": "DSC00850-HDR",
+    "title": "DSC00850 HDR",
     "slugs": [
-      "prachi-shahbellevue-p44"
+      "dsc00850-hdr-l11"
     ]
   },
   {
-    "key": "ShrutiAndheri",
-    "title": "Shruti Andheri",
+    "key": "DSC00964-HDR",
+    "title": "DSC00964 HDR",
     "slugs": [
-      "shrutiandheri-p45"
-    ]
-  },
-  {
-    "key": "ZRLDadar",
-    "title": "ZRLDadar",
-    "slugs": [
-      "zrldadar-p46"
-    ]
-  },
-  {
-    "key": "ZaraDadar_2",
-    "title": "Zara Dadar 2",
-    "slugs": [
-      "zaradadar-2-p47"
-    ]
-  },
-  {
-    "key": "Dority_Designs_The_Urban_Home",
-    "title": "Dority Designs The Urban Home",
-    "slugs": [
-      "dority-designs-the-urban-home-p50"
-    ]
-  },
-  {
-    "key": "Design_huesLodha_Sterling",
-    "title": "Design Hues Lodha Sterling",
-    "slugs": [
-      "design-hueslodha-sterling-p51"
+      "dsc00964-hdr-l12"
     ]
   }
 ];
