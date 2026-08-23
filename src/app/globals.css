@@ -924,9 +924,34 @@ html[data-ribbon-on-light="true"] .brand-mark img {
   opacity: 0.85;
 }
 
+.contact-submit:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.field-honey {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+
 .contact-note {
   color: var(--stone);
   font-size: 12.5px;
+}
+
+.contact-note-sent {
+  color: var(--brass);
+}
+
+.contact-note-error {
+  color: #e0796b;
+}
+
+.contact-note-error a {
+  text-decoration: underline;
 }
 
 .contact-right {

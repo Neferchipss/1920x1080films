@@ -1,15 +1,45 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { withBasePath } from "@/lib/basePath";
 
 // Mumbai (19.076N 72.877E) as a fraction of the equirectangular source map.
 const MUMBAI_X_FRAC = 0.7024;
 const MUMBAI_Y_FRAC = 0.3940;
 
+// Static export (next.config.ts: output: "export") means there's no server
+// to receive the form POST, so it goes to FormSubmit.co's AJAX endpoint
+// instead — no account/API key needed, just the destination address baked
+// into the URL. The FIRST submission triggers a one-time "confirm this
+// form" email from FormSubmit to that address; until it's clicked,
+// FormSubmit holds submissions rather than delivering them.
+const ENQUIRY_EMAIL = "1920x1080.films@gmail.com";
+const FORMSUBMIT_ENDPOINT = `https://formsubmit.co/ajax/${ENQUIRY_EMAIL}`;
+
+type SubmitStatus = "idle" | "sending" | "sent" | "error";
+
 export default function ContactContent() {
   const mapImgRef = useRef<HTMLImageElement>(null);
   const pinRef = useRef<HTMLDivElement>(null);
+  const [status, setStatus] = useState<SubmitStatus>("idle");
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const form = e.currentTarget;
+    setStatus("sending");
+    try {
+      const res = await fetch(FORMSUBMIT_ENDPOINT, {
+        method: "POST",
+        headers: { Accept: "application/json" },
+        body: new FormData(form),
+      });
+      if (!res.ok) throw new Error("Request failed");
+      setStatus("sent");
+      form.reset();
+    } catch {
+      setStatus("error");
+    }
+  };
 
   useEffect(() => {
     const img = mapImgRef.current;
@@ -59,22 +89,34 @@ export default function ContactContent() {
             I&apos;d love to hear what you&apos;re working on.
           </p>
 
-          <form className="contact-form" onSubmit={(e) => e.preventDefault()}>
+          <form className="contact-form" onSubmit={handleSubmit}>
+            <input type="hidden" name="_subject" value="New project enquiry — 1920x1080 Films" />
+            <input type="hidden" name="_template" value="table" />
+            <input type="hidden" name="_captcha" value="false" />
+            <input
+              type="text"
+              name="_honey"
+              tabIndex={-1}
+              autoComplete="off"
+              className="field-honey"
+              aria-hidden="true"
+            />
+
             <label className="field">
               <span className="eyebrow">Your name</span>
-              <input type="text" name="name" required />
+              <input type="text" name="name" required disabled={status === "sending"} />
             </label>
             <label className="field">
               <span className="eyebrow">Email address</span>
-              <input type="email" name="email" required />
+              <input type="email" name="email" required disabled={status === "sending"} />
             </label>
             <label className="field">
               <span className="eyebrow">Phone number</span>
-              <input type="tel" name="phone" />
+              <input type="tel" name="phone" disabled={status === "sending"} />
             </label>
             <label className="field">
               <span className="eyebrow">Project type</span>
-              <select name="projectType" defaultValue="">
+              <select name="projectType" defaultValue="" disabled={status === "sending"}>
                 <option value="" disabled>
                   Select one
                 </option>
@@ -86,13 +128,31 @@ export default function ContactContent() {
             </label>
             <label className="field">
               <span className="eyebrow">Tell me about your project</span>
-              <textarea name="message" rows={3} />
+              <textarea name="message" rows={3} disabled={status === "sending"} />
             </label>
-            <button type="submit" className="contact-submit">
-              <span>Book Now</span>
+
+            <button
+              type="submit"
+              className="contact-submit"
+              disabled={status === "sending"}
+            >
+              <span>{status === "sending" ? "Sending…" : "Book Now"}</span>
               <span aria-hidden>→</span>
             </button>
-            <p className="contact-note">I&apos;ll get back to you within 24 hours.</p>
+
+            {status === "sent" ? (
+              <p className="contact-note contact-note-sent">
+                Thanks — your enquiry is on its way. I&apos;ll get back to you
+                within 24 hours.
+              </p>
+            ) : status === "error" ? (
+              <p className="contact-note contact-note-error">
+                Something went wrong sending that. Please email{" "}
+                <a href={`mailto:${ENQUIRY_EMAIL}`}>{ENQUIRY_EMAIL}</a> directly.
+              </p>
+            ) : (
+              <p className="contact-note">I&apos;ll get back to you within 24 hours.</p>
+            )}
           </form>
         </div>
 
@@ -102,7 +162,7 @@ export default function ContactContent() {
       </div>
 
       <div className="contact-footer-bar">
-        <a href="mailto:1920x1080films@gmail.com">
+        <a href={`mailto:${ENQUIRY_EMAIL}`}>
           <svg width="15" height="12" viewBox="0 0 15 12" fill="none" aria-hidden>
             <path
               d="M1 1h13v10H1V1Zm0 0 6.5 5L14 1"
@@ -111,7 +171,7 @@ export default function ContactContent() {
               strokeLinejoin="round"
             />
           </svg>
-          1920x1080films@gmail.com
+          {ENQUIRY_EMAIL}
         </a>
         <a href="tel:+919101586350">
           <svg width="13" height="13" viewBox="0 0 13 13" fill="none" aria-hidden>
