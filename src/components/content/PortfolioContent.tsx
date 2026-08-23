@@ -59,12 +59,6 @@ export default function PortfolioContent() {
       <div className="portfolio-head">
         <div>
           <h1 className="font-display portfolio-title">Showcase</h1>
-          <p className="portfolio-sub">
-            Interiors, architecture and the light that moves through them —
-            {" "}
-            {PORTFOLIO_IMAGES.length} photographs and {PORTFOLIO_FILMS.length}{" "}
-            films made with designers and studios across Mumbai and beyond.
-          </p>
         </div>
       </div>
 

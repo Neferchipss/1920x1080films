@@ -74,10 +74,9 @@ const FACADE_BOX_MIN_VW = 900;
 
 const COUNTERS = [
   { value: 100, suffix: "+", label: "Luxury Homes" },
-  { value: 4500, suffix: "+", label: "Edited Images" },
   { value: 50, suffix: "+", label: "Interior Designers" },
   { value: 25, suffix: "+", label: "Commercial Projects" },
-  { value: 10, suffix: "M+", label: "Sq Ft Captured" },
+  { value: 10, suffix: "L+", label: "Sq Ft Captured" },
 ];
 
 function fmt(n: number) {
