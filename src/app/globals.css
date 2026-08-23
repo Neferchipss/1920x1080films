@@ -1185,6 +1185,325 @@ html[data-ribbon-on-light="true"] .brand-mark img {
   opacity: 0.85;
 }
 
+/* ---------------- services: content retainer ---------------- */
+
+.retainer-header {
+  margin-bottom: clamp(50px, 8vh, 90px);
+}
+
+.retainer-title {
+  font-size: clamp(34px, 5vw, 56px);
+  line-height: 1.08;
+  margin: 12px 0 20px;
+}
+
+.retainer-title em {
+  font-style: italic;
+  color: var(--stone);
+}
+
+.retainer-lede {
+  color: var(--stone);
+  font-size: 15px;
+  line-height: 1.65;
+  max-width: 42ch;
+}
+
+.retainer-block {
+  margin-bottom: clamp(56px, 8vh, 90px);
+}
+
+.retainer-block-head {
+  display: grid;
+  grid-template-columns: 60px 1fr;
+  gap: 20px;
+  margin-bottom: clamp(28px, 4vh, 44px);
+}
+
+.retainer-block-head h3 {
+  font-size: clamp(21px, 2vw, 26px);
+  margin: 0 0 8px;
+}
+
+.retainer-block-head p {
+  color: var(--stone);
+  font-size: 14px;
+  line-height: 1.6;
+  max-width: 46ch;
+}
+
+.credit-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: clamp(24px, 3vw, 40px);
+}
+
+.credit-item {
+  border-top: 1px solid var(--line);
+  padding-top: 18px;
+}
+
+.credit-item-label {
+  font-size: 13px;
+  color: var(--stone);
+  margin-bottom: 6px;
+}
+
+.credit-item-value {
+  font-size: clamp(22px, 2.4vw, 28px);
+  color: var(--brass);
+  margin-bottom: 8px;
+}
+
+.credit-item p {
+  color: var(--stone);
+  font-size: 13px;
+  line-height: 1.55;
+  max-width: 24ch;
+}
+
+.plans-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: clamp(20px, 3vw, 32px);
+}
+
+.plan-card {
+  border: 1px solid var(--line);
+  padding: clamp(24px, 3vw, 36px);
+}
+
+.plan-card-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  border-bottom: 1px solid var(--line);
+  padding-bottom: clamp(18px, 2.4vw, 26px);
+  margin-bottom: clamp(18px, 2.4vw, 26px);
+}
+
+.plan-name {
+  font-size: clamp(24px, 2.6vw, 30px);
+  margin: 6px 0 0;
+  text-transform: uppercase;
+}
+
+.plan-price {
+  font-size: clamp(20px, 2.2vw, 26px);
+  text-align: right;
+  white-space: nowrap;
+}
+
+.plan-price span {
+  display: block;
+  font-size: 11px;
+  color: var(--stone);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-top: 4px;
+}
+
+.plan-audience {
+  color: var(--stone);
+  font-size: 13px;
+  line-height: 1.6;
+  max-width: 34ch;
+  margin: 0 0 clamp(18px, 2.4vw, 28px);
+}
+
+.plan-credits {
+  font-size: clamp(36px, 4vw, 48px);
+  color: #fff;
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  margin-bottom: clamp(20px, 2.6vw, 30px);
+}
+
+.plan-credits span {
+  font-family: var(--font-body), sans-serif;
+  font-size: 12px;
+  color: var(--stone);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.plan-allocation {
+  border-top: 1px solid var(--line);
+  padding-top: clamp(16px, 2.2vw, 22px);
+}
+
+.plan-allocation-title-row {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+  margin-bottom: clamp(14px, 2vw, 20px);
+}
+
+.plan-used {
+  font-family: var(--font-mono), monospace;
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  color: var(--stone);
+  margin-right: auto;
+}
+
+.plan-used[data-full="true"] {
+  color: var(--brass);
+}
+
+.plan-reset {
+  font-family: var(--font-mono), monospace;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--stone);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  transition: color 0.2s ease;
+}
+
+.plan-reset:hover {
+  color: #fff;
+}
+
+.plan-slider-row {
+  padding: 12px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.plan-slider-row:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.plan-slider-label {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  font-size: 13.5px;
+  margin-bottom: 10px;
+}
+
+.plan-slider-credits {
+  color: var(--stone);
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+.plan-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 2px;
+  background: var(--line);
+  border-radius: 999px;
+  outline: none;
+  cursor: pointer;
+}
+
+.plan-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--brass);
+  border: 2px solid #0a0a0b;
+  transition: transform 0.15s ease;
+}
+
+.plan-slider::-webkit-slider-thumb:hover {
+  transform: scale(1.15);
+}
+
+.plan-slider::-moz-range-thumb {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--brass);
+  border: 2px solid #0a0a0b;
+  transition: transform 0.15s ease;
+}
+
+.plan-slider::-moz-range-thumb:hover {
+  transform: scale(1.15);
+}
+
+.plan-slider::-moz-range-track {
+  height: 2px;
+  background: var(--line);
+  border-radius: 999px;
+}
+
+.retainer-extra-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: clamp(24px, 3vw, 40px);
+}
+
+.retainer-extra-item {
+  border-top: 1px solid var(--line);
+  padding-top: 18px;
+}
+
+.retainer-extra-item p {
+  color: var(--stone);
+  font-size: 13.5px;
+  line-height: 1.6;
+  max-width: 26ch;
+  margin: 10px 0;
+}
+
+.retainer-extra-item ul {
+  color: var(--stone);
+  font-size: 13.5px;
+  line-height: 1.7;
+  margin: 0 0 10px;
+  padding-left: 18px;
+}
+
+.retainer-extra-note {
+  font-size: 12px !important;
+  opacity: 0.7;
+}
+
+.topup-table {
+  margin: 10px 0;
+}
+
+.topup-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  font-size: 13.5px;
+  color: #fff;
+  padding: 6px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.topup-row span:last-child {
+  color: var(--stone);
+}
+
+.retainer-enquire {
+  margin-top: clamp(40px, 6vh, 64px);
+}
+
+@media (max-width: 900px) {
+  .credit-grid,
+  .retainer-extra-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+  .plans-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
 @media (max-width: 700px) {
   .services-grid {
     grid-template-columns: 1fr;
@@ -1195,6 +1514,13 @@ html[data-ribbon-on-light="true"] .brand-mark img {
   .services-cta {
     align-items: flex-start;
     flex-direction: column;
+  }
+  .retainer-block-head {
+    grid-template-columns: 1fr;
+  }
+  .credit-grid,
+  .retainer-extra-grid {
+    grid-template-columns: 1fr;
   }
 }
 
