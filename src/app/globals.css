@@ -671,83 +671,41 @@ html[data-ribbon-on-light="true"] .brand-mark img {
   letter-spacing: 0.32em;
   text-transform: uppercase;
   color: var(--brass);
-  margin: 0 0 clamp(10px, 1.6vmin, 16px);
+  margin: 0 0 clamp(8px, 1.4vmin, 14px);
 }
 
-.about-copy-head {
-  margin-bottom: clamp(20px, 3.4vmin, 40px);
+/* Two full bios have to share the same print the short "who are we" copy
+   used to fill alone, with no scroll and no extra section to spill into —
+   kept at the print's own width (not widened) and sized noticeably
+   smaller than that copy was, off vmin so it shrinks further still on a
+   short viewport. */
+.about-inner-founders {
+  width: min(420px, 30vw);
 }
 
-.about-name {
-  font-size: clamp(26px, 4.8vmin, 48px);
-  line-height: 1.08;
-  letter-spacing: -0.01em;
-  margin: 0 0 clamp(14px, 2.2vmin, 22px);
-  color: #161513;
-}
-
-.about-rule {
-  width: 44px;
-  height: 1px;
-  background: var(--brass);
-  border: none;
-  margin: 0;
-}
-
-.about-copy p {
-  color: #2c2822;
-  line-height: 1.62;
-  margin: 0 0 clamp(12px, 2vmin, 20px);
-  font-size: clamp(13px, 1.9vmin, 16px);
-  letter-spacing: 0.005em;
-}
-
-/* ---- founders ---- */
-
-.founders-wrap {
-  background: var(--ink);
-  color: var(--paper);
-  padding: clamp(70px, 10vh, 120px) clamp(24px, 8vw, 140px);
-}
-
-.founders-wrap .eyebrow {
-  max-width: 1180px;
-  margin: 0 auto;
-}
-
-.founders-grid {
-  max-width: 1180px;
-  margin: clamp(28px, 4vh, 52px) auto 0;
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: clamp(40px, 6vw, 90px);
+.founder-block + .founder-block {
+  margin-top: clamp(10px, 1.8vmin, 16px);
+  padding-top: clamp(10px, 1.8vmin, 16px);
+  border-top: 1px solid rgba(28, 26, 23, 0.16);
 }
 
 .founder-name {
-  font-size: clamp(24px, 2.6vw, 32px);
-  margin: 0 0 6px;
+  font-size: clamp(15px, 2vmin, 20px);
+  line-height: 1.1;
+  margin: 0 0 3px;
+  color: #161513;
 }
 
 .founder-role {
   color: var(--brass);
-  margin-bottom: clamp(16px, 2.2vw, 24px);
+  margin-bottom: clamp(4px, 0.8vmin, 7px);
 }
 
 .founder-bio {
-  color: var(--stone);
-  line-height: 1.7;
-  font-size: 14.5px;
-  max-width: 48ch;
-}
-
-@media (max-width: 760px) {
-  .founders-grid {
-    grid-template-columns: 1fr;
-  }
-}
-
-.about-copy p:last-child {
-  margin-bottom: 0;
+  color: #2c2822;
+  line-height: 1.36;
+  font-size: clamp(9.5px, 1.15vmin, 11px);
+  letter-spacing: 0.002em;
 }
 
 /* ---------------- portfolio ---------------- */
