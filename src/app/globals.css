@@ -681,6 +681,7 @@ html[data-ribbon-on-light="true"] .brand-mark img {
    short viewport. */
 .about-inner-founders {
   width: min(450px, 31vw);
+  margin-right: clamp(10px, 2vw, 28px);
 }
 
 .founder-block + .founder-block {
