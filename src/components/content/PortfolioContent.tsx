@@ -56,12 +56,6 @@ function Tile({ image }: { image: PortfolioImage }) {
 export default function PortfolioContent() {
   return (
     <div className="portfolio-wrap">
-      <div className="portfolio-head">
-        <div>
-          <h1 className="font-display portfolio-title">Showcase</h1>
-        </div>
-      </div>
-
       {PORTFOLIO_FILMS.length > 0 && (
         <section className="portfolio-section">
           <h2 className="portfolio-section-title eyebrow">Films</h2>
