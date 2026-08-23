@@ -68,12 +68,29 @@ const UNIT_COST = {
 
 type ItemKey = keyof typeof UNIT_COST;
 
+// Static export (see next.config.ts: output: "export") means there's no
+// server to hold a secret API key, so checkout can't go through Dodo's
+// Create Checkout Session API. Dodo's no-key "static payment link" — plain
+// GET, no auth — covers this instead. These product IDs came from a
+// TEST-mode key, which is why the link goes through the test.checkout.*
+// subdomain rather than checkout.dodopayments.com. Once real (live-mode)
+// products exist, swap CHECKOUT_BASE to "https://checkout.dodopayments.com"
+// and the product IDs below to the live ones — the rest is unchanged.
+const CHECKOUT_BASE = "https://test.checkout.dodopayments.com";
+const CHECKOUT_REDIRECT_URL = "https://www.1920x1080films.in/services?checkout=success";
+
+const checkoutHref = (productId: string) =>
+  `${CHECKOUT_BASE}/buy/${productId}?quantity=1&redirect_url=${encodeURIComponent(
+    CHECKOUT_REDIRECT_URL
+  )}`;
+
 const RETAINER_PLANS: {
   n: string;
   name: string;
   price: string;
   audience: string;
   credits: number;
+  productId: string;
   items: { key: ItemKey; label: string; defaultQty: number }[];
 }[] = [
   {
@@ -82,6 +99,7 @@ const RETAINER_PLANS: {
     price: "₹50,000",
     audience: "For independent designers and growing studios.",
     credits: 100,
+    productId: "pdt_0Nm1F8Oz8IL8fdk5lTur5",
     items: [
       { key: "landscape", label: "Landscape Video", defaultQty: 1 },
       { key: "reel", label: "Reels", defaultQty: 4 },
@@ -95,6 +113,7 @@ const RETAINER_PLANS: {
     price: "₹75,000",
     audience: "For established studios with multiple active projects.",
     credits: 150,
+    productId: "pdt_0Nm1F9u2grQgjotXxrYT2",
     items: [
       { key: "landscape", label: "Landscape Videos", defaultQty: 2 },
       { key: "reel", label: "Reels", defaultQty: 6 },
@@ -193,6 +212,22 @@ function PlanCard({ plan }: { plan: (typeof RETAINER_PLANS)[number] }) {
           );
         })}
       </div>
+
+      <a
+        className="plan-select-btn"
+        href={checkoutHref(plan.productId)}
+      >
+        <span>Select Plan</span>
+        <svg width="14" height="10" viewBox="0 0 14 10" fill="none" aria-hidden>
+          <path
+            d="M1 5h11.5M8 1l4.5 4L8 9"
+            stroke="currentColor"
+            strokeWidth="1.1"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+        </svg>
+      </a>
     </div>
   );
 }

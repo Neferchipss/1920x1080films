@@ -1439,6 +1439,27 @@ html[data-ribbon-on-light="true"] .brand-mark img {
   border-radius: 999px;
 }
 
+.plan-select-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  width: 100%;
+  margin-top: clamp(24px, 3.2vw, 34px);
+  font-size: 12.5px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #0a0a0b;
+  background: #fff;
+  padding: 15px 24px;
+  border-radius: 2px;
+  transition: opacity 0.2s ease;
+}
+
+.plan-select-btn:hover {
+  opacity: 0.85;
+}
+
 .retainer-extra-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
