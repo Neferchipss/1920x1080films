@@ -702,6 +702,50 @@ html[data-ribbon-on-light="true"] .brand-mark img {
   letter-spacing: 0.005em;
 }
 
+/* ---- founders ---- */
+
+.founders-wrap {
+  background: var(--ink);
+  color: var(--paper);
+  padding: clamp(70px, 10vh, 120px) clamp(24px, 8vw, 140px);
+}
+
+.founders-wrap .eyebrow {
+  max-width: 1180px;
+  margin: 0 auto;
+}
+
+.founders-grid {
+  max-width: 1180px;
+  margin: clamp(28px, 4vh, 52px) auto 0;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: clamp(40px, 6vw, 90px);
+}
+
+.founder-name {
+  font-size: clamp(24px, 2.6vw, 32px);
+  margin: 0 0 6px;
+}
+
+.founder-role {
+  color: var(--brass);
+  margin-bottom: clamp(16px, 2.2vw, 24px);
+}
+
+.founder-bio {
+  color: var(--stone);
+  line-height: 1.7;
+  font-size: 14.5px;
+  max-width: 48ch;
+}
+
+@media (max-width: 760px) {
+  .founders-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
 .about-copy p:last-child {
   margin-bottom: 0;
 }
