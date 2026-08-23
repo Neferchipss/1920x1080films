@@ -655,7 +655,7 @@ html[data-ribbon-on-light="true"] .brand-mark img {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: clamp(40px, 8vmin, 100px) clamp(24px, 6vw, 90px);
+  padding: clamp(24px, 6vmin, 100px) clamp(24px, 6vw, 90px);
   overflow: hidden;
   box-sizing: border-box;
 }
@@ -680,17 +680,17 @@ html[data-ribbon-on-light="true"] .brand-mark img {
    smaller than that copy was, off vmin so it shrinks further still on a
    short viewport. */
 .about-inner-founders {
-  width: min(460px, 32vw);
+  width: min(450px, 31vw);
 }
 
 .founder-block + .founder-block {
-  margin-top: clamp(8px, 1.4vmin, 14px);
-  padding-top: clamp(8px, 1.4vmin, 14px);
+  margin-top: clamp(6px, 1.1vmin, 12px);
+  padding-top: clamp(6px, 1.1vmin, 12px);
   border-top: 1px solid rgba(28, 26, 23, 0.16);
 }
 
 .founder-name {
-  font-size: clamp(14px, 1.9vmin, 19px);
+  font-size: clamp(15px, 2vmin, 21px);
   line-height: 1.1;
   margin: 0 0 3px;
   color: #161513;
@@ -698,13 +698,13 @@ html[data-ribbon-on-light="true"] .brand-mark img {
 
 .founder-role {
   color: var(--brass);
-  margin-bottom: clamp(4px, 0.7vmin, 6px);
+  margin-bottom: clamp(4px, 0.6vmin, 6px);
 }
 
 .founder-bio {
   color: #2c2822;
-  line-height: 1.4;
-  font-size: clamp(12px, 1.6vmin, 14.5px);
+  line-height: 1.36;
+  font-size: clamp(14px, 1.9vmin, 17px);
   letter-spacing: 0.002em;
 }
 
